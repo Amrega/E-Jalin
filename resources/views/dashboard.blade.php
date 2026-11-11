@@ -60,7 +60,7 @@
                                 E<span class="text-[#ffb700]">-JALIN</span>
                             </span>
                             <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mt-0.5">
-                                SiTIA JALIN JATIM
+                                JALIN JATIM
                             </span>
                         </div>
                     </a>
@@ -143,10 +143,10 @@
                         <a href="{{ url('/dashboard') }}" class="block py-2 px-3 rounded-lg bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm">
                             Referensi Ruas
                         </a>
-                        <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
+                        <a href="{{ route('referensi-jembatan') }}" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-[#ffb700] hover:bg-white/5 transition">
                             Referensi Jembatan
                         </a>
-                        <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
+                        <!-- <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
                             User Manual Usulan Inpres
                         </a>
                         <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
@@ -154,7 +154,7 @@
                         </a>
                         <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
                             Template Dokumen Data Dukung
-                        </a>
+                        </a> -->
                     </div>
                 </div>
 

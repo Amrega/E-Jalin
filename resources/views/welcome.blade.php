@@ -139,9 +139,9 @@
                 </h1>
 
                 <!-- Subtitle / Mission Statement -->
-                <p class="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto mb-10 leading-relaxed font-normal">
+                <!-- <p class="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto mb-10 leading-relaxed font-normal">
                     Mengintegrasikan ekosistem <strong>JALIN JATIM</strong> dan fungsi operasional <strong>SiTIA</strong> untuk mengubah kompilasi manual usulan Kabupaten, Kota, dan Instansi menjadi sistem digital yang transparan, akuntabel, serta tersaring secara objektif oleh Dinas PU Bina Marga Prov. Jatim.
-                </p>
+                </p> -->
 
                 <!-- CTA Action Buttons -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4">

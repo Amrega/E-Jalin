@@ -21,5 +21,9 @@ Route::middleware('auth')->group(function () {
         return view('usulan-inpres');
     })->name('usulan-inpres');
 
+    Route::get('/referensi-jembatan', function () {
+        return view('referensi-jembatan');
+    })->name('referensi-jembatan');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
