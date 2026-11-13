@@ -71,7 +71,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3s3.5-1 3.5-3V7c0-2-1.5-3-3.5-3S4 5 4 7zm9 0v10c0 2 1.5 3 3.5 3s3.5-1 3.5-3V7c0-2-1.5-3-3.5-3s-3.5 1-3.5 3z"></path>
                     </svg>
                 </div>
-                <span>Referensi Master</span>
+                <span>Master</span>
             </div>
 
             <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
