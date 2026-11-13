@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Mojoagung - Peterongan</name>
+    <Placemark>
+      <name>Ruas Jalan Mojoagung - Peterongan</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.3412,-7.5612,0
+          112.3112,-7.5512,0
+          112.2812,-7.5412,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

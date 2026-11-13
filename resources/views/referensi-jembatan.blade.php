@@ -1,244 +1,13 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Referensi Jembatan - E-Jalin Dinas PU Bina Marga Provinsi Jawa Timur</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+@extends('layouts.app')
+
+@section('title', 'Referensi Jembatan - E-Jalin Dinas PU Bina Marga Provinsi Jawa Timur')
+
+@push('styles')
     <!-- Leaflet for interactive GIS map modal -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        navy: {
-                            DEFAULT: '#0f2a71',
-                            700: '#153894',
-                            800: '#112d7a',
-                            900: '#0f2a71',
-                            950: '#09183f',
-                        },
-                        gold: {
-                            DEFAULT: '#ffb700',
-                            400: '#ffc42e',
-                            500: '#ffb700',
-                            600: '#e69d00',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 8px;
-            width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-        #table_jembatan thead th {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body class="bg-slate-100 text-slate-800 antialiased font-sans flex flex-col min-h-screen selection:bg-[#ffb700] selection:text-[#0f2a71]">
+@endpush
 
-    <!-- Top Main Header (E-Jalin / SiTIA Style) -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
-        <div class="px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 gap-4">
-                
-                <!-- Left: Sidebar Toggle & Brand -->
-                <div class="flex items-center gap-3">
-                    <button id="toggleSidebarBtn" class="p-2 rounded-lg text-slate-500 hover:text-[#0f2a71] hover:bg-slate-100 transition focus:outline-none">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-
-                    <!-- E-Jalin Brand Logo -->
-                    <a href="{{ url('/dashboard') }}" class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-[#0f2a71] border-2 border-[#ffb700] flex items-center justify-center text-[#ffb700] font-black text-xl shadow-xs">
-                            EJ
-                        </div>
-                        <div class="leading-none">
-                            <span class="text-2xl font-black tracking-tighter text-[#0f2a71]">
-                                E<span class="text-[#ffb700]">-JALIN</span>
-                            </span>
-                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mt-0.5">
-                                JALIN JATIM
-                            </span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Center: Tahun Anggaran Pill -->
-                <div class="hidden md:flex items-center gap-2">
-                    <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 text-xs font-semibold text-slate-700">
-                        <span>Tahun Anggaran :</span>
-                        <select id="thangSelect" class="bg-transparent font-bold text-[#0f2a71] focus:outline-none cursor-pointer">
-                            <option value="2026" selected>2026</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                        </select>
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Right: User Identity & Actions -->
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs">
-                        <div class="w-7 h-7 rounded-full bg-[#0f2a71] text-[#ffb700] flex items-center justify-center font-bold text-xs">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <div class="text-left hidden sm:block">
-                            <span class="font-bold text-[#0f2a71] block leading-tight">
-                                {{ Auth::user()->name ?? 'Gubernur Provinsi Jawa Timur (Pemda)' }}
-                            </span>
-                            <span class="text-[10px] text-slate-500 font-medium">Dinas PU Bina Marga Prov. Jatim</span>
-                        </div>
-                    </div>
-
-                    <!-- Logout Button -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" title="Keluar dari sistem" class="p-2 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
-                        </button>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Container: Sidebar + Content -->
-    <div class="flex flex-grow relative overflow-hidden">
-        
-        <!-- Sidebar Navigation (Deep Navy Style) -->
-        <aside id="sidebar" class="w-64 bg-[#09183f] text-slate-300 flex-shrink-0 flex flex-col border-r border-[#0f2a71] transition-all duration-300 ease-in-out">
-            <div class="p-4 flex-grow overflow-y-auto space-y-6">
-                
-                <!-- Main Menu Group: Usulan PEMDA -->
-                <div>
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 py-1">
-                        <div class="flex items-center gap-2 text-white">
-                            <svg class="w-4 h-4 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                            </svg>
-                            <span>Usulan PEMDA</span>
-                        </div>
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </div>
-
-                    <!-- Submenu Items -->
-                    <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-4">
-                        <a href="{{ route('usulan-inpres') }}" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-[#ffb700] hover:bg-white/5 transition">
-                            Usulan Inpres
-                        </a>
-                        <a href="{{ route('dashboard') }}" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-[#ffb700] hover:bg-white/5 transition">
-                            Referensi Ruas
-                        </a>
-                        <!-- Active Submenu: Referensi Jembatan -->
-                        <a href="{{ route('referensi-jembatan') }}" class="block py-2 px-3 rounded-lg bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm">
-                            Referensi Jembatan
-                        </a>
-                        <!-- <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
-                            User Manual Usulan Inpres
-                        </a>
-                        <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
-                            Usulan Jembatan Gantung
-                        </a>
-                        <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
-                            Template Dokumen Data Dukung
-                        </a> -->
-                    </div>
-                </div>
-
-                <!-- Menu Group: Referensi Master -->
-                <div>
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 py-1">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3s3.5-1 3.5-3V7c0-2-1.5-3-3.5-3S4 5 4 7zm9 0v10c0 2 1.5 3 3.5 3s3.5-1 3.5-3V7c0-2-1.5-3-3.5-3s-3.5 1-3.5 3z"></path>
-                            </svg>
-                            <span>Referensi Master</span>
-                        </div>
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </div>
-                    <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-4">
-                        <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
-                            Data 38 Kab/Kota
-                        </a>
-                        <a href="#" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
-                            Daftar UPT PJJ
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Menu Group: Monitoring & Geospasial -->
-                <div>
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-3 py-1">
-                        <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
-                            </svg>
-                            <span>Geospasial GIS</span>
-                        </div>
-                    </div>
-                    <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-4">
-                        <a href="{{ url('/#geospasial') }}" target="_blank" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/5 transition">
-                            Peta Spasial Jatim
-                        </a>
-                        <a href="http://localhost:8080" target="_blank" class="block py-2 px-3 rounded-lg text-slate-300 hover:text-[#ffb700] hover:bg-white/5 transition flex items-center justify-between">
-                            <span>phpMyAdmin</span>
-                            <span class="text-[10px] bg-[#ffb700] text-[#0f2a71] px-1.5 py-0.2 rounded font-bold">DB</span>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Sidebar Footer Status -->
-            <div class="p-3.5 bg-[#071333] border-t border-[#0f2a71] text-[11px] text-slate-400 flex items-center justify-between">
-                <span>E-Jalin v12.0</span>
-                <span class="flex items-center gap-1.5 text-emerald-400 font-bold">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Online
-                </span>
-            </div>
-        </aside>
-
-        <!-- Main Page Content Area -->
-        <main class="flex-grow p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            
+@section('content')
             <!-- Breadcrumbs -->
             <nav class="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 mb-6 gap-2">
                 <a href="{{ url('/dashboard') }}" class="text-[#0f2a71] hover:underline">USULAN PEMDA</a>
@@ -637,7 +406,11 @@
 
         </div>
     </div>
+@endsection
 
+@push('scripts')
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Scripts: Jembatan Data, Filters, Pagination, & Handlers -->
     <script>
         // Exact dataset from SiTIA ~Jembatan.html export
@@ -1111,16 +884,9 @@
             exportCSV();
         }
 
-        // Toggle Sidebar on mobile
-        document.getElementById('toggleSidebarBtn').addEventListener('click', () => {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('-ml-64');
-        });
-
         // Initialize on DOM load
         document.addEventListener('DOMContentLoaded', () => {
             applyFilters();
         });
     </script>
-</body>
-</html>
+@endpush

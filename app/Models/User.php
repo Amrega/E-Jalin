@@ -22,8 +22,18 @@ class User extends Authenticatable
         'name',
         'username',
         'email',
+        'role_id',
+        'void',
         'password',
     ];
+
+    /**
+     * Relasi ke master Role
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,6 +55,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'void' => 'boolean',
         ];
     }
 }

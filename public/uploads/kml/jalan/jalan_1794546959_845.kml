@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Baron - Kertosono</name>
+    <Placemark>
+      <name>Ruas Jalan Baron - Kertosono</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.0512,-7.6012,0
+          112.0812,-7.5956,0
+          112.1012,-7.5912,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

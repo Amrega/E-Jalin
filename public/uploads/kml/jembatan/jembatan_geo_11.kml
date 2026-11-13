@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Jembatan Grindulu Pacitan</name>
+    <Placemark>
+      <name>Jembatan Grindulu Pacitan</name>
+      <Point>
+        <coordinates>111.1085,-8.2212,0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

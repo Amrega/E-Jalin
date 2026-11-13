@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Jembatan Suramadu Sisi Madura</name>
+    <Placemark>
+      <name>Jembatan Suramadu Sisi Madura</name>
+      <Point>
+        <coordinates>112.7825,-7.1682,0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

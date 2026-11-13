@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Durenan - Panggul</name>
+    <Placemark>
+      <name>Ruas Jalan Durenan - Panggul</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          111.7812,-8.1012,0
+          111.6212,-8.1812,0
+          111.4523,-8.2415,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

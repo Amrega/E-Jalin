@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Pandaan - Purwosari</name>
+    <Placemark>
+      <name>Ruas Jalan Pandaan - Purwosari</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.7012,-7.6512,0
+          112.7212,-7.7012,0
+          112.7412,-7.7612,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

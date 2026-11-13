@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Koridor 01: Pantura Jatim (Tuban - Lamongan - Gresik - Surabaya)</name>
+    <Placemark>
+      <name>Koridor 01: Pantura Jatim (Tuban - Lamongan - Gresik - Surabaya)</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.0521,-6.8924,0
+          112.1643,-7.1121,0
+          112.4132,-7.1215,0
+          112.5843,-7.1234,0
+          112.6512,-7.1623,0
+          112.7521,-7.2543,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

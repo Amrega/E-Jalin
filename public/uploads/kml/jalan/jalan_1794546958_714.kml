@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Singosari - Kepanjen</name>
+    <Placemark>
+      <name>Ruas Jalan Singosari - Kepanjen</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.6612,-7.8912,0
+          112.6312,-7.9812,0
+          112.6012,-8.0612,0
+          112.5712,-8.1312,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

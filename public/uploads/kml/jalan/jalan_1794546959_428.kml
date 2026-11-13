@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Camplong - Torjun</name>
+    <Placemark>
+      <name>Ruas Jalan Camplong - Torjun</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          113.3312,-7.2012,0
+          113.2712,-7.1812,0
+          113.2012,-7.1712,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Porong - Bangil</name>
+    <Placemark>
+      <name>Ruas Jalan Porong - Bangil</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.7012,-7.5312,0
+          112.7412,-7.5612,0
+          112.7912,-7.5912,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

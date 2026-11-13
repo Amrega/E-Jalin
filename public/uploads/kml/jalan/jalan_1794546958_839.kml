@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Babat - Sukodadi</name>
+    <Placemark>
+      <name>Ruas Jalan Babat - Sukodadi</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.1643,-7.1121,0
+          112.2312,-7.1189,0
+          112.2812,-7.1212,0
+          112.3212,-7.1245,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

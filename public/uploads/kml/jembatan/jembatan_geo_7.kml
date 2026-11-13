@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Jembatan Gladak Perak Reborn</name>
+    <Placemark>
+      <name>Jembatan Gladak Perak Reborn</name>
+      <Point>
+        <coordinates>112.9855,-8.1925,0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

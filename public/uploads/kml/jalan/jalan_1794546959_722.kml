@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Caruban - Saradan</name>
+    <Placemark>
+      <name>Ruas Jalan Caruban - Saradan</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          111.6612,-7.5412,0
+          111.7112,-7.5489,0
+          111.7512,-7.5512,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

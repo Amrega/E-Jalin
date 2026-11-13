@@ -10,7 +10,7 @@ class AuthController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('geospasial.index');
         }
 
         return view('auth.login');
@@ -31,10 +31,10 @@ class AuthController extends Controller
         // Allow login using username or email
         $fieldType = filter_var($credentials['username'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        if (Auth::attempt([$fieldType => $credentials['username'], 'password' => $credentials['password']], $remember)) {
+        if (Auth::attempt([$fieldType => $credentials['username'], 'password' => $credentials['password'], 'void' => 0], $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('geospasial.index'));
         }
 
         return back()->withErrors([

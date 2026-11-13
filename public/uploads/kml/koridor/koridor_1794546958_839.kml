@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Koridor 03: Lingkar Wilis (Madiun - Ponorogo - Nganjuk - Kediri)</name>
+    <Placemark>
+      <name>Koridor 03: Lingkar Wilis (Madiun - Ponorogo - Nganjuk - Kediri)</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          111.5234,-7.6321,0
+          111.4612,-7.8743,0
+          111.7523,-7.7512,0
+          111.9023,-7.6012,0
+          112.0123,-7.8214,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

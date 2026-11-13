@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Tongas - Banyuanyar</name>
+    <Placemark>
+      <name>Ruas Jalan Tongas - Banyuanyar</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          113.1023,-7.7312,0
+          113.1812,-7.7812,0
+          113.2512,-7.8212,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

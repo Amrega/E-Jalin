@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Tanah Merah - Kwanyar</name>
+    <Placemark>
+      <name>Ruas Jalan Tanah Merah - Kwanyar</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.8712,-7.0612,0
+          112.8612,-7.1012,0
+          112.8512,-7.1412,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

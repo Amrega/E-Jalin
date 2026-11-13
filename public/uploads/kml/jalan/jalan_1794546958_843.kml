@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Manyar - Sidayu</name>
+    <Placemark>
+      <name>Ruas Jalan Manyar - Sidayu</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.5843,-7.1234,0
+          112.5712,-7.0612,0
+          112.5612,-7.0123,0
+          112.5512,-6.9812,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

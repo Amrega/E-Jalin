@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Ranuyoso - Kedungjajang</name>
+    <Placemark>
+      <name>Ruas Jalan Ranuyoso - Kedungjajang</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          113.2412,-8.0112,0
+          113.2412,-8.0412,0
+          113.2412,-8.0812,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Jembatan Kali Porong Baru</name>
+    <Placemark>
+      <name>Jembatan Kali Porong Baru</name>
+      <Point>
+        <coordinates>112.7125,-7.5552,0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

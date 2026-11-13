@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Ruas Jalan Paciran - Brondong</name>
+    <Placemark>
+      <name>Ruas Jalan Paciran - Brondong</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.1812,-6.8712,0
+          112.2412,-6.8814,0
+          112.3012,-6.8912,0
+          112.3512,-6.8923,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

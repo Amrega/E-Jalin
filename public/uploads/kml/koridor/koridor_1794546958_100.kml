@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Koridor 06: Trans Madura (Bangkalan - Sampang - Pamekasan - Sumenep)</name>
+    <Placemark>
+      <name>Koridor 06: Trans Madura (Bangkalan - Sampang - Pamekasan - Sumenep)</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.7512,-7.0423,0
+          113.1023,-7.1412,0
+          113.2412,-7.1923,0
+          113.4723,-7.1612,0
+          113.8612,-7.0123,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

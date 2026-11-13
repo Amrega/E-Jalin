@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Koridor 04: Bromo-Semeru (Pasuruan - Probolinggo - Lumajang)</name>
+    <Placemark>
+      <name>Koridor 04: Bromo-Semeru (Pasuruan - Probolinggo - Lumajang)</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.9023,-7.6512,0
+          113.1023,-7.7123,0
+          113.2134,-7.7523,0
+          113.2512,-8.0012,0
+          113.2234,-8.1345,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>

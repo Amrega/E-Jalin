@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Koridor 07: Poros Metropolitan (Mojokerto - Sidoarjo - Surabaya)</name>
+    <Placemark>
+      <name>Koridor 07: Poros Metropolitan (Mojokerto - Sidoarjo - Surabaya)</name>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.4312,-7.4723,0
+          112.5823,-7.4112,0
+          112.7123,-7.4523,0
+          112.7312,-7.3512,0
+          112.7523,-7.2512,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+  </Document>
+</kml>
