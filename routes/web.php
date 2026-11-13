@@ -12,6 +12,7 @@ use App\Http\Controllers\RuasJalanController;
 use App\Http\Controllers\TematikKawasanController;
 use App\Http\Controllers\UptDinasController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsulanInpresController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,9 +38,10 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('geospasial.index');
     });
 
-    Route::get('/usulan-inpres', function () {
-        return view('usulan-inpres');
-    })->name('usulan-inpres');
+    // CRUD Usulan Inpres
+    Route::resource('usulan-inpres', UsulanInpresController::class)->parameters(['usulan-inpres' => 'usulan_inpres']);
+    Route::post('usulan-inpres/{usulan_inpres}/toggle-void', [UsulanInpresController::class, 'toggleVoid'])->name('usulan-inpres.toggle-void');
+    Route::get('usulan-inpres/{usulan_inpres}/download-dokumen', [UsulanInpresController::class, 'downloadDokumen'])->name('usulan-inpres.download-dokumen');
 
     Route::get('/referensi-jembatan', function () {
         return redirect()->route('jembatan.index');

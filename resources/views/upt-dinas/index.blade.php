@@ -272,9 +272,7 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">
-                        EJ
-                    </div>
+                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Tambah UPT PJJ</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Registrasi Unit Pengelolaan Jalan & Jembatan</p>
@@ -341,9 +339,7 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">
-                        EJ
-                    </div>
+                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Ubah Data UPT PJJ</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Perbarui Informasi Kantor Unit Pengelolaan</p>
@@ -407,7 +403,7 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">EJ</div>
+                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Detail UPT PJJ</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Informasi Wilayah Kerja Pengelolaan Jalan & Jembatan</p>

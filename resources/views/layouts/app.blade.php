@@ -67,16 +67,21 @@
     <!-- Header Partial -->
     @include('layouts.header')
 
-    <!-- Main Body Container: Sidebar + Content -->
+    <!-- Main Body Container: Sidebar + Content + Footer -->
     <div class="flex flex-grow relative overflow-hidden">
         
         <!-- Sidebar Partial -->
         @include('layouts.sidebar')
 
-        <!-- Dynamic Main Page Content -->
-        <main class="flex-grow p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            @yield('content')
-        </main>
+        <!-- Right Column: Dynamic Main Page Content + Footer -->
+        <div class="flex-grow flex flex-col min-w-0 overflow-y-auto">
+            <main class="flex-grow p-4 sm:p-6 lg:p-8">
+                @yield('content')
+            </main>
+
+            <!-- Footer Partial -->
+            @include('layouts.footer')
+        </div>
 
     </div>
 

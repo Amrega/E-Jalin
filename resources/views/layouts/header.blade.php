@@ -11,11 +11,9 @@
                     </svg>
                 </button>
 
-                <!-- E-Jalin Brand Logo inspired by SiTIA layout -->
+                <!-- E-Jalin Brand Logo -->
                 <a href="{{ url('/dashboard') }}" class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-[#0f2a71] border-2 border-[#ffb700] flex items-center justify-center text-[#ffb700] font-black text-xl shadow-xs">
-                        EJ
-                    </div>
+                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-9 h-9 rounded-full object-cover shadow-xs ring-2 ring-[#ffb700]">
                     <div class="leading-none">
                         <span class="text-2xl font-black tracking-tighter text-[#0f2a71]">
                             E<span class="text-[#ffb700]">-JALIN</span>

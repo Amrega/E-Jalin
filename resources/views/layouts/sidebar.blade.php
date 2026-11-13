@@ -57,7 +57,7 @@
                 <a href="{{ route('jembatan.index') }}" class="block py-2 px-3 rounded-lg transition {{ (request()->routeIs('jembatan*') || request()->is('referensi-jembatan*')) ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
                     Referensi Jembatan
                 </a>
-                <a href="{{ route('usulan-inpres') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('usulan-inpres*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                <a href="{{ route('usulan-inpres.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('usulan-inpres*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
                     Usulan Inpres
                 </a>
             </div>
