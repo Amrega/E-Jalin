@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 2, 'nama_role' => 'pu_turdal', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
             ['id' => 3, 'nama_role' => 'bappeda', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
             ['id' => 4, 'nama_role' => 'pu_bintek', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
+            ['id' => 5, 'nama_role' => 'kabupaten_kota', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
         ], ['id'], ['nama_role', 'void', 'updated_at']);
 
         // 2. Users
@@ -31,6 +32,39 @@ class DatabaseSeeder extends Seeder
                 'role_id' => 1,
                 'void' => 0,
                 'password' => Hash::make('admin'),
+            ]
+        );
+
+        User::updateOrCreate(
+            ['username' => 'pu_turdal'],
+            [
+                'name' => 'Petugas PU Turdal',
+                'email' => 'pu_turdal@ejalin.jatimprov.go.id',
+                'role_id' => 2,
+                'void' => 0,
+                'password' => Hash::make('pu_turdal'),
+            ]
+        );
+
+        User::updateOrCreate(
+            ['username' => 'bappeda'],
+            [
+                'name' => 'Petugas Bappeda',
+                'email' => 'bappeda@ejalin.jatimprov.go.id',
+                'role_id' => 3,
+                'void' => 0,
+                'password' => Hash::make('bappeda'),
+            ]
+        );
+
+        User::updateOrCreate(
+            ['username' => 'pu_bintek'],
+            [
+                'name' => 'Petugas PU Bintek',
+                'email' => 'pu_bintek@ejalin.jatimprov.go.id',
+                'role_id' => 4,
+                'void' => 0,
+                'password' => Hash::make('pu_bintek'),
             ]
         );
 
@@ -95,6 +129,31 @@ class DatabaseSeeder extends Seeder
             ['id' => 37, 'provinsi_id' => 1, 'upt_id' => 8, 'nama_kabupaten_kota' => 'Kota Probolinggo', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 38, 'provinsi_id' => 1, 'upt_id' => 1, 'nama_kabupaten_kota' => 'Kota Surabaya', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
         ], ['id'], ['provinsi_id', 'upt_id', 'nama_kabupaten_kota', 'void', 'updated_at']);
+
+        // 5b. Users untuk seluruh 38 Kabupaten dan Kota di Jawa Timur
+        $kabKotaRows = DB::table('kabupaten_kota')->orderBy('id')->get();
+        foreach ($kabKotaRows as $kk) {
+            $lowerName = strtolower(trim($kk->nama_kabupaten_kota));
+            if (str_starts_with($lowerName, 'kabupaten ')) {
+                $slug = 'kab_' . str_replace(' ', '_', trim(substr($lowerName, 10)));
+            } elseif (str_starts_with($lowerName, 'kota ')) {
+                $slug = 'kota_' . str_replace(' ', '_', trim(substr($lowerName, 5)));
+            } else {
+                $slug = str_replace(' ', '_', $lowerName);
+            }
+
+            User::updateOrCreate(
+                ['username' => $slug],
+                [
+                    'name'              => 'Pemda ' . $kk->nama_kabupaten_kota,
+                    'email'             => $slug . '@ejalin.jatimprov.go.id',
+                    'role_id'           => 5,
+                    'kabupaten_kota_id' => $kk->id,
+                    'void'              => 0,
+                    'password'          => Hash::make($slug),
+                ]
+            );
+        }
 
         // 6. Jenis Penanganan
         DB::table('jenis_penanganan')->upsert([
@@ -187,8 +246,8 @@ class DatabaseSeeder extends Seeder
             ['id' => 16, 'ruas_jalan_id' => 21, 'nama_jembatan' => 'Jembatan Kali Sampang', 'nomor_jembatan' => 'JMB-14-SPG', 'panjang_jembatan' => 88, 'status_jembatan' => 'Kabupaten/Kota', 'file_kml_jembatan' => 'jembatan_geo_16.kml', 'void' => 0, 'created_at' => '2026-11-12 22:16:00', 'updated_at' => '2026-11-12 22:43:59'],
         ], ['id'], ['ruas_jalan_id', 'nama_jembatan', 'nomor_jembatan', 'panjang_jembatan', 'status_jembatan', 'file_kml_jembatan', 'void', 'updated_at']);
 
-        // 11. Usulan Inpres
-        DB::table('usulan_inpres')->upsert([
+        // 11. Usulan
+        DB::table('usulan')->upsert([
             [
                 'id' => 1,
                 'kode_usulan' => '238898',
@@ -207,9 +266,9 @@ class DatabaseSeeder extends Seeder
                 'keterangan' => 'Mendukung tematik kawasan komoditas unggulan tebu tapal kuda Kab. Lumajang.',
                 'status_dokumen_pendukung' => 'SIAP',
                 'file_dokumen_pendukung' => null,
-                'prioritas_pu' => 1,
+                'prioritas_pu' => 0,
                 'prioritas_bappeda' => 0,
-                'verifikasi_pu' => 1,
+                'verifikasi_pu' => 0,
                 'void' => 0,
                 'created_at' => '2026-11-13 08:00:00',
                 'updated_at' => '2026-11-13 08:00:00',
@@ -232,9 +291,9 @@ class DatabaseSeeder extends Seeder
                 'keterangan' => 'Menjadi akses utama yang mendukung kawasan Swasembada Pangan di Kabupaten Jombang.',
                 'status_dokumen_pendukung' => 'SIAP',
                 'file_dokumen_pendukung' => null,
-                'prioritas_pu' => 1,
-                'prioritas_bappeda' => 1,
-                'verifikasi_pu' => 1,
+                'prioritas_pu' => 0,
+                'prioritas_bappeda' => 0,
+                'verifikasi_pu' => 0,
                 'void' => 0,
                 'created_at' => '2026-11-13 08:05:00',
                 'updated_at' => '2026-11-13 08:05:00',
@@ -257,9 +316,9 @@ class DatabaseSeeder extends Seeder
                 'keterangan' => 'Mendukung konektivitas kawasan sentra logistik dan pariwisata Banyuwangi.',
                 'status_dokumen_pendukung' => 'SIAP',
                 'file_dokumen_pendukung' => null,
-                'prioritas_pu' => 1,
-                'prioritas_bappeda' => 1,
-                'verifikasi_pu' => 1,
+                'prioritas_pu' => 0,
+                'prioritas_bappeda' => 0,
+                'verifikasi_pu' => 0,
                 'void' => 0,
                 'created_at' => '2026-11-13 08:10:00',
                 'updated_at' => '2026-11-13 08:10:00',
@@ -282,9 +341,9 @@ class DatabaseSeeder extends Seeder
                 'keterangan' => 'Akses vital menuju Jalur Lintas Selatan (JLS) dan kawasan sentra ekonomi Malang.',
                 'status_dokumen_pendukung' => 'SIAP',
                 'file_dokumen_pendukung' => null,
-                'prioritas_pu' => 1,
-                'prioritas_bappeda' => 1,
-                'verifikasi_pu' => 1,
+                'prioritas_pu' => 0,
+                'prioritas_bappeda' => 0,
+                'verifikasi_pu' => 0,
                 'void' => 0,
                 'created_at' => '2026-11-13 08:15:00',
                 'updated_at' => '2026-11-13 08:15:00',
@@ -307,9 +366,9 @@ class DatabaseSeeder extends Seeder
                 'keterangan' => 'Menghubungkan pusat perekonomian dan industri Pantura Gresik - Lamongan.',
                 'status_dokumen_pendukung' => 'SIAP',
                 'file_dokumen_pendukung' => null,
-                'prioritas_pu' => 1,
-                'prioritas_bappeda' => 1,
-                'verifikasi_pu' => 1,
+                'prioritas_pu' => 0,
+                'prioritas_bappeda' => 0,
+                'verifikasi_pu' => 0,
                 'void' => 0,
                 'created_at' => '2026-11-13 08:20:00',
                 'updated_at' => '2026-11-13 08:20:00',

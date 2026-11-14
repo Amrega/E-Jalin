@@ -12,7 +12,7 @@ use App\Http\Controllers\RuasJalanController;
 use App\Http\Controllers\TematikKawasanController;
 use App\Http\Controllers\UptDinasController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UsulanInpresController;
+use App\Http\Controllers\UsulanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -38,10 +38,12 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('geospasial.index');
     });
 
-    // CRUD Usulan Inpres
-    Route::resource('usulan-inpres', UsulanInpresController::class)->parameters(['usulan-inpres' => 'usulan_inpres']);
-    Route::post('usulan-inpres/{usulan_inpres}/toggle-void', [UsulanInpresController::class, 'toggleVoid'])->name('usulan-inpres.toggle-void');
-    Route::get('usulan-inpres/{usulan_inpres}/download-dokumen', [UsulanInpresController::class, 'downloadDokumen'])->name('usulan-inpres.download-dokumen');
+    // CRUD Usulan
+    Route::resource('usulan', UsulanController::class)->parameters(['usulan' => 'usulan']);
+    Route::post('usulan/{usulan}/update-status', [UsulanController::class, 'updateStatus'])->name('usulan.update-status');
+    Route::post('usulan/{usulan}/toggle-void', [UsulanController::class, 'toggleVoid'])->name('usulan.toggle-void');
+    Route::get('usulan/{usulan}/download-dokumen', [UsulanController::class, 'downloadDokumen'])->name('usulan.download-dokumen');
+    Route::redirect('usulan-inpres', '/usulan');
 
     Route::get('/referensi-jembatan', function () {
         return redirect()->route('jembatan.index');

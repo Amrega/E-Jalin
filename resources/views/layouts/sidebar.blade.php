@@ -36,7 +36,25 @@
             </div>
         </div>
 
-        <!-- 2. Induk Menu: Usulan PEMDA -->
+        <!-- 2. Induk Menu: Usulan -->
+        <div>
+            <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+                <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
+                    <svg class="w-3.5 h-3.5 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <span>Usulan</span>
+            </div>
+
+            <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
+                <a href="{{ route('usulan.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('usulan*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                    Usulan
+                </a>
+            </div>
+        </div>
+
+        <!-- 3. Induk Menu: Referensi -->
         <div>
             <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
                 <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
@@ -44,7 +62,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                     </svg>
                 </div>
-                <span>Usulan PEMDA</span>
+                <span>Referensi</span>
             </div>
 
             <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
@@ -56,9 +74,6 @@
                 </a>
                 <a href="{{ route('jembatan.index') }}" class="block py-2 px-3 rounded-lg transition {{ (request()->routeIs('jembatan*') || request()->is('referensi-jembatan*')) ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
                     Referensi Jembatan
-                </a>
-                <a href="{{ route('usulan-inpres.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('usulan-inpres*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Usulan Inpres
                 </a>
             </div>
         </div>

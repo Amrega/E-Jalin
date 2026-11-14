@@ -193,6 +193,11 @@
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold border {{ $badgeColor }}">
                                         {{ $item->role->nama_role }}
                                     </span>
+                                    @if($item->kabupatenKota)
+                                        <span class="block text-[10px] font-semibold text-slate-500 mt-1">
+                                            {{ $item->kabupatenKota->nama_kabupaten_kota }}
+                                        </span>
+                                    @endif
                                 @else
                                     <span class="text-slate-400 italic text-[11px]">Tanpa Role</span>
                                 @endif
@@ -355,6 +360,18 @@
 
                     <div>
                         <label class="block font-bold text-slate-700 mb-1.5">
+                            Wilayah Kabupaten/Kota <span class="text-[10px] font-normal text-slate-400">(Khusus Role Kabupaten/Kota)</span>
+                        </label>
+                        <select name="kabupaten_kota_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                            <option value="">-- Bukan Akun Spesifik Kab/Kota (Semua Wilayah) --</option>
+                            @foreach($kabupatenKotaList ?? [] as $kk)
+                                <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1.5">
                             Alamat Email <span class="text-red-500">*</span>
                         </label>
                         <input 
@@ -458,6 +475,18 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1.5">
+                            Wilayah Kabupaten/Kota <span class="text-[10px] font-normal text-slate-400">(Khusus Role Kabupaten/Kota)</span>
+                        </label>
+                        <select id="edit_kabupaten_kota_id" name="kabupaten_kota_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                            <option value="">-- Bukan Akun Spesifik Kab/Kota (Semua Wilayah) --</option>
+                            @foreach($kabupatenKotaList ?? [] as $kk)
+                                <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
@@ -577,6 +606,7 @@
         document.getElementById('edit_username').value = data.username || '';
         document.getElementById('edit_email').value = data.email || '';
         document.getElementById('edit_role_id').value = data.role_id || '';
+        document.getElementById('edit_kabupaten_kota_id').value = data.kabupaten_kota_id || '';
         document.getElementById('edit_void').checked = data.void == 1;
 
         document.getElementById('modalEdit').classList.remove('hidden');

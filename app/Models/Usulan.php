@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UsulanInpres extends Model
+class Usulan extends Model
 {
     use HasFactory;
 
-    protected $table = 'usulan_inpres';
+    protected $table = 'usulan';
 
     protected $fillable = [
         'kode_usulan',

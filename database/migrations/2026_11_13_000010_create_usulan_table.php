@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('usulan_inpres')) {
-            Schema::create('usulan_inpres', function (Blueprint $table) {
+        Schema::dropIfExists('usulan_inpres');
+
+        if (!Schema::hasTable('usulan')) {
+            Schema::create('usulan', function (Blueprint $table) {
                 $table->integer('id', true);
                 $table->string('kode_usulan', 50)->nullable();
                 $table->integer('kabupaten_kota_id');
@@ -37,36 +39,36 @@ return new class extends Migration
                 $table->timestamp('created_at')->nullable()->useCurrent();
                 $table->timestamp('updated_at')->nullable()->useCurrent()->useCurrentOnUpdate();
 
-                $table->foreign('kabupaten_kota_id', 'fk_usulan_inpres_kab_kota')
+                $table->foreign('kabupaten_kota_id', 'fk_usulan_kab_kota')
                     ->references('id')
                     ->on('kabupaten_kota')
                     ->cascadeOnUpdate();
 
-                $table->foreign('tematik_kawasan_id', 'fk_usulan_inpres_tematik')
+                $table->foreign('tematik_kawasan_id', 'fk_usulan_tematik')
                     ->references('id')
                     ->on('tematik_kawasan')
                     ->nullOnDelete()
                     ->cascadeOnUpdate();
 
-                $table->foreign('jenis_penanganan_id', 'fk_usulan_inpres_jenis_penanganan')
+                $table->foreign('jenis_penanganan_id', 'fk_usulan_jenis_penanganan')
                     ->references('id')
                     ->on('jenis_penanganan')
                     ->nullOnDelete()
                     ->cascadeOnUpdate();
 
-                $table->foreign('koridor_id', 'fk_usulan_inpres_koridor')
+                $table->foreign('koridor_id', 'fk_usulan_koridor')
                     ->references('id')
                     ->on('koridor')
                     ->nullOnDelete()
                     ->cascadeOnUpdate();
 
-                $table->foreign('ruas_jalan_id', 'fk_usulan_inpres_ruas_jalan')
+                $table->foreign('ruas_jalan_id', 'fk_usulan_ruas_jalan')
                     ->references('id')
                     ->on('ruas_jalan')
                     ->nullOnDelete()
                     ->cascadeOnUpdate();
 
-                $table->foreign('jembatan_id', 'fk_usulan_inpres_jembatan')
+                $table->foreign('jembatan_id', 'fk_usulan_jembatan')
                     ->references('id')
                     ->on('jembatan')
                     ->nullOnDelete()
@@ -80,6 +82,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('usulan_inpres');
+        Schema::dropIfExists('usulan');
     }
 };

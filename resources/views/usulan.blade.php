@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Usulan Inpres - E-Jalin Dinas PU Bina Marga Provinsi Jawa Timur')
+@section('title', 'Usulan - E-Jalin Dinas PU Bina Marga Provinsi Jawa Timur')
 
 @push('styles')
     <!-- Leaflet for interactive map modal -->
@@ -12,7 +12,7 @@
     <nav class="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 mb-6 gap-2">
         <a href="{{ url('/dashboard') }}" class="text-[#0f2a71] hover:underline">USULAN PEMDA</a>
         <span class="text-slate-400">&gt;</span>
-        <span class="text-[#b87500] font-extrabold">USULAN INPRES</span>
+        <span class="text-[#b87500] font-extrabold">USULAN</span>
     </nav>
 
     <!-- Notification Messages -->
@@ -56,15 +56,49 @@
     </div>
     @endif
 
+    @php
+        $currentUser = auth()->user();
+        $isKabKotaUser = $currentUser && $currentUser->isKabupatenKota();
+        $isVerifierUser = $currentUser && $currentUser->isVerifierRole();
+        $canCreateUsulan = $currentUser && $currentUser->canManageUsulan();
+        $userRoleName = $currentUser ? $currentUser->roleName() : '';
+    @endphp
+
     <!-- Top Action Header & Buttons -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div class="flex items-center gap-3">
-            <button onclick="openModalTambah()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5 active:translate-y-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
-                </svg>
-                <span>+ Tambah Usulan</span>
-            </button>
+        <div class="flex flex-wrap items-center gap-3">
+            @if($canCreateUsulan)
+                <button onclick="openModalTambah()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5 active:translate-y-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    <span>+ Tambah Usulan</span>
+                </button>
+            @endif
+
+            @if($isKabKotaUser && $currentUser->kabupatenKota)
+                <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-[#0f2a71] text-xs font-bold">
+                    <svg class="w-4 h-4 text-[#ffb700]" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Wilayah Akses: {{ strtoupper($currentUser->kabupatenKota->nama_kabupaten_kota) }} (Hanya Usulan Wilayah Sendiri)</span>
+                </div>
+            @elseif($isVerifierUser)
+                <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>
+                        @if($userRoleName === 'pu_turdal')
+                            Mode Role PU Turdal: Hanya Lihat Usulan &amp; Input Indikasi Ruas Prioritas (PU)
+                        @elseif($userRoleName === 'bappeda')
+                            Mode Role Bappeda: Hanya Lihat Usulan &amp; Input Indikasi Ruas Prioritas (Bappeda)
+                        @elseif($userRoleName === 'pu_bintek')
+                            Mode Role PU Bintek: Hanya Lihat Usulan &amp; Input Verifikasi (PU)
+                        @endif
+                    </span>
+                </div>
+            @endif
         </div>
 
         <div class="flex items-center gap-2.5">
@@ -83,23 +117,8 @@
         </div>
     </div>
 
-    <!-- Kapasitas Fiskal Daerah Banner -->
-    <div class="mb-6 p-4 rounded-xl border border-amber-300 bg-amber-50/80 text-amber-900 text-xs sm:text-sm font-medium flex items-center gap-3 shadow-xs">
-        <div class="w-8 h-8 rounded-lg bg-amber-200 text-amber-800 flex items-center justify-center flex-shrink-0">
-            <svg class="w-5 h-5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-        </div>
-        <div>
-            Berdasarkan <span class="font-bold">PMK No 97 Tahun 2025</span> (tanggal 22 Desember 2025), Rentang Kapasitas Fiskal Daerah (<span class="font-bold text-[#0f2a71]">JAWA TIMUR</span>) Adalah: 
-            <span class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold ml-1 border border-emerald-300 uppercase text-xs">
-                Tinggi
-            </span>
-        </div>
-    </div>
-
     <!-- Filter Panel Box -->
-    <form method="GET" action="{{ route('usulan-inpres.index') }}" id="filterForm" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs mb-6">
+    <form method="GET" action="{{ route('usulan.index') }}" id="filterForm" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs mb-6">
         <input type="hidden" name="per_page" id="hiddenPerPage" value="{{ request('per_page', 10) }}">
         <input type="hidden" name="search" id="hiddenSearch" value="{{ request('search') }}">
 
@@ -163,7 +182,7 @@
                 Menampilkan {{ $usulanList->total() }} usulan sesuai filter.
             </span>
             @if(request()->anyFilled(['kabupaten_kota_id', 'nama_pengusul', 'tematik_kawasan_id', 'search', 'status']))
-                <a href="{{ route('usulan-inpres.index') }}" class="text-rose-600 hover:text-rose-700 font-bold flex items-center gap-1 hover:underline">
+                <a href="{{ route('usulan.index') }}" class="text-rose-600 hover:text-rose-700 font-bold flex items-center gap-1 hover:underline">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                     </svg>
@@ -230,7 +249,7 @@
             <div class="text-xl sm:text-2xl font-black text-emerald-700 mt-3 truncate" title="Rp {{ number_format($totalEstimasiBiaya, 0, ',', '.') }}">
                 Rp {{ number_format($totalEstimasiBiaya, 0, ',', '.') }}
             </div>
-            <div class="text-[11px] text-slate-400 mt-1 font-medium">Total Anggaran Inpres Jawa Timur</div>
+            <div class="text-[11px] text-slate-400 mt-1 font-medium">Total Anggaran Usulan Jawa Timur</div>
         </div>
     </div>
 
@@ -238,7 +257,7 @@
     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
         
         <!-- Table Controls: Length & Search -->
-        <form method="GET" action="{{ route('usulan-inpres.index') }}" class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <form method="GET" action="{{ route('usulan.index') }}" class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
             <input type="hidden" name="kabupaten_kota_id" value="{{ request('kabupaten_kota_id') }}">
             <input type="hidden" name="nama_pengusul" value="{{ request('nama_pengusul') }}">
             <input type="hidden" name="tematik_kawasan_id" value="{{ request('tematik_kawasan_id') }}">
@@ -303,6 +322,11 @@
                 </thead>
 
                 <tbody class="divide-y divide-slate-200 text-slate-700 bg-white">
+                    @php
+                        $canPrioritasPu = auth()->check() && auth()->user()->canEditPrioritasPu();
+                        $canPrioritasBappeda = auth()->check() && auth()->user()->canEditPrioritasBappeda();
+                        $canVerifikasiPu = auth()->check() && auth()->user()->canEditVerifikasiPu();
+                    @endphp
                     @forelse($usulanList as $index => $item)
                         @php
                             $lokasiText = 'JAWA TIMUR - ' . strtoupper($item->kabupatenKota->nama_kabupaten_kota ?? '-');
@@ -364,17 +388,34 @@
                                 {{ $item->keterangan ?: '-' }}
                             </td>
 
-                            <!-- Indikasi Ruas Prioritas (PU, Bappeda) -->
+                            <!-- Indikasi Ruas Prioritas: PU (Role: pu_turdal) -->
                             <td class="p-2.5 text-center">
-                                <span class="w-2.5 h-2.5 rounded-full inline-block {{ $item->prioritas_pu ? 'bg-emerald-500' : 'bg-slate-300' }}" title="{{ $item->prioritas_pu ? 'Prioritas PU' : 'Belum' }}"></span>
-                            </td>
-                            <td class="p-2.5 text-center">
-                                <span class="w-2.5 h-2.5 rounded-full inline-block {{ $item->prioritas_bappeda ? 'bg-emerald-500' : 'bg-slate-300' }}" title="{{ $item->prioritas_bappeda ? 'Prioritas Bappeda' : 'Belum' }}"></span>
+                                <span
+                                    class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->prioritas_pu ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
+                                    title="{{ $item->prioritas_pu ? 'Indikasi Prioritas PU: Disetujui' : 'Indikasi Prioritas PU: Belum (X)' }}"
+                                >
+                                    {!! $item->prioritas_pu ? '&#10003;' : '&#10005;' !!}
+                                </span>
                             </td>
 
-                            <!-- Verifikasi (PU) -->
-                            <td class="p-2.5 text-center font-bold {{ $item->verifikasi_pu ? 'text-emerald-600' : 'text-slate-400' }}">
-                                {!! $item->verifikasi_pu ? '&#10003;' : '&#9633;' !!}
+                            <!-- Indikasi Ruas Prioritas: Bappeda (Role: bappeda) -->
+                            <td class="p-2.5 text-center">
+                                <span
+                                    class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->prioritas_bappeda ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
+                                    title="{{ $item->prioritas_bappeda ? 'Indikasi Prioritas Bappeda: Disetujui' : 'Indikasi Prioritas Bappeda: Belum (X)' }}"
+                                >
+                                    {!! $item->prioritas_bappeda ? '&#10003;' : '&#10005;' !!}
+                                </span>
+                            </td>
+
+                            <!-- Verifikasi: PU (Role: pu_bintek) -->
+                            <td class="p-2.5 text-center">
+                                <span
+                                    class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->verifikasi_pu ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
+                                    title="{{ $item->verifikasi_pu ? 'Verifikasi PU: Terverifikasi' : 'Verifikasi PU: Belum (X)' }}"
+                                >
+                                    {!! $item->verifikasi_pu ? '&#10003;' : '&#10005;' !!}
+                                </span>
                             </td>
 
                             <!-- Peta Pin -->
@@ -402,29 +443,64 @@
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                     </button>
-                                    <button
-                                        type="button"
-                                        onclick="openModalEdit(@js($item))"
-                                        title="Edit Usulan"
-                                        class="p-1.5 rounded-lg bg-blue-50 text-[#0f2a71] hover:bg-blue-100 transition"
-                                    >
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onclick="openModalHapus({{ $item->id }}, @js($item->nama_kegiatan))"
-                                        title="Hapus Usulan"
-                                        class="p-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition"
-                                    >
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                    </button>
+
+                                    @if($userRoleName === 'pu_turdal')
+                                        <button
+                                            type="button"
+                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'prioritas_pu', 'Indikasi Ruas Prioritas - PU (PU Turdal)', {{ $item->prioritas_pu ? '1' : '0' }})"
+                                            title="Form Indikasi Ruas Prioritas PU"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#0f2a71] text-[#ffb700] hover:bg-navy-800 font-bold text-[10px] transition shadow-2xs"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <span>Indikasi PU</span>
+                                        </button>
+                                    @elseif($userRoleName === 'bappeda')
+                                        <button
+                                            type="button"
+                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'prioritas_bappeda', 'Indikasi Ruas Prioritas - Bappeda', {{ $item->prioritas_bappeda ? '1' : '0' }})"
+                                            title="Form Indikasi Ruas Prioritas Bappeda"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-purple-700 text-white hover:bg-purple-800 font-bold text-[10px] transition shadow-2xs"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <span>Indikasi Bappeda</span>
+                                        </button>
+                                    @elseif($userRoleName === 'pu_bintek')
+                                        <button
+                                            type="button"
+                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'verifikasi_pu', 'Verifikasi - PU (PU Bintek)', {{ $item->verifikasi_pu ? '1' : '0' }})"
+                                            title="Form Verifikasi PU"
+                                            class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold text-[10px] transition shadow-2xs"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <span>Verifikasi PU</span>
+                                        </button>
+                                    @endif
+
+                                    @if($currentUser && $currentUser->canManageUsulan($item))
+                                        <button
+                                            type="button"
+                                            onclick="openModalEdit(@js($item))"
+                                            title="Edit Usulan"
+                                            class="p-1.5 rounded-lg bg-blue-50 text-[#0f2a71] hover:bg-blue-100 transition"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onclick="openModalHapus({{ $item->id }}, @js($item->nama_kegiatan))"
+                                            title="Hapus Usulan"
+                                            class="p-1.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition"
+                                        >
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="19" class="p-8 text-center text-slate-400 font-bold bg-slate-50">
-                                Tidak ada data usulan inpres yang cocok dengan kriteria pencarian/filter.
+                                Tidak ada data usulan yang cocok dengan kriteria pencarian/filter.
                             </td>
                         </tr>
                     @endforelse
@@ -456,7 +532,7 @@
                 <div class="flex items-center gap-2.5">
                     <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
-                        <h3 class="text-base font-bold text-white leading-tight">Detail Tinjau Usulan Inpres</h3>
+                        <h3 class="text-base font-bold text-white leading-tight">Detail Tinjau Usulan</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Data Terverifikasi E-Jalin Bina Marga Jawa Timur</p>
                     </div>
                 </div>
@@ -480,7 +556,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- MODAL: TAMBAH / EDIT USULAN INPRES                              -->
+    <!-- MODAL: TAMBAH / EDIT USULAN                                     -->
     <!-- ============================================================== -->
     <div id="modalTambah" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs hidden transition-opacity">
         <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden">
@@ -490,7 +566,7 @@
                 <div class="flex items-center gap-2.5">
                     <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
-                        <h3 id="modalFormTitle" class="text-base font-bold text-white leading-tight">Formulir Tambah Usulan Inpres Baru</h3>
+                        <h3 id="modalFormTitle" class="text-base font-bold text-white leading-tight">Formulir Tambah Usulan Baru</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Pengusulan Penanganan Jalan &amp; Jembatan Daerah Provinsi Jawa Timur</p>
                     </div>
                 </div>
@@ -502,7 +578,7 @@
             </div>
 
             <!-- Form Content -->
-            <form id="frmUsulanInpres" method="POST" action="{{ route('usulan-inpres.store') }}" enctype="multipart/form-data" class="p-6 overflow-y-auto space-y-6 text-xs text-slate-700 flex-grow">
+            <form id="frmUsulan" method="POST" action="{{ route('usulan.store') }}" enctype="multipart/form-data" class="p-6 overflow-y-auto space-y-6 text-xs text-slate-700 flex-grow">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
 
@@ -558,16 +634,20 @@
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">Kabupaten/Kota <span class="text-red-500">*</span></label>
                             <select name="kabupaten_kota_id" id="f_kabkota" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0f2a71]">
-                                <option value="">-- Pilih Kabupaten/Kota --</option>
+                                @if(!$isKabKotaUser)
+                                    <option value="">-- Pilih Kabupaten/Kota --</option>
+                                @endif
                                 @foreach($kabupatenKotaList as $kk)
-                                    <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
+                                    <option value="{{ $kk->id }}" {{ ($isKabKotaUser && (int) $currentUser->kabupaten_kota_id === (int) $kk->id) ? 'selected' : '' }}>
+                                        {{ $kk->nama_kabupaten_kota }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">Nama Pengusul <span class="text-red-500">*</span></label>
-                            <input type="text" name="nama_pengusul" id="f_pengusul" required value="Gubernur Provinsi Jawa Timur" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0f2a71]">
+                            <input type="text" name="nama_pengusul" id="f_pengusul" required value="{{ $isKabKotaUser && $currentUser->kabupatenKota ? (str_starts_with(strtolower($currentUser->kabupatenKota->nama_kabupaten_kota), 'kota') ? 'Walikota ' . substr($currentUser->kabupatenKota->nama_kabupaten_kota, 5) : 'Bupati ' . substr($currentUser->kabupatenKota->nama_kabupaten_kota, 10)) : 'Gubernur Provinsi Jawa Timur' }}" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0f2a71]">
                         </div>
 
                         <div>
@@ -629,22 +709,6 @@
                             <label class="block font-bold text-slate-700 mb-1">Keterangan / Justifikasi Usulan</label>
                             <textarea name="keterangan" id="f_keterangan" rows="2" placeholder="Catatan dukungan kawasan pangan, industri, konektivitas, dll." class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0f2a71]"></textarea>
                         </div>
-
-                        <!-- Indikasi Prioritas & Verifikasi Checkboxes -->
-                        <div class="md:col-span-2 p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center gap-6">
-                            <label class="inline-flex items-center gap-2 cursor-pointer font-bold text-slate-700">
-                                <input type="checkbox" name="prioritas_pu" id="f_prioritas_pu" value="1" checked class="w-4 h-4 rounded text-[#0f2a71]">
-                                <span>Indikasi Prioritas PU</span>
-                            </label>
-                            <label class="inline-flex items-center gap-2 cursor-pointer font-bold text-slate-700">
-                                <input type="checkbox" name="prioritas_bappeda" id="f_prioritas_bappeda" value="1" class="w-4 h-4 rounded text-[#0f2a71]">
-                                <span>Indikasi Prioritas Bappeda</span>
-                            </label>
-                            <label class="inline-flex items-center gap-2 cursor-pointer font-bold text-slate-700">
-                                <input type="checkbox" name="verifikasi_pu" id="f_verifikasi_pu" value="1" checked class="w-4 h-4 rounded text-emerald-600">
-                                <span>Verifikasi PU</span>
-                            </label>
-                        </div>
                     </div>
                 </div>
 
@@ -675,7 +739,62 @@
                         Batal
                     </button>
                     <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-sm transition">
-                        Simpan Usulan Inpres
+                        Simpan Usulan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL: UBAH STATUS INDIKASI PRIORITAS / VERIFIKASI SESUAI ROLE -->
+    <!-- ============================================================== -->
+    <div id="modalStatus" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs hidden transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
+            <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
+                <div class="flex items-center gap-2.5">
+                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
+                    <div>
+                        <h3 id="modalStatusTitle" class="text-sm font-bold text-white leading-tight">Ubah Status Verifikasi / Indikasi</h3>
+                        <p id="modalStatusSubtitle" class="text-[10px] text-slate-300 font-medium">Usulan #</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModalStatus()" class="p-1.5 text-slate-300 hover:text-white rounded-lg hover:bg-white/10 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="formUpdateStatus" method="POST" class="p-6 space-y-4 text-xs text-slate-700">
+                @csrf
+                <input type="hidden" name="field" id="status_field">
+
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Nama Kegiatan</span>
+                    <span id="status_nama_kegiatan" class="font-bold text-[#0f2a71] text-xs block mt-0.5"></span>
+                </div>
+
+                <div>
+                    <label id="status_label" class="block font-bold text-slate-700 mb-2">Pilih Status:</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-emerald-200 bg-emerald-50/60 cursor-pointer hover:bg-emerald-100/70 transition">
+                            <input type="radio" name="value" id="status_val_true" value="1" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
+                            <span class="font-extrabold text-emerald-800">&#10003; Disetujui / Ya</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-rose-200 bg-rose-50/60 cursor-pointer hover:bg-rose-100/70 transition">
+                            <input type="radio" name="value" id="status_val_false" value="0" class="w-4 h-4 text-rose-600 focus:ring-rose-500">
+                            <span class="font-extrabold text-rose-700">&#10005; Belum / Tidak (X)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-200 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="closeModalStatus()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-bold hover:bg-slate-100 transition">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-[#0f2a71] hover:bg-navy-800 text-[#ffb700] font-extrabold shadow-sm transition">
+                        Simpan Status
                     </button>
                 </div>
             </form>
@@ -693,7 +812,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                     </svg>
                 </div>
-                <h3 class="text-base font-bold text-slate-900 mb-2">Hapus Data Usulan Inpres?</h3>
+                <h3 class="text-base font-bold text-slate-900 mb-2">Hapus Data Usulan?</h3>
                 <p id="hapusTextPrompt" class="text-xs text-slate-500 mb-6 leading-relaxed"></p>
                 <form id="formHapus" method="POST" class="flex items-center justify-center gap-3">
                     @csrf
@@ -724,7 +843,7 @@
                     </div>
                     <div>
                         <h3 id="petaTitle" class="text-base font-bold text-white leading-tight">Peta Spasial Geometri Ruas</h3>
-                        <p id="petaSubtitle" class="text-[10px] text-slate-300 font-medium">Jalur Geospasial Usulan Inpres Jatim</p>
+                        <p id="petaSubtitle" class="text-[10px] text-slate-300 font-medium">Jalur Geospasial Usulan Jatim</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeModalPeta()" class="p-1.5 text-slate-300 hover:text-white rounded-lg hover:bg-white/10 transition">
@@ -774,25 +893,22 @@
         }
 
         function openModalTambah() {
-            const form = document.getElementById('frmUsulanInpres');
+            const form = document.getElementById('frmUsulan');
             form.reset();
-            form.action = "{{ route('usulan-inpres.store') }}";
+            form.action = "{{ route('usulan.store') }}";
             document.getElementById('formMethod').value = 'POST';
-            document.getElementById('modalFormTitle').innerText = 'Formulir Tambah Usulan Inpres Baru';
+            document.getElementById('modalFormTitle').innerText = 'Formulir Tambah Usulan Baru';
             document.getElementById('infoFileDokumen').innerHTML = '';
-            document.getElementById('f_prioritas_pu').checked = true;
-            document.getElementById('f_prioritas_bappeda').checked = false;
-            document.getElementById('f_verifikasi_pu').checked = true;
             toggleBridgeField();
             document.getElementById('modalTambah').classList.remove('hidden');
         }
 
         function openModalEdit(item) {
-            const form = document.getElementById('frmUsulanInpres');
+            const form = document.getElementById('frmUsulan');
             form.reset();
-            form.action = `/usulan-inpres/${item.id}`;
+            form.action = `/usulan/${item.id}`;
             document.getElementById('formMethod').value = 'PUT';
-            document.getElementById('modalFormTitle').innerText = `Edit Usulan Inpres #${item.kode_usulan || item.id}`;
+            document.getElementById('modalFormTitle').innerText = `Edit Usulan #${item.kode_usulan || item.id}`;
 
             document.getElementById('f_kegiatan').value = item.nama_kegiatan || '';
             document.getElementById('f_tematik').value = item.tematik_kawasan_id || '';
@@ -809,10 +925,6 @@
             document.getElementById('f_biaya').value = item.alokasi_usulan || 0;
             document.getElementById('f_keterangan').value = item.keterangan || '';
             document.getElementById('f_status_dokumen').value = item.status_dokumen_pendukung || 'SIAP';
-
-            document.getElementById('f_prioritas_pu').checked = !!item.prioritas_pu;
-            document.getElementById('f_prioritas_bappeda').checked = !!item.prioritas_bappeda;
-            document.getElementById('f_verifikasi_pu').checked = !!item.verifikasi_pu;
 
             const infoDok = document.getElementById('infoFileDokumen');
             if (item.file_dokumen_pendukung) {
@@ -831,7 +943,7 @@
         function openModalDetail(item, lokasiText, koridorText, ruasText, jembatanText, tematikText) {
             const modalBody = document.getElementById('modalDetailBody');
             const downloadBtn = item.file_dokumen_pendukung
-                ? `<a href="/usulan-inpres/${item.id}/download-dokumen" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0f2a71] text-white font-bold hover:bg-navy-800 transition">
+                ? `<a href="/usulan/${item.id}/download-dokumen" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0f2a71] text-white font-bold hover:bg-navy-800 transition">
                     <span>Download Dokumen</span>
                    </a>`
                 : '';
@@ -901,8 +1013,30 @@
             document.getElementById('modalDetail').classList.add('hidden');
         }
 
+        function openModalStatus(id, kodeUsulan, namaKegiatan, field, labelTitle, currentVal) {
+            const form = document.getElementById('formUpdateStatus');
+            form.action = `/usulan/${id}/update-status`;
+            document.getElementById('status_field').value = field;
+            document.getElementById('modalStatusTitle').innerText = labelTitle;
+            document.getElementById('modalStatusSubtitle').innerText = `ID Usulan #${kodeUsulan}`;
+            document.getElementById('status_nama_kegiatan').innerText = namaKegiatan;
+            document.getElementById('status_label').innerText = `Ubah Status ${labelTitle}:`;
+
+            if (Number(currentVal) === 1) {
+                document.getElementById('status_val_true').checked = true;
+            } else {
+                document.getElementById('status_val_false').checked = true;
+            }
+
+            document.getElementById('modalStatus').classList.remove('hidden');
+        }
+
+        function closeModalStatus() {
+            document.getElementById('modalStatus').classList.add('hidden');
+        }
+
         function openModalHapus(id, namaKegiatan) {
-            document.getElementById('formHapus').action = `/usulan-inpres/${id}`;
+            document.getElementById('formHapus').action = `/usulan/${id}`;
             document.getElementById('hapusTextPrompt').innerHTML = `Apakah Anda yakin ingin menghapus usulan <strong>"${namaKegiatan}"</strong>?`;
             document.getElementById('modalHapus').classList.remove('hidden');
         }
@@ -962,7 +1096,7 @@
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Usulan_Inpres_Jatim_${new Date().toISOString().slice(0, 10)}.csv`;
+            link.download = `Usulan_Jatim_${new Date().toISOString().slice(0, 10)}.csv`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

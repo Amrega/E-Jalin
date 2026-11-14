@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KabupatenKota;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with('role');
+        $query = User::with(['role', 'kabupatenKota']);
 
         // Filter Pencarian (Nama, Username, Email, atau Role)
         if ($request->filled('search')) {
@@ -58,14 +59,19 @@ class UserController extends Controller
         $totalVoid  = User::where('void', 1)->count();
         $totalRoles = Role::where('void', 0)->count();
 
-        // Dropdown Role
+        // Dropdown Role & Kabupaten/Kota
         $roleList = Role::where('void', 0)
             ->orderBy('nama_role', 'asc')
+            ->get();
+
+        $kabupatenKotaList = KabupatenKota::where('void', 0)
+            ->orderBy('nama_kabupaten_kota', 'asc')
             ->get();
 
         return view('user.index', compact(
             'userList',
             'roleList',
+            'kabupatenKotaList',
             'totalUsers',
             'totalAktif',
             'totalVoid',
@@ -79,12 +85,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:100', 'unique:users,username'],
-            'email'    => ['required', 'email', 'max:255', 'unique:users,email'],
-            'role_id'  => ['required', 'exists:role,id'],
-            'password' => ['required', 'string', 'min:6'],
-            'void'     => ['nullable', 'in:0,1'],
+            'name'              => ['required', 'string', 'max:255'],
+            'username'          => ['required', 'string', 'max:100', 'unique:users,username'],
+            'email'             => ['required', 'email', 'max:255', 'unique:users,email'],
+            'role_id'           => ['required', 'exists:role,id'],
+            'kabupaten_kota_id' => ['nullable', 'exists:kabupaten_kota,id'],
+            'password'          => ['required', 'string', 'min:6'],
+            'void'              => ['nullable', 'in:0,1'],
         ], [
             'name.required'     => 'Nama lengkap pengguna wajib diisi.',
             'username.required' => 'Username wajib diisi.',
@@ -98,12 +105,13 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'name'     => $validated['name'],
-            'username' => strtolower(trim($validated['username'])),
-            'email'    => strtolower(trim($validated['email'])),
-            'role_id'  => $validated['role_id'],
-            'password' => Hash::make($validated['password']),
-            'void'     => $request->has('void') ? (int) $request->void : 0,
+            'name'              => $validated['name'],
+            'username'          => strtolower(trim($validated['username'])),
+            'email'             => strtolower(trim($validated['email'])),
+            'role_id'           => $validated['role_id'],
+            'kabupaten_kota_id' => $validated['kabupaten_kota_id'] ?? null,
+            'password'          => Hash::make($validated['password']),
+            'void'              => $request->has('void') ? (int) $request->void : 0,
         ]);
 
         return redirect()->route('user.index')->with('success', 'Akun pengguna berhasil ditambahkan.');
@@ -115,12 +123,13 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:100', 'unique:users,username,' . $user->id],
-            'email'    => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'role_id'  => ['required', 'exists:role,id'],
-            'password' => ['nullable', 'string', 'min:6'],
-            'void'     => ['nullable', 'in:0,1'],
+            'name'              => ['required', 'string', 'max:255'],
+            'username'          => ['required', 'string', 'max:100', 'unique:users,username,' . $user->id],
+            'email'             => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'role_id'           => ['required', 'exists:role,id'],
+            'kabupaten_kota_id' => ['nullable', 'exists:kabupaten_kota,id'],
+            'password'          => ['nullable', 'string', 'min:6'],
+            'void'              => ['nullable', 'in:0,1'],
         ], [
             'name.required'     => 'Nama lengkap pengguna wajib diisi.',
             'username.required' => 'Username wajib diisi.',
@@ -132,11 +141,12 @@ class UserController extends Controller
         ]);
 
         $updateData = [
-            'name'     => $validated['name'],
-            'username' => strtolower(trim($validated['username'])),
-            'email'    => strtolower(trim($validated['email'])),
-            'role_id'  => $validated['role_id'],
-            'void'     => $request->has('void') ? (int) $request->void : 0,
+            'name'              => $validated['name'],
+            'username'          => strtolower(trim($validated['username'])),
+            'email'             => strtolower(trim($validated['email'])),
+            'role_id'           => $validated['role_id'],
+            'kabupaten_kota_id' => $validated['kabupaten_kota_id'] ?? null,
+            'void'              => $request->has('void') ? (int) $request->void : 0,
         ];
 
         // Jika password diisi, enkripsi dan simpan yang baru
