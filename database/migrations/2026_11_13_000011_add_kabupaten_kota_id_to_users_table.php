@@ -20,6 +20,15 @@ return new class extends Migration
                     ->nullOnDelete()
                     ->cascadeOnUpdate();
             }
+
+            if (!Schema::hasColumn('users', 'upt_dinas_id')) {
+                $table->integer('upt_dinas_id')->nullable()->after('kabupaten_kota_id');
+                $table->foreign('upt_dinas_id', 'fk_users_upt_dinas')
+                    ->references('id')
+                    ->on('upt_dinas')
+                    ->nullOnDelete()
+                    ->cascadeOnUpdate();
+            }
         });
     }
 
@@ -29,6 +38,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            if (Schema::hasColumn('users', 'upt_dinas_id')) {
+                $table->dropForeign('fk_users_upt_dinas');
+                $table->dropColumn('upt_dinas_id');
+            }
             if (Schema::hasColumn('users', 'kabupaten_kota_id')) {
                 $table->dropForeign('fk_users_kabupaten_kota');
                 $table->dropColumn('kabupaten_kota_id');

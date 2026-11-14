@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 3, 'nama_role' => 'bappeda', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
             ['id' => 4, 'nama_role' => 'pu_bintek', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
             ['id' => 5, 'nama_role' => 'user', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
+            ['id' => 6, 'nama_role' => 'upt', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
         ], ['id'], ['nama_role', 'void', 'updated_at']);
 
         // 2. Users
@@ -87,6 +88,32 @@ class DatabaseSeeder extends Seeder
             ['id' => 10, 'provinsi_id' => 1, 'nama_upt' => 'UPT PJJ Banyuwangi', 'void' => 0, 'created_at' => '2026-11-12 15:24:10', 'updated_at' => '2026-11-12 15:24:10'],
             ['id' => 11, 'provinsi_id' => 1, 'nama_upt' => 'UPT PJJ Pamekasan', 'void' => 0, 'created_at' => '2026-11-12 15:24:10', 'updated_at' => '2026-11-12 15:24:10'],
         ], ['id'], ['provinsi_id', 'nama_upt', 'void', 'updated_at']);
+
+        // 4b. Users untuk seluruh 11 UPT PJJ di Jawa Timur
+        $uptRows = DB::table('upt_dinas')->orderBy('id')->get();
+        foreach ($uptRows as $upt) {
+            $lowerUpt = strtolower(trim($upt->nama_upt));
+            if (str_starts_with($lowerUpt, 'upt pjj ')) {
+                $uptSlug = 'upt_' . str_replace(' ', '_', trim(substr($lowerUpt, 8)));
+            } elseif (str_starts_with($lowerUpt, 'upt ')) {
+                $uptSlug = 'upt_' . str_replace(' ', '_', trim(substr($lowerUpt, 4)));
+            } else {
+                $uptSlug = 'upt_' . str_replace(' ', '_', $lowerUpt);
+            }
+
+            User::updateOrCreate(
+                ['username' => $uptSlug],
+                [
+                    'name'              => $upt->nama_upt,
+                    'email'             => $uptSlug . '@ejalin.jatimprov.go.id',
+                    'role_id'           => 6,
+                    'kabupaten_kota_id' => null,
+                    'upt_dinas_id'      => $upt->id,
+                    'void'              => 0,
+                    'password'          => Hash::make($uptSlug),
+                ]
+            );
+        }
 
         // 5. Kabupaten / Kota
         DB::table('kabupaten_kota')->upsert([

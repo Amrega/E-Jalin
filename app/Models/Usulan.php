@@ -14,6 +14,7 @@ class Usulan extends Model
     protected $fillable = [
         'kode_usulan',
         'kabupaten_kota_id',
+        'upt_dinas_id',
         'tematik_kawasan_id',
         'jenis_penanganan_id',
         'koridor_id',
@@ -51,6 +52,14 @@ class Usulan extends Model
     public function kabupatenKota()
     {
         return $this->belongsTo(KabupatenKota::class, 'kabupaten_kota_id');
+    }
+
+    /**
+     * Relasi ke UPT Dinas (UPT PJJ yang mendapat tugas dari PU Turdal)
+     */
+    public function uptDinas()
+    {
+        return $this->belongsTo(UptDinas::class, 'upt_dinas_id');
     }
 
     /**

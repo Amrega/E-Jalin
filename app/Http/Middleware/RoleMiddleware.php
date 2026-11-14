@@ -43,9 +43,16 @@ class RoleMiddleware
             $allowedRoles[] = 'pemda';
         }
 
+        // Jika 'upt' diizinkan, dukung juga alias upt_dinas / upt_pjj
+        if (in_array('upt', $allowedRoles, true)) {
+            $allowedRoles[] = 'upt';
+            $allowedRoles[] = 'upt_dinas';
+            $allowedRoles[] = 'upt_pjj';
+        }
+
         $allowedRoles = array_values(array_unique($allowedRoles));
 
-        if ($user->hasRole($allowedRoles)) {
+        if ($user->hasRole($allowedRoles) || (in_array('upt', $allowedRoles, true) && $user->isUpt())) {
             return $next($request);
         }
 

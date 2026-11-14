@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'role_id',
         'kabupaten_kota_id',
+        'upt_dinas_id',
         'void',
         'password',
     ];
@@ -42,6 +43,14 @@ class User extends Authenticatable
     public function kabupatenKota()
     {
         return $this->belongsTo(KabupatenKota::class, 'kabupaten_kota_id');
+    }
+
+    /**
+     * Relasi ke UPT Dinas / UPT PJJ (untuk akun UPT penerima tugas)
+     */
+    public function uptDinas()
+    {
+        return $this->belongsTo(UptDinas::class, 'upt_dinas_id');
     }
 
     /**
@@ -71,10 +80,21 @@ class User extends Authenticatable
     }
 
     /**
+     * Apakah user merupakan akun UPT Dinas / UPT PJJ
+     */
+    public function isUpt(): bool
+    {
+        return $this->hasRole(['upt', 'upt_dinas', 'upt_pjj']) || (!empty($this->upt_dinas_id) && !$this->isAdmin() && !$this->isVerifierRole());
+    }
+
+    /**
      * Apakah user merupakan akun Pemerintah Daerah Kabupaten/Kota (role: user)
      */
     public function isKabupatenKota(): bool
     {
+        if ($this->isUpt()) {
+            return false;
+        }
         return $this->hasRole(['user', 'kabupaten_kota', 'pemda']) || (!empty($this->kabupaten_kota_id) && !$this->isAdmin() && !$this->isVerifierRole());
     }
 
@@ -88,13 +108,13 @@ class User extends Authenticatable
 
     /**
      * Cek apakah user boleh menambah / mengedit / menghapus data Usulan.
-     * - pu_turdal, bappeda, pu_bintek: TIDAK BISA tambah/edit/hapus usulan (hanya lihat & verifikasi/indikasi).
-     * - kabupaten_kota: Hanya bisa tambah usulan milik kab/kotanya sendiri dan edit/hapus usulan milik kab/kotanya sendiri.
+     * - pu_turdal, bappeda, pu_bintek, upt: TIDAK BISA tambah/edit/hapus usulan.
+     * - user (kabupaten_kota): Hanya bisa tambah usulan milik kab/kotanya sendiri dan edit/hapus usulan milik kab/kotanya sendiri.
      * - administrator: Bisa kelola semua usulan.
      */
     public function canManageUsulan(?Usulan $usulan = null): bool
     {
-        if ($this->isVerifierRole()) {
+        if ($this->isVerifierRole() || $this->isUpt()) {
             return false;
         }
 
@@ -113,7 +133,7 @@ class User extends Authenticatable
     }
 
     /**
-     * pu_turdal melakukan indikasi ruas prioritas di PU
+     * pu_turdal melakukan indikasi ruas prioritas di PU (sekaligus menugaskan UPT)
      */
     public function canEditPrioritasPu(): bool
     {

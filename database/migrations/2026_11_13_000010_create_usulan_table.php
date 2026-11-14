@@ -18,6 +18,7 @@ return new class extends Migration
                 $table->integer('id', true);
                 $table->string('kode_usulan', 50)->nullable();
                 $table->integer('kabupaten_kota_id');
+                $table->integer('upt_dinas_id')->nullable();
                 $table->integer('tematik_kawasan_id')->nullable();
                 $table->integer('jenis_penanganan_id')->nullable();
                 $table->integer('koridor_id')->nullable();
@@ -42,6 +43,12 @@ return new class extends Migration
                 $table->foreign('kabupaten_kota_id', 'fk_usulan_kab_kota')
                     ->references('id')
                     ->on('kabupaten_kota')
+                    ->cascadeOnUpdate();
+
+                $table->foreign('upt_dinas_id', 'fk_usulan_upt_dinas')
+                    ->references('id')
+                    ->on('upt_dinas')
+                    ->nullOnDelete()
                     ->cascadeOnUpdate();
 
                 $table->foreign('tematik_kawasan_id', 'fk_usulan_tematik')

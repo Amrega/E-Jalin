@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KabupatenKota;
 use App\Models\Role;
+use App\Models\UptDinas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with(['role', 'kabupatenKota']);
+        $query = User::with(['role', 'kabupatenKota', 'uptDinas']);
 
         // Filter Pencarian (Nama, Username, Email, atau Role)
         if ($request->filled('search')) {
@@ -68,10 +69,15 @@ class UserController extends Controller
             ->orderBy('nama_kabupaten_kota', 'asc')
             ->get();
 
+        $uptDinasList = UptDinas::where('void', 0)
+            ->orderBy('id', 'asc')
+            ->get();
+
         return view('user.index', compact(
             'userList',
             'roleList',
             'kabupatenKotaList',
+            'uptDinasList',
             'totalUsers',
             'totalAktif',
             'totalVoid',
@@ -90,6 +96,7 @@ class UserController extends Controller
             'email'             => ['required', 'email', 'max:255', 'unique:users,email'],
             'role_id'           => ['required', 'exists:role,id'],
             'kabupaten_kota_id' => ['nullable', 'exists:kabupaten_kota,id'],
+            'upt_dinas_id'      => ['nullable', 'exists:upt_dinas,id'],
             'password'          => ['required', 'string', 'min:6'],
             'void'              => ['nullable', 'in:0,1'],
         ], [
@@ -110,6 +117,7 @@ class UserController extends Controller
             'email'             => strtolower(trim($validated['email'])),
             'role_id'           => $validated['role_id'],
             'kabupaten_kota_id' => $validated['kabupaten_kota_id'] ?? null,
+            'upt_dinas_id'      => $validated['upt_dinas_id'] ?? null,
             'password'          => Hash::make($validated['password']),
             'void'              => $request->has('void') ? (int) $request->void : 0,
         ]);
@@ -128,6 +136,7 @@ class UserController extends Controller
             'email'             => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'role_id'           => ['required', 'exists:role,id'],
             'kabupaten_kota_id' => ['nullable', 'exists:kabupaten_kota,id'],
+            'upt_dinas_id'      => ['nullable', 'exists:upt_dinas,id'],
             'password'          => ['nullable', 'string', 'min:6'],
             'void'              => ['nullable', 'in:0,1'],
         ], [
@@ -146,6 +155,7 @@ class UserController extends Controller
             'email'             => strtolower(trim($validated['email'])),
             'role_id'           => $validated['role_id'],
             'kabupaten_kota_id' => $validated['kabupaten_kota_id'] ?? null,
+            'upt_dinas_id'      => $validated['upt_dinas_id'] ?? null,
             'void'              => $request->has('void') ? (int) $request->void : 0,
         ];
 

@@ -198,6 +198,11 @@
                                             {{ $item->kabupatenKota->nama_kabupaten_kota }}
                                         </span>
                                     @endif
+                                    @if($item->uptDinas)
+                                        <span class="block text-[10px] font-semibold text-blue-700 mt-1">
+                                            {{ $item->uptDinas->nama_upt }}
+                                        </span>
+                                    @endif
                                 @else
                                     <span class="text-slate-400 italic text-[11px]">Tanpa Role</span>
                                 @endif
@@ -358,16 +363,29 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1.5">
-                            Wilayah Kabupaten/Kota <span class="text-[10px] font-normal text-slate-400">(Khusus Role Kabupaten/Kota)</span>
-                        </label>
-                        <select name="kabupaten_kota_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
-                            <option value="">-- Bukan Akun Spesifik Kab/Kota (Semua Wilayah) --</option>
-                            @foreach($kabupatenKotaList ?? [] as $kk)
-                                <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
-                            @endforeach
-                        </select>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1.5">
+                                Wilayah Kabupaten/Kota <span class="text-[10px] font-normal text-slate-400">(Role User)</span>
+                            </label>
+                            <select name="kabupaten_kota_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                                <option value="">-- Bukan Akun Kab/Kota --</option>
+                                @foreach($kabupatenKotaList ?? [] as $kk)
+                                    <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1.5">
+                                Unit UPT PJJ <span class="text-[10px] font-normal text-slate-400">(Role UPT)</span>
+                            </label>
+                            <select name="upt_dinas_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                                <option value="">-- Bukan Akun UPT --</option>
+                                @foreach($uptDinasList ?? [] as $upt)
+                                    <option value="{{ $upt->id }}">{{ $upt->nama_upt }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div>
@@ -477,16 +495,29 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1.5">
-                            Wilayah Kabupaten/Kota <span class="text-[10px] font-normal text-slate-400">(Khusus Role Kabupaten/Kota)</span>
-                        </label>
-                        <select id="edit_kabupaten_kota_id" name="kabupaten_kota_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
-                            <option value="">-- Bukan Akun Spesifik Kab/Kota (Semua Wilayah) --</option>
-                            @foreach($kabupatenKotaList ?? [] as $kk)
-                                <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
-                            @endforeach
-                        </select>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1.5">
+                                Wilayah Kabupaten/Kota <span class="text-[10px] font-normal text-slate-400">(Role User)</span>
+                            </label>
+                            <select id="edit_kabupaten_kota_id" name="kabupaten_kota_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                                <option value="">-- Bukan Akun Kab/Kota --</option>
+                                @foreach($kabupatenKotaList ?? [] as $kk)
+                                    <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1.5">
+                                Unit UPT PJJ <span class="text-[10px] font-normal text-slate-400">(Role UPT)</span>
+                            </label>
+                            <select id="edit_upt_dinas_id" name="upt_dinas_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                                <option value="">-- Bukan Akun UPT --</option>
+                                @foreach($uptDinasList ?? [] as $upt)
+                                    <option value="{{ $upt->id }}">{{ $upt->nama_upt }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div>
@@ -607,6 +638,7 @@
         document.getElementById('edit_email').value = data.email || '';
         document.getElementById('edit_role_id').value = data.role_id || '';
         document.getElementById('edit_kabupaten_kota_id').value = data.kabupaten_kota_id || '';
+        document.getElementById('edit_upt_dinas_id').value = data.upt_dinas_id || '';
         document.getElementById('edit_void').checked = data.void == 1;
 
         document.getElementById('modalEdit').classList.remove('hidden');

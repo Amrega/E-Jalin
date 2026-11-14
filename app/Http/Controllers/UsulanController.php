@@ -8,6 +8,7 @@ use App\Models\KabupatenKota;
 use App\Models\Koridor;
 use App\Models\RuasJalan;
 use App\Models\TematikKawasan;
+use App\Models\UptDinas;
 use App\Models\Usulan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -36,6 +37,7 @@ class UsulanController extends Controller
 
         $query = Usulan::with([
             'kabupatenKota',
+            'uptDinas',
             'tematikKawasan',
             'jenisPenanganan',
             'koridor',
@@ -43,8 +45,16 @@ class UsulanController extends Controller
             'jembatan',
         ]);
 
-        // Jika akun Kabupaten/Kota, batasi hanya bisa melihat usulan miliknya sendiri
-        if ($user && $user->isKabupatenKota()) {
+        // Filter cakupan data berdasarkan Role Pengguna
+        if ($user && $user->isUpt()) {
+            // Akun UPT: Hanya menampilkan usulan yang sudah disetujui PU Turdal dan ditugaskan ke UPT tersebut
+            $query->where('upt_dinas_id', $user->upt_dinas_id)
+                  ->where('prioritas_pu', 1);
+            if ($request->filled('kabupaten_kota_id')) {
+                $query->where('kabupaten_kota_id', $request->kabupaten_kota_id);
+            }
+        } elseif ($user && $user->isKabupatenKota()) {
+            // Akun Kabupaten/Kota: Hanya menampilkan usulan miliknya sendiri
             $query->where('kabupaten_kota_id', $user->kabupaten_kota_id);
         } elseif ($request->filled('kabupaten_kota_id')) {
             // Filter Kabupaten / Kota (untuk Admin / PU / Bappeda)
@@ -61,6 +71,9 @@ class UsulanController extends Controller
                   ->orWhere('keterangan', 'like', "%{$search}%")
                   ->orWhereHas('kabupatenKota', function ($kq) use ($search) {
                       $kq->where('nama_kabupaten_kota', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('uptDinas', function ($uq) use ($search) {
+                      $uq->where('nama_upt', 'like', "%{$search}%");
                   })
                   ->orWhereHas('ruasJalan', function ($rq) use ($search) {
                       $rq->where('nama_ruas', 'like', "%{$search}%")
@@ -104,7 +117,10 @@ class UsulanController extends Controller
 
         // Data Statistik (berdasarkan data aktif / void = 0, sesuai cakupan user)
         $activeQuery = Usulan::where('void', 0);
-        if ($user && $user->isKabupatenKota()) {
+        if ($user && $user->isUpt()) {
+            $activeQuery->where('upt_dinas_id', $user->upt_dinas_id)
+                        ->where('prioritas_pu', 1);
+        } elseif ($user && $user->isKabupatenKota()) {
             $activeQuery->where('kabupaten_kota_id', $user->kabupaten_kota_id);
         }
 
@@ -119,6 +135,10 @@ class UsulanController extends Controller
             $kabKotaQuery->where('id', $user->kabupaten_kota_id);
         }
         $kabupatenKotaList = $kabKotaQuery->get();
+
+        $uptDinasList = UptDinas::where('void', 0)
+            ->orderBy('id', 'asc')
+            ->get();
 
         $tematikKawasanList = TematikKawasan::where('void', 0)
             ->orderBy('id', 'asc')
@@ -142,7 +162,9 @@ class UsulanController extends Controller
             ->get();
 
         $pengusulQuery = Usulan::select('nama_pengusul')->distinct()->orderBy('nama_pengusul', 'asc');
-        if ($user && $user->isKabupatenKota()) {
+        if ($user && $user->isUpt()) {
+            $pengusulQuery->where('upt_dinas_id', $user->upt_dinas_id)->where('prioritas_pu', 1);
+        } elseif ($user && $user->isKabupatenKota()) {
             $pengusulQuery->where('kabupaten_kota_id', $user->kabupaten_kota_id);
         }
         $pengusulList = $pengusulQuery->pluck('nama_pengusul');
@@ -150,6 +172,7 @@ class UsulanController extends Controller
         return view('usulan', compact(
             'usulanList',
             'kabupatenKotaList',
+            'uptDinasList',
             'tematikKawasanList',
             'jenisPenangananList',
             'koridorList',
@@ -171,7 +194,7 @@ class UsulanController extends Controller
         $user = $request->user();
 
         if (!$user || !$user->canManageUsulan()) {
-            return redirect()->route('usulan.index')->with('error', 'Role Anda tidak diizinkan menambahkan data usulan baru (hanya dapat melihat dan melakukan verifikasi/indikasi prioritas).');
+            return redirect()->route('usulan.index')->with('error', 'Role Anda tidak diizinkan menambahkan data usulan baru.');
         }
 
         // Jika akun Kabupaten/Kota, paksa kabupaten_kota_id ke miliknya sendiri
@@ -215,6 +238,7 @@ class UsulanController extends Controller
         Usulan::create([
             'kode_usulan'              => $kodeUsulan,
             'kabupaten_kota_id'        => $validated['kabupaten_kota_id'],
+            'upt_dinas_id'             => null,
             'tematik_kawasan_id'       => $validated['tematik_kawasan_id'] ?? null,
             'jenis_penanganan_id'      => $validated['jenis_penanganan_id'] ?? null,
             'koridor_id'               => $validated['koridor_id'] ?? null,
@@ -240,7 +264,7 @@ class UsulanController extends Controller
 
     /**
      * Update status Indikasi Ruas Prioritas / Verifikasi sesuai Role:
-     * - pu_turdal  -> prioritas_pu (Indikasi Ruas Prioritas PU)
+     * - pu_turdal  -> prioritas_pu (Indikasi Ruas Prioritas PU + pilih UPT yang mendapat tugas)
      * - bappeda    -> prioritas_bappeda (Indikasi Ruas Prioritas Bappeda)
      * - pu_bintek  -> verifikasi_pu (Verifikasi PU)
      * - administrator -> dapat mengubah ketiganya
@@ -248,8 +272,9 @@ class UsulanController extends Controller
     public function updateStatus(Request $request, Usulan $usulan)
     {
         $validated = $request->validate([
-            'field' => ['required', 'in:prioritas_pu,prioritas_bappeda,verifikasi_pu'],
-            'value' => ['nullable', 'boolean'],
+            'field'        => ['required', 'in:prioritas_pu,prioritas_bappeda,verifikasi_pu'],
+            'value'        => ['nullable', 'boolean'],
+            'upt_dinas_id' => ['nullable', 'exists:upt_dinas,id'],
         ]);
 
         $user = $request->user();
@@ -270,6 +295,20 @@ class UsulanController extends Controller
             ? $request->boolean('value')
             : !$usulan->{$field};
 
+        // Jika PU Turdal menyetujui Indikasi Prioritas PU, wajib memilih UPT yang mendapat tugas
+        if ($field === 'prioritas_pu') {
+            if ($newValue) {
+                $request->validate([
+                    'upt_dinas_id' => ['required', 'exists:upt_dinas,id'],
+                ], [
+                    'upt_dinas_id.required' => 'Silakan pilih UPT PJJ yang akan mendapatkan tugas untuk usulan ini.',
+                ]);
+                $usulan->upt_dinas_id = (int) $request->input('upt_dinas_id');
+            } else {
+                $usulan->upt_dinas_id = null;
+            }
+        }
+
         $usulan->{$field} = $newValue;
         $usulan->save();
 
@@ -280,8 +319,16 @@ class UsulanController extends Controller
         ];
 
         $statusSimbol = $newValue ? 'Disetujui (✓)' : 'Belum / Ditolak (✕)';
+        $extraInfo = '';
 
-        return redirect()->back()->with('success', "Status {$labelMap[$field]} untuk Usulan #{$usulan->kode_usulan} diubah menjadi {$statusSimbol}.");
+        if ($field === 'prioritas_pu' && $newValue && $usulan->upt_dinas_id) {
+            $upt = UptDinas::find($usulan->upt_dinas_id);
+            if ($upt) {
+                $extraInfo = " dan ditugaskan ke {$upt->nama_upt}";
+            }
+        }
+
+        return redirect()->back()->with('success', "Status {$labelMap[$field]} untuk Usulan #{$usulan->kode_usulan} diubah menjadi {$statusSimbol}{$extraInfo}.");
     }
 
     /**
@@ -292,8 +339,8 @@ class UsulanController extends Controller
         $user = $request->user();
 
         if (!$user || !$user->canManageUsulan($usulan)) {
-            if ($user && $user->isVerifierRole()) {
-                return redirect()->route('usulan.index')->with('error', 'Role Anda hanya dapat melihat usulan dan mengubah status verifikasi/indikasi prioritas.');
+            if ($user && ($user->isVerifierRole() || $user->isUpt())) {
+                return redirect()->route('usulan.index')->with('error', 'Role Anda hanya dapat melihat data usulan.');
             }
             return redirect()->route('usulan.index')->with('error', 'Anda tidak memiliki akses untuk mengedit usulan milik Pemerintah Daerah lain.');
         }
@@ -410,6 +457,10 @@ class UsulanController extends Controller
 
         if ($user && $user->isKabupatenKota() && (int) $usulan->kabupaten_kota_id !== (int) $user->kabupaten_kota_id) {
             return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk mengunduh dokumen usulan Pemerintah Daerah lain.');
+        }
+
+        if ($user && $user->isUpt() && ((int) $usulan->upt_dinas_id !== (int) $user->upt_dinas_id || !$usulan->prioritas_pu)) {
+            return redirect()->back()->with('error', 'Anda hanya dapat mengunduh dokumen tugas milik UPT Anda.');
         }
 
         if (!$usulan->file_dokumen_pendukung) {

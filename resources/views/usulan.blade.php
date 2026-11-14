@@ -59,6 +59,7 @@
     @php
         $currentUser = auth()->user();
         $isKabKotaUser = $currentUser && $currentUser->isKabupatenKota();
+        $isUptUser = $currentUser && $currentUser->isUpt();
         $isVerifierUser = $currentUser && $currentUser->isVerifierRole();
         $canCreateUsulan = $currentUser && $currentUser->canManageUsulan();
         $userRoleName = $currentUser ? $currentUser->roleName() : '';
@@ -76,7 +77,14 @@
                 </button>
             @endif
 
-            @if($isKabKotaUser && $currentUser->kabupatenKota)
+            @if($isUptUser && $currentUser->uptDinas)
+                <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-bold">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                    </svg>
+                    <span>Daftar Tugas UPT: {{ strtoupper($currentUser->uptDinas->nama_upt) }} (Usulan Disetujui PU Turdal)</span>
+                </div>
+            @elseif($isKabKotaUser && $currentUser->kabupatenKota)
                 <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-[#0f2a71] text-xs font-bold">
                     <svg class="w-4 h-4 text-[#ffb700]" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
@@ -388,34 +396,75 @@
                                 {{ $item->keterangan ?: '-' }}
                             </td>
 
-                            <!-- Indikasi Ruas Prioritas: PU (Role: pu_turdal) -->
+                            <!-- Indikasi Ruas Prioritas: PU (Role: pu_turdal + Pilih UPT Tugas) -->
                             <td class="p-2.5 text-center">
-                                <span
-                                    class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->prioritas_pu ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
-                                    title="{{ $item->prioritas_pu ? 'Indikasi Prioritas PU: Disetujui' : 'Indikasi Prioritas PU: Belum (X)' }}"
-                                >
-                                    {!! $item->prioritas_pu ? '&#10003;' : '&#10005;' !!}
-                                </span>
+                                <div class="flex flex-col items-center gap-1">
+                                    @if($canPrioritasPu)
+                                        <button
+                                            type="button"
+                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'prioritas_pu', 'Indikasi Ruas Prioritas - PU (PU Turdal)', {{ $item->prioritas_pu ? '1' : '0' }}, {{ $item->upt_dinas_id ?? ($item->kabupatenKota->upt_id ?? 'null') }})"
+                                            title="Klik untuk ubah Indikasi Prioritas PU &amp; Pilih UPT"
+                                            class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border transition cursor-pointer {{ $item->prioritas_pu ? 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100' }}"
+                                        >
+                                            {!! $item->prioritas_pu ? '&#10003;' : '&#10005;' !!}
+                                        </button>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->prioritas_pu ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
+                                            title="{{ $item->prioritas_pu ? 'Indikasi Prioritas PU: Disetujui' : 'Indikasi Prioritas PU: Belum (X)' }}"
+                                        >
+                                            {!! $item->prioritas_pu ? '&#10003;' : '&#10005;' !!}
+                                        </span>
+                                    @endif
+
+                                    @if($item->prioritas_pu && $item->uptDinas)
+                                        <span class="px-1.5 py-0.5 rounded bg-blue-50 text-[#0f2a71] border border-blue-200 text-[9px] font-bold leading-tight">
+                                            {{ $item->uptDinas->nama_upt }}
+                                        </span>
+                                    @endif
+                                </div>
                             </td>
 
                             <!-- Indikasi Ruas Prioritas: Bappeda (Role: bappeda) -->
                             <td class="p-2.5 text-center">
-                                <span
-                                    class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->prioritas_bappeda ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
-                                    title="{{ $item->prioritas_bappeda ? 'Indikasi Prioritas Bappeda: Disetujui' : 'Indikasi Prioritas Bappeda: Belum (X)' }}"
-                                >
-                                    {!! $item->prioritas_bappeda ? '&#10003;' : '&#10005;' !!}
-                                </span>
+                                @if($canPrioritasBappeda)
+                                    <button
+                                        type="button"
+                                        onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'prioritas_bappeda', 'Indikasi Ruas Prioritas - Bappeda', {{ $item->prioritas_bappeda ? '1' : '0' }}, null)"
+                                        title="Klik untuk ubah Indikasi Prioritas Bappeda"
+                                        class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border transition cursor-pointer {{ $item->prioritas_bappeda ? 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100' }}"
+                                    >
+                                        {!! $item->prioritas_bappeda ? '&#10003;' : '&#10005;' !!}
+                                    </button>
+                                @else
+                                    <span
+                                        class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->prioritas_bappeda ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
+                                        title="{{ $item->prioritas_bappeda ? 'Indikasi Prioritas Bappeda: Disetujui' : 'Indikasi Prioritas Bappeda: Belum (X)' }}"
+                                    >
+                                        {!! $item->prioritas_bappeda ? '&#10003;' : '&#10005;' !!}
+                                    </span>
+                                @endif
                             </td>
 
                             <!-- Verifikasi: PU (Role: pu_bintek) -->
                             <td class="p-2.5 text-center">
-                                <span
-                                    class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->verifikasi_pu ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
-                                    title="{{ $item->verifikasi_pu ? 'Verifikasi PU: Terverifikasi' : 'Verifikasi PU: Belum (X)' }}"
-                                >
-                                    {!! $item->verifikasi_pu ? '&#10003;' : '&#10005;' !!}
-                                </span>
+                                @if($canVerifikasiPu)
+                                    <button
+                                        type="button"
+                                        onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'verifikasi_pu', 'Verifikasi - PU (PU Bintek)', {{ $item->verifikasi_pu ? '1' : '0' }}, null)"
+                                        title="Klik untuk ubah Verifikasi PU"
+                                        class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border transition cursor-pointer {{ $item->verifikasi_pu ? 'bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100' }}"
+                                    >
+                                        {!! $item->verifikasi_pu ? '&#10003;' : '&#10005;' !!}
+                                    </button>
+                                @else
+                                    <span
+                                        class="inline-flex items-center justify-center w-6 h-6 rounded-lg font-extrabold text-xs border {{ $item->verifikasi_pu ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-rose-50 text-rose-600 border-rose-200' }}"
+                                        title="{{ $item->verifikasi_pu ? 'Verifikasi PU: Terverifikasi' : 'Verifikasi PU: Belum (X)' }}"
+                                    >
+                                        {!! $item->verifikasi_pu ? '&#10003;' : '&#10005;' !!}
+                                    </span>
+                                @endif
                             </td>
 
                             <!-- Peta Pin -->
@@ -447,8 +496,8 @@
                                     @if($userRoleName === 'pu_turdal')
                                         <button
                                             type="button"
-                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'prioritas_pu', 'Indikasi Ruas Prioritas - PU (PU Turdal)', {{ $item->prioritas_pu ? '1' : '0' }})"
-                                            title="Form Indikasi Ruas Prioritas PU"
+                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'prioritas_pu', 'Indikasi Ruas Prioritas - PU (PU Turdal)', {{ $item->prioritas_pu ? '1' : '0' }}, {{ $item->upt_dinas_id ?? ($item->kabupatenKota->upt_id ?? 'null') }})"
+                                            title="Form Indikasi Ruas Prioritas PU &amp; Pilih UPT"
                                             class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#0f2a71] text-[#ffb700] hover:bg-navy-800 font-bold text-[10px] transition shadow-2xs"
                                         >
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -457,7 +506,7 @@
                                     @elseif($userRoleName === 'bappeda')
                                         <button
                                             type="button"
-                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'prioritas_bappeda', 'Indikasi Ruas Prioritas - Bappeda', {{ $item->prioritas_bappeda ? '1' : '0' }})"
+                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'prioritas_bappeda', 'Indikasi Ruas Prioritas - Bappeda', {{ $item->prioritas_bappeda ? '1' : '0' }}, null)"
                                             title="Form Indikasi Ruas Prioritas Bappeda"
                                             class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-purple-700 text-white hover:bg-purple-800 font-bold text-[10px] transition shadow-2xs"
                                         >
@@ -467,7 +516,7 @@
                                     @elseif($userRoleName === 'pu_bintek')
                                         <button
                                             type="button"
-                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'verifikasi_pu', 'Verifikasi - PU (PU Bintek)', {{ $item->verifikasi_pu ? '1' : '0' }})"
+                                            onclick="openModalStatus({{ $item->id }}, @js($item->kode_usulan ?? $item->id), @js($item->nama_kegiatan), 'verifikasi_pu', 'Verifikasi - PU (PU Bintek)', {{ $item->verifikasi_pu ? '1' : '0' }}, null)"
                                             title="Form Verifikasi PU"
                                             class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold text-[10px] transition shadow-2xs"
                                         >
@@ -779,14 +828,28 @@
                     <label id="status_label" class="block font-bold text-slate-700 mb-2">Pilih Status:</label>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-emerald-200 bg-emerald-50/60 cursor-pointer hover:bg-emerald-100/70 transition">
-                            <input type="radio" name="value" id="status_val_true" value="1" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
+                            <input type="radio" name="value" id="status_val_true" value="1" onchange="toggleUptSelector()" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500">
                             <span class="font-extrabold text-emerald-800">&#10003; Disetujui / Ya</span>
                         </label>
                         <label class="flex items-center gap-2.5 p-3 rounded-xl border border-rose-200 bg-rose-50/60 cursor-pointer hover:bg-rose-100/70 transition">
-                            <input type="radio" name="value" id="status_val_false" value="0" class="w-4 h-4 text-rose-600 focus:ring-rose-500">
+                            <input type="radio" name="value" id="status_val_false" value="0" onchange="toggleUptSelector()" class="w-4 h-4 text-rose-600 focus:ring-rose-500">
                             <span class="font-extrabold text-rose-700">&#10005; Belum / Tidak (X)</span>
                         </label>
                     </div>
+                </div>
+
+                <!-- Pilihan UPT Penerima Tugas (Khusus saat PU Turdal Menyetujui Indikasi Prioritas PU) -->
+                <div id="wrapStatusUpt" class="hidden p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 space-y-1.5">
+                    <label class="block font-bold text-[#0f2a71]">
+                        Pilih UPT PJJ Penerima Tugas <span class="text-red-500">*</span>
+                    </label>
+                    <select name="upt_dinas_id" id="status_upt_dinas_id" class="w-full border border-slate-300 rounded-lg px-3 py-2 bg-white text-slate-800 font-semibold focus:outline-none focus:border-[#0f2a71]">
+                        <option value="">-- Pilih UPT PJJ yang Mendapat Tugas --</option>
+                        @foreach($uptDinasList ?? [] as $upt)
+                            <option value="{{ $upt->id }}">{{ $upt->nama_upt }}</option>
+                        @endforeach
+                    </select>
+                    <p class="text-[10px] text-slate-500">UPT yang dipilih akan menerima tugas penanganan usulan ini pada halaman Usulan mereka.</p>
                 </div>
 
                 <div class="pt-3 border-t border-slate-200 flex items-center justify-end gap-2.5">
@@ -1013,7 +1076,22 @@
             document.getElementById('modalDetail').classList.add('hidden');
         }
 
-        function openModalStatus(id, kodeUsulan, namaKegiatan, field, labelTitle, currentVal) {
+        function toggleUptSelector() {
+            const field = document.getElementById('status_field').value;
+            const isApproved = document.getElementById('status_val_true').checked;
+            const wrapUpt = document.getElementById('wrapStatusUpt');
+            const selectUpt = document.getElementById('status_upt_dinas_id');
+
+            if (field === 'prioritas_pu' && isApproved) {
+                wrapUpt.classList.remove('hidden');
+                selectUpt.required = true;
+            } else {
+                wrapUpt.classList.add('hidden');
+                selectUpt.required = false;
+            }
+        }
+
+        function openModalStatus(id, kodeUsulan, namaKegiatan, field, labelTitle, currentVal, defaultUptId = null) {
             const form = document.getElementById('formUpdateStatus');
             form.action = `/usulan/${id}/update-status`;
             document.getElementById('status_field').value = field;
@@ -1028,6 +1106,12 @@
                 document.getElementById('status_val_false').checked = true;
             }
 
+            const selectUpt = document.getElementById('status_upt_dinas_id');
+            if (selectUpt) {
+                selectUpt.value = defaultUptId ? String(defaultUptId) : '';
+            }
+
+            toggleUptSelector();
             document.getElementById('modalStatus').classList.remove('hidden');
         }
 

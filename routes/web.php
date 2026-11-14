@@ -30,9 +30,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // =========================================================================
-    // AKSES SEMUA 5 ROLE: administrator, pu_turdal, bappeda, pu_bintek, user
+    // AKSES SEMUA ROLE: administrator, pu_turdal, bappeda, pu_bintek, user, upt
     // =========================================================================
-    Route::middleware('role:administrator,pu_turdal,bappeda,pu_bintek,user')->group(function () {
+    Route::middleware('role:administrator,pu_turdal,bappeda,pu_bintek,user,upt')->group(function () {
         Route::get('/dashboard', function () {
             return redirect()->route('geospasial.index');
         })->name('dashboard');
