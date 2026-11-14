@@ -71,11 +71,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Apakah user merupakan akun Pemerintah Daerah Kabupaten/Kota
+     * Apakah user merupakan akun Pemerintah Daerah Kabupaten/Kota (role: user)
      */
     public function isKabupatenKota(): bool
     {
-        return $this->hasRole(['kabupaten_kota', 'pemda']) || (!empty($this->kabupaten_kota_id) && !$this->isAdmin() && !$this->isVerifierRole());
+        return $this->hasRole(['user', 'kabupaten_kota', 'pemda']) || (!empty($this->kabupaten_kota_id) && !$this->isAdmin() && !$this->isVerifierRole());
     }
 
     /**

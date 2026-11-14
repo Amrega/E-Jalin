@@ -15,10 +15,10 @@
         </div>
     </div>
 
-    <!-- Scrollable Menu Section: Langsung Tampil Semua (Always Visible) -->
+    <!-- Scrollable Menu Section: Langsung Tampil Semua Sesuai Role -->
     <div class="p-3.5 flex-grow overflow-y-auto space-y-6 custom-scrollbar">
 
-        <!-- 1. Induk Menu: Geospasial GIS -->
+        <!-- 1. Induk Menu: Geospasial GIS (Semua Role) -->
         <div>
             <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
                 <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <!-- 2. Induk Menu: Usulan -->
+        <!-- 2. Induk Menu: Usulan PEMDA (Semua Role) -->
         <div>
             <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
                 <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
@@ -44,7 +44,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                 </div>
-                <span>Usulan</span>
+                <span>Usulan PEMDA</span>
             </div>
 
             <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
@@ -54,77 +54,80 @@
             </div>
         </div>
 
-        <!-- 3. Induk Menu: Referensi -->
-        <div>
-            <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
-                <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
-                    <svg class="w-3.5 h-3.5 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                    </svg>
+        
+            <!-- 3. Induk Menu: Referensi (Khusus Administrator) -->
+            <div>
+                <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+                    <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
+                        <svg class="w-3.5 h-3.5 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
+                    <span>Referensi</span>
                 </div>
-                <span>Referensi</span>
-            </div>
 
-            <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
-                <a href="{{ route('koridor.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('koridor*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Referensi Koridor
-                </a>
-                <a href="{{ route('ruas.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('ruas*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Referensi Ruas Jalan
-                </a>
-                <a href="{{ route('jembatan.index') }}" class="block py-2 px-3 rounded-lg transition {{ (request()->routeIs('jembatan*') || request()->is('referensi-jembatan*')) ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Referensi Jembatan
-                </a>
-            </div>
-        </div>
-
-        <!-- 3. Induk Menu: Referensi Master -->
-        <div>
-            <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
-                <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
-                    <svg class="w-3.5 h-3.5 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3s3.5-1 3.5-3V7c0-2-1.5-3-3.5-3S4 5 4 7zm9 0v10c0 2 1.5 3 3.5 3s3.5-1 3.5-3V7c0-2-1.5-3-3.5-3s-3.5 1-3.5 3z"></path>
-                    </svg>
+                <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
+                    <a href="{{ route('koridor.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('koridor*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Referensi Koridor
+                    </a>
+                    <a href="{{ route('ruas.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('ruas*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Referensi Ruas Jalan
+                    </a>
+                    <a href="{{ route('jembatan.index') }}" class="block py-2 px-3 rounded-lg transition {{ (request()->routeIs('jembatan*') || request()->is('referensi-jembatan*')) ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Referensi Jembatan
+                    </a>
                 </div>
-                <span>Master</span>
             </div>
-
-            <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
-                <a href="{{ route('kabupaten-kota.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('kabupaten-kota*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Kab/Kota
-                </a>
-                <a href="{{ route('upt-dinas.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('upt-dinas*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    UPT PJJ
-                </a>
-                <a href="{{ route('jenis-penanganan.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('jenis-penanganan*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Jenis Penanganan
-                </a>
-                <a href="{{ route('tematik-kawasan.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('tematik-kawasan*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Tematik Kawasan
-                </a>
-            </div>
-        </div>
-
-        <!-- 4. Induk Menu: Manajemen Akses -->
-        <div>
-            <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
-                <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
-                    <svg class="w-3.5 h-3.5 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
+            
+        @if(auth()->check() && auth()->user()->isAdmin())
+            <!-- 4. Induk Menu: Master (Khusus Administrator) -->
+            <div>
+                <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+                    <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
+                        <svg class="w-3.5 h-3.5 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3s3.5-1 3.5-3V7c0-2-1.5-3-3.5-3S4 5 4 7zm9 0v10c0 2 1.5 3 3.5 3s3.5-1 3.5-3V7c0-2-1.5-3-3.5-3s-3.5 1-3.5 3z"></path>
+                        </svg>
+                    </div>
+                    <span>Master</span>
                 </div>
-                <span>Manajemen Akses</span>
+
+                <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
+                    <a href="{{ route('kabupaten-kota.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('kabupaten-kota*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Kab/Kota
+                    </a>
+                    <a href="{{ route('upt-dinas.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('upt-dinas*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        UPT PJJ
+                    </a>
+                    <a href="{{ route('jenis-penanganan.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('jenis-penanganan*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Jenis Penanganan
+                    </a>
+                    <a href="{{ route('tematik-kawasan.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('tematik-kawasan*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Tematik Kawasan
+                    </a>
+                </div>
             </div>
 
-            <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
-                <a href="{{ route('user.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('user*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Pengguna
-                </a>
-                <a href="{{ route('role.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('role*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                    Role
-                </a>
+            <!-- 5. Induk Menu: Manajemen Akses (Khusus Administrator) -->
+            <div>
+                <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+                    <div class="w-6 h-6 rounded-lg bg-[#0f2a71] text-[#ffb700] flex items-center justify-center shadow-2xs flex-shrink-0">
+                        <svg class="w-3.5 h-3.5 text-[#ffb700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                    </div>
+                    <span>Manajemen Akses</span>
+                </div>
+
+                <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
+                    <a href="{{ route('user.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('user*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Pengguna
+                    </a>
+                    <a href="{{ route('role.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('role*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Role
+                    </a>
+                </div>
             </div>
-        </div>
+        @endif
 
     </div>
 

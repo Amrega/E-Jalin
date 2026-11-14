@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             ['id' => 2, 'nama_role' => 'pu_turdal', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
             ['id' => 3, 'nama_role' => 'bappeda', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
             ['id' => 4, 'nama_role' => 'pu_bintek', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
-            ['id' => 5, 'nama_role' => 'kabupaten_kota', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
+            ['id' => 5, 'nama_role' => 'user', 'void' => 0, 'created_at' => '2026-11-12 14:38:45', 'updated_at' => '2026-11-12 14:38:45'],
         ], ['id'], ['nama_role', 'void', 'updated_at']);
 
         // 2. Users
