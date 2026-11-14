@@ -26,13 +26,24 @@ return new class extends Migration
                 $table->integer('jembatan_id')->nullable();
                 $table->string('nama_pengusul', 150);
                 $table->string('nama_kegiatan', 255);
-                $table->enum('status_ruas', ['Provinsi', 'Kabupaten/Kota', 'Non Status'])->default('Kabupaten/Kota');
+                $table->enum('status_ruas', ['Jalan Kab/Kota', 'Jalan Desa'])->default('Jalan Kab/Kota');
                 $table->double('panjang_penanganan')->default(0);
                 $table->enum('satuan', ['KM', 'M'])->default('KM');
                 $table->bigInteger('alokasi_usulan')->default(0);
                 $table->text('keterangan')->nullable();
                 $table->enum('status_dokumen_pendukung', ['SIAP', 'TIDAK SIAP', 'TIDAK PERLU'])->default('SIAP');
                 $table->string('file_dokumen_pendukung', 255)->nullable();
+                // Dokumen Kelengkapan (Umum: Jalan Kab/Kota & Jalan Desa)
+                $table->string('file_surat_permohonan', 255)->nullable();
+                $table->string('file_proposal_rab', 255)->nullable();
+                // Dokumen Kelengkapan Khusus Jalan Kab/Kota (No. 3 - 6)
+                $table->string('file_pernyataan_pemeliharaan', 255)->nullable();
+                $table->string('file_pernyataan_ketidakmampuan_kabkota', 255)->nullable();
+                $table->string('file_keputusan_gubernur_fungsi', 255)->nullable();
+                $table->string('file_keputusan_bupati_status', 255)->nullable();
+                // Dokumen Kelengkapan Khusus Jalan Desa (No. 3 - 4)
+                $table->string('file_pernyataan_kepala_desa', 255)->nullable();
+                $table->string('file_pernyataan_bupati_jalan_desa', 255)->nullable();
                 $table->boolean('prioritas_pu')->default(false);
                 $table->boolean('prioritas_bappeda')->default(false);
                 $table->boolean('verifikasi_pu')->default(false);

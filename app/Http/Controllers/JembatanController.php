@@ -58,7 +58,7 @@ class JembatanController extends Controller
             $query->where('ruas_jalan_id', $request->ruas_jalan_id);
         }
 
-        // Filter Status Jembatan (Kabupaten/Kota, Non Status)
+        // Filter Status Jembatan (Jalan Kab/Kota, Jalan Desa)
         if ($request->filled('status_jembatan')) {
             $query->where('status_jembatan', $request->status_jembatan);
         }
@@ -126,7 +126,7 @@ class JembatanController extends Controller
             'nama_jembatan'    => ['required', 'string', 'max:255'],
             'nomor_jembatan'   => ['nullable', 'string', 'max:100'],
             'panjang_jembatan' => ['nullable', 'numeric', 'min:0'],
-            'status_jembatan'  => ['required', 'in:Kabupaten/Kota,Non Status'],
+            'status_jembatan'  => ['required', 'in:Jalan Kab/Kota,Jalan Desa'],
             'file_kml_jembatan'=> ['nullable', 'file', 'max:25600'], // max 25MB
             'void'             => ['nullable', 'in:0,1'],
         ], [
@@ -134,7 +134,7 @@ class JembatanController extends Controller
             'ruas_jalan_id.exists'      => 'Ruas jalan yang dipilih tidak valid.',
             'nama_jembatan.required'    => 'Nama jembatan wajib diisi.',
             'status_jembatan.required'  => 'Status jembatan wajib dipilih.',
-            'status_jembatan.in'        => 'Status jembatan harus "Kabupaten/Kota" atau "Non Status".',
+            'status_jembatan.in'        => 'Status jembatan harus "Jalan Kab/Kota" atau "Jalan Desa".',
             'panjang_jembatan.numeric'  => 'Panjang jembatan harus berupa angka desimal.',
             'file_kml_jembatan.max'     => 'Ukuran file KML jembatan maksimal 25MB.',
         ]);
@@ -173,7 +173,7 @@ class JembatanController extends Controller
             'nama_jembatan'    => ['required', 'string', 'max:255'],
             'nomor_jembatan'   => ['nullable', 'string', 'max:100'],
             'panjang_jembatan' => ['nullable', 'numeric', 'min:0'],
-            'status_jembatan'  => ['required', 'in:Kabupaten/Kota,Non Status'],
+            'status_jembatan'  => ['required', 'in:Jalan Kab/Kota,Jalan Desa'],
             'file_kml_jembatan'=> ['nullable', 'file', 'max:25600'],
             'void'             => ['nullable', 'in:0,1'],
         ], [
@@ -181,7 +181,7 @@ class JembatanController extends Controller
             'ruas_jalan_id.exists'      => 'Ruas jalan yang dipilih tidak valid.',
             'nama_jembatan.required'    => 'Nama jembatan wajib diisi.',
             'status_jembatan.required'  => 'Status jembatan wajib dipilih.',
-            'status_jembatan.in'        => 'Status jembatan harus "Kabupaten/Kota" atau "Non Status".',
+            'status_jembatan.in'        => 'Status jembatan harus "Jalan Kab/Kota" atau "Jalan Desa".',
             'panjang_jembatan.numeric'  => 'Panjang jembatan harus berupa angka.',
             'file_kml_jembatan.max'     => 'Ukuran file KML jembatan maksimal 25MB.',
         ]);

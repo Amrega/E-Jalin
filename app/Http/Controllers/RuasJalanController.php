@@ -59,7 +59,7 @@ class RuasJalanController extends Controller
             }
         }
 
-        // Filter Status Jalan (Kabupaten/Kota, Non Status)
+        // Filter Status Jalan (Jalan Kab/Kota, Jalan Desa)
         if ($request->filled('status_jalan')) {
             $query->where('status_jalan', $request->status_jalan);
         }
@@ -128,7 +128,7 @@ class RuasJalanController extends Controller
             'nama_ruas'         => ['required', 'string', 'max:255'],
             'nomor_ruas'        => ['nullable', 'string', 'max:100'],
             'panjang_ruas'      => ['nullable', 'numeric', 'min:0'],
-            'status_jalan'      => ['required', 'in:Kabupaten/Kota,Non Status'],
+            'status_jalan'      => ['required', 'in:Jalan Kab/Kota,Jalan Desa'],
             'file_kml_ruas'     => ['nullable', 'file', 'max:25600'], // max 25MB
             'void'              => ['nullable', 'in:0,1'],
         ], [
@@ -137,7 +137,7 @@ class RuasJalanController extends Controller
             'koridor_id.exists'          => 'Koridor yang dipilih tidak valid.',
             'nama_ruas.required'         => 'Nama ruas jalan wajib diisi.',
             'status_jalan.required'      => 'Status jalan wajib dipilih.',
-            'status_jalan.in'            => 'Status jalan harus "Kabupaten/Kota" atau "Non Status".',
+            'status_jalan.in'            => 'Status jalan harus "Jalan Kab/Kota" atau "Jalan Desa".',
             'panjang_ruas.numeric'       => 'Panjang ruas harus berupa angka desimal.',
             'file_kml_ruas.max'          => 'Ukuran file KML maksimal 25MB.',
         ]);
@@ -178,7 +178,7 @@ class RuasJalanController extends Controller
             'nama_ruas'         => ['required', 'string', 'max:255'],
             'nomor_ruas'        => ['nullable', 'string', 'max:100'],
             'panjang_ruas'      => ['nullable', 'numeric', 'min:0'],
-            'status_jalan'      => ['required', 'in:Kabupaten/Kota,Non Status'],
+            'status_jalan'      => ['required', 'in:Jalan Kab/Kota,Jalan Desa'],
             'file_kml_ruas'     => ['nullable', 'file', 'max:25600'],
             'void'              => ['nullable', 'in:0,1'],
         ], [
@@ -187,7 +187,7 @@ class RuasJalanController extends Controller
             'koridor_id.exists'          => 'Koridor yang dipilih tidak valid.',
             'nama_ruas.required'         => 'Nama ruas jalan wajib diisi.',
             'status_jalan.required'      => 'Status jalan wajib dipilih.',
-            'status_jalan.in'            => 'Status jalan harus "Kabupaten/Kota" atau "Non Status".',
+            'status_jalan.in'            => 'Status jalan harus "Jalan Kab/Kota" atau "Jalan Desa".',
             'panjang_ruas.numeric'       => 'Panjang ruas harus berupa angka.',
             'file_kml_ruas.max'          => 'Ukuran file KML maksimal 25MB.',
         ]);

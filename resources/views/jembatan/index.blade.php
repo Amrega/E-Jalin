@@ -117,8 +117,8 @@
                 <div class="flex items-center">
                     <select name="status_jembatan" onchange="this.form.submit()" class="border border-slate-300 rounded-lg px-3 py-1.5 bg-white font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#0f2a71]">
                         <option value="">Semua Status</option>
-                        <option value="Kabupaten/Kota" {{ request('status_jembatan') === 'Kabupaten/Kota' ? 'selected' : '' }}>Kabupaten/Kota</option>
-                        <option value="Non Status" {{ request('status_jembatan') === 'Non Status' ? 'selected' : '' }}>Non Status</option>
+                        <option value="Jalan Kab/Kota" {{ request('status_jembatan') === 'Jalan Kab/Kota' ? 'selected' : '' }}>Jalan Kab/Kota</option>
+                        <option value="Jalan Desa" {{ request('status_jembatan') === 'Jalan Desa' ? 'selected' : '' }}>Jalan Desa</option>
                     </select>
                 </div>
 
@@ -219,13 +219,13 @@
                                 </div>
                             </td>
                             <td class="py-3 px-4 text-center">
-                                @if($item->status_jembatan === 'Kabupaten/Kota')
+                                @if($item->status_jembatan === 'Jalan Kab/Kota')
                                     <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-semibold text-[11px] border border-slate-200">
-                                        Kabupaten/Kota
+                                        Jalan Kab/Kota
                                     </span>
                                 @else
                                     <span class="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 font-semibold text-[11px] border border-amber-200">
-                                        Non Status
+                                        Jalan Desa
                                     </span>
                                 @endif
                             </td>
@@ -394,8 +394,8 @@
                         <div>
                             <label class="block font-bold text-slate-700 mb-1.5">Status Jembatan <span class="text-red-500">*</span></label>
                             <select name="status_jembatan" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
-                                <option value="Kabupaten/Kota">Kabupaten/Kota</option>
-                                <option value="Non Status">Non Status</option>
+                                <option value="Jalan Kab/Kota">Jalan Kab/Kota</option>
+                                <option value="Jalan Desa">Jalan Desa</option>
                             </select>
                         </div>
                         <div>
@@ -484,8 +484,8 @@
                         <div>
                             <label class="block font-bold text-slate-700 mb-1.5">Status Jembatan <span class="text-red-500">*</span></label>
                             <select id="edit_status_jembatan" name="status_jembatan" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
-                                <option value="Kabupaten/Kota">Kabupaten/Kota</option>
-                                <option value="Non Status">Non Status</option>
+                                <option value="Jalan Kab/Kota">Jalan Kab/Kota</option>
+                                <option value="Jalan Desa">Jalan Desa</option>
                             </select>
                         </div>
                         <div>
@@ -648,7 +648,7 @@
 
         document.getElementById('edit_nomor_jembatan').value = data.nomor_jembatan || '';
         document.getElementById('edit_nama_jembatan').value = data.nama_jembatan || '';
-        document.getElementById('edit_status_jembatan').value = data.status_jembatan || 'Kabupaten/Kota';
+        document.getElementById('edit_status_jembatan').value = data.status_jembatan || 'Jalan Kab/Kota';
         document.getElementById('edit_panjang_jembatan').value = data.panjang_jembatan !== null ? data.panjang_jembatan : '';
         document.getElementById('edit_void').checked = data.void == 1;
 

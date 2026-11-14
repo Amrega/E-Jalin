@@ -137,7 +137,7 @@
             <span>Filter Parameter Usulan</span>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 text-xs">
             <!-- 1. Provinsi -->
             <div>
                 <label class="block font-bold text-slate-600 mb-1">Provinsi</label>
@@ -182,6 +182,16 @@
                     @endforeach
                 </select>
             </div>
+
+            <!-- 5. Status Ruas -->
+            <div>
+                <label class="block font-bold text-slate-600 mb-1">Status Ruas</label>
+                <select name="status_ruas" onchange="this.form.submit()" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 font-medium focus:outline-none focus:border-[#0f2a71]">
+                    <option value="">-- Semua Status Ruas --</option>
+                    <option value="Jalan Kab/Kota" {{ request('status_ruas') === 'Jalan Kab/Kota' ? 'selected' : '' }}>Jalan Kab/Kota</option>
+                    <option value="Jalan Desa" {{ request('status_ruas') === 'Jalan Desa' ? 'selected' : '' }}>Jalan Desa</option>
+                </select>
+            </div>
         </div>
 
         <!-- Reset Filter Action -->
@@ -189,7 +199,7 @@
             <span class="text-slate-500 font-medium">
                 Menampilkan {{ $usulanList->total() }} usulan sesuai filter.
             </span>
-            @if(request()->anyFilled(['kabupaten_kota_id', 'nama_pengusul', 'tematik_kawasan_id', 'search', 'status']))
+            @if(request()->anyFilled(['kabupaten_kota_id', 'nama_pengusul', 'tematik_kawasan_id', 'status_ruas', 'search', 'status']))
                 <a href="{{ route('usulan.index') }}" class="text-rose-600 hover:text-rose-700 font-bold flex items-center gap-1 hover:underline">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -374,7 +384,7 @@
                             <td class="p-2.5 font-medium text-slate-800 whitespace-normal min-w-[200px] leading-snug">
                                 {{ $ruasText }}
                             </td>
-                            <td class="p-2.5 text-center font-semibold {{ $item->status_ruas === 'Provinsi' ? 'text-amber-800 bg-amber-50' : 'text-blue-800 bg-blue-50' }}">
+                            <td class="p-2.5 text-center font-semibold {{ $item->status_ruas === 'Jalan Desa' ? 'text-amber-800 bg-amber-50' : 'text-blue-800 bg-blue-50' }}">
                                 {{ $item->status_ruas }}
                             </td>
                             <td class="p-2.5 text-slate-600">
@@ -711,10 +721,10 @@
 
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">Nama Ruas (Referensi)</label>
-                            <select name="ruas_jalan_id" id="f_ruas" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0f2a71]">
+                            <select name="ruas_jalan_id" id="f_ruas" onchange="syncStatusRuasFromSelectedRuas()" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0f2a71]">
                                 <option value="">-- Pilih Ruas Jalan --</option>
                                 @foreach($ruasJalanList as $rj)
-                                    <option value="{{ $rj->id }}">{{ $rj->nomor_ruas ? '['.$rj->nomor_ruas.'] ' : '' }}{{ $rj->nama_ruas }}</option>
+                                    <option value="{{ $rj->id }}" data-status="{{ $rj->status_jalan }}">{{ $rj->nomor_ruas ? '['.$rj->nomor_ruas.'] ' : '' }}{{ $rj->nama_ruas }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -731,11 +741,11 @@
 
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">Status Ruas <span class="text-red-500">*</span></label>
-                            <select name="status_ruas" id="f_statusruas" required class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#0f2a71]">
-                                <option value="Kabupaten/Kota">Kabupaten/Kota</option>
-                                <option value="Provinsi">Provinsi</option>
-                                <option value="Non Status">Non Status</option>
+                            <select name="status_ruas" id="f_statusruas" onchange="toggleDokumenByStatusRuas()" required class="w-full border border-slate-300 rounded-lg px-3 py-2 font-bold text-[#0f2a71] focus:outline-none focus:border-[#0f2a71]">
+                                <option value="Jalan Kab/Kota">Jalan Kab/Kota</option>
+                                <option value="Jalan Desa">Jalan Desa</option>
                             </select>
+                            <span class="text-[10px] text-slate-400 mt-0.5 block">Pilihan status ruas menentukan jenis dokumen kelengkapan di Bagian 2.</span>
                         </div>
 
                         <div>
@@ -763,21 +773,98 @@
 
                 <!-- Bagian 2: Dokumen Kelengkapan -->
                 <div class="space-y-4">
-                    <h4 class="font-extrabold text-[#0f2a71] text-xs uppercase tracking-wider pb-1 border-b border-slate-200 flex items-center gap-2">
-                        <span class="w-5 h-5 rounded-full bg-[#0f2a71] text-[#ffb700] inline-flex items-center justify-center text-[10px]">2</span>
-                        <span>Dokumen Kelengkapan</span>
-                    </h4>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-slate-200">
+                        <h4 class="font-extrabold text-[#0f2a71] text-xs uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-[#0f2a71] text-[#ffb700] inline-flex items-center justify-center text-[10px]">2</span>
+                            <span>Dokumen Kelengkapan</span>
+                            <span id="badgeJenisDokumen" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-[#0f2a71] border border-blue-200">
+                                Jalan Kab/Kota (6 Dokumen)
+                            </span>
+                        </h4>
 
-                    <div class="grid grid-cols-1 gap-4">
-                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                            <label class="block font-bold text-slate-700 mb-1">Dokumen Pendukung / Teknis <span class="text-red-500">*</span></label>
-                            <select name="status_dokumen_pendukung" id="f_status_dokumen" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 mb-2 focus:outline-none bg-white">
-                                <option value="SIAP">SIAP</option>
-                                <option value="TIDAK SIAP">TIDAK SIAP</option>
-                                <option value="TIDAK PERLU">TIDAK PERLU</option>
-                            </select>
-                            <input type="file" name="file_dokumen_pendukung" accept=".pdf,.doc,.docx,.zip" class="w-full text-[11px] text-slate-500">
-                            <div id="infoFileDokumen" class="mt-1 text-[11px] text-slate-500"></div>
+                        <!-- Opsi Cepat Pilih Status Ruas untuk Dokumen -->
+                        <div class="inline-flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200 text-[11px] font-bold">
+                            <button type="button" id="btnPilihKabKota" onclick="setStatusRuasOption('Jalan Kab/Kota')" class="px-3 py-1 rounded-lg bg-[#0f2a71] text-white shadow-2xs transition">
+                                Jalan Kab/Kota (6 File)
+                            </button>
+                            <button type="button" id="btnPilihJalanDesa" onclick="setStatusRuasOption('Jalan Desa')" class="px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">
+                                Jalan Desa (4 File)
+                            </button>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="status_dokumen_pendukung" id="f_status_dokumen" value="SIAP">
+
+                    <!-- Dokumen 1 & 2 (Wajib untuk Jalan Kab/Kota maupun Jalan Desa) -->
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1.5 leading-snug">
+                                1) Surat permohonan;
+                            </label>
+                            <input type="file" name="file_surat_permohonan" accept=".pdf,.doc,.docx,.zip,.jpg,.jpeg,.png" class="w-full text-[11px] text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#0f2a71] file:text-[#ffb700] hover:file:bg-navy-800 cursor-pointer">
+                            <div id="info_file_surat_permohonan" class="mt-1 text-[11px] text-slate-500"></div>
+                        </div>
+
+                        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1.5 leading-snug">
+                                2) Proposal dan rencana anggaran biaya;
+                            </label>
+                            <input type="file" name="file_proposal_rab" accept=".pdf,.doc,.docx,.zip,.jpg,.jpeg,.png" class="w-full text-[11px] text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#0f2a71] file:text-[#ffb700] hover:file:bg-navy-800 cursor-pointer">
+                            <div id="info_file_proposal_rab" class="mt-1 text-[11px] text-slate-500"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dokumen 3 s/d 6: KHUSUS JALAN KAB/KOTA -->
+                    <div id="dokumenKabKotaWrap" class="grid grid-cols-1 gap-3">
+                        <div class="p-3.5 bg-blue-50/40 rounded-xl border border-blue-200">
+                            <label class="block font-bold text-slate-800 mb-1.5 leading-snug">
+                                3) Pernyataan tertulis menyatakan akan melaksanakan pemeliharaan terhadap ruas-ruas Jalan yang diusulkan setelah diserahkan kembali kepada pengusul;
+                            </label>
+                            <input type="file" name="file_pernyataan_pemeliharaan" accept=".pdf,.doc,.docx,.zip,.jpg,.jpeg,.png" class="w-full text-[11px] text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#0f2a71] file:text-[#ffb700] hover:file:bg-navy-800 cursor-pointer">
+                            <div id="info_file_pernyataan_pemeliharaan" class="mt-1 text-[11px] text-slate-500"></div>
+                        </div>
+
+                        <div class="p-3.5 bg-blue-50/40 rounded-xl border border-blue-200">
+                            <label class="block font-bold text-slate-800 mb-1.5 leading-snug">
+                                4) Pernyataan tertulis yang menyatakan belum mampu membiayai penyelenggaraan Jalan Kabupaten/Kota, dengan melampirkan laporan realisasi anggaran tahun anggaran sebelumnya;
+                            </label>
+                            <input type="file" name="file_pernyataan_ketidakmampuan_kabkota" accept=".pdf,.doc,.docx,.zip,.jpg,.jpeg,.png" class="w-full text-[11px] text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#0f2a71] file:text-[#ffb700] hover:file:bg-navy-800 cursor-pointer">
+                            <div id="info_file_pernyataan_ketidakmampuan_kabkota" class="mt-1 text-[11px] text-slate-500"></div>
+                        </div>
+
+                        <div class="p-3.5 bg-blue-50/40 rounded-xl border border-blue-200">
+                            <label class="block font-bold text-slate-800 mb-1.5 leading-snug">
+                                5) Keputusan Gubernur tentang fungsi jalan Kabupaten/Kota; dan
+                            </label>
+                            <input type="file" name="file_keputusan_gubernur_fungsi" accept=".pdf,.doc,.docx,.zip,.jpg,.jpeg,.png" class="w-full text-[11px] text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#0f2a71] file:text-[#ffb700] hover:file:bg-navy-800 cursor-pointer">
+                            <div id="info_file_keputusan_gubernur_fungsi" class="mt-1 text-[11px] text-slate-500"></div>
+                        </div>
+
+                        <div class="p-3.5 bg-blue-50/40 rounded-xl border border-blue-200">
+                            <label class="block font-bold text-slate-800 mb-1.5 leading-snug">
+                                6) Keputusan Bupati/Wali Kota tentang status jalan Kabupaten/Kota dan peraturan perundangan yang terkait.
+                            </label>
+                            <input type="file" name="file_keputusan_bupati_status" accept=".pdf,.doc,.docx,.zip,.jpg,.jpeg,.png" class="w-full text-[11px] text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#0f2a71] file:text-[#ffb700] hover:file:bg-navy-800 cursor-pointer">
+                            <div id="info_file_keputusan_bupati_status" class="mt-1 text-[11px] text-slate-500"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dokumen 3 s/d 4: KHUSUS JALAN DESA -->
+                    <div id="dokumenJalanDesaWrap" class="grid grid-cols-1 gap-3 hidden">
+                        <div class="p-3.5 bg-amber-50/50 rounded-xl border border-amber-200">
+                            <label class="block font-bold text-slate-800 mb-1.5 leading-snug">
+                                3) Pernyataan tertulis Kepala Desa yang menyatakan belum mampu membiayai penyelenggaraan Jalan Desa secara keseluruhan; dan
+                            </label>
+                            <input type="file" name="file_pernyataan_kepala_desa" accept=".pdf,.doc,.docx,.zip,.jpg,.jpeg,.png" class="w-full text-[11px] text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#0f2a71] file:text-[#ffb700] hover:file:bg-navy-800 cursor-pointer">
+                            <div id="info_file_pernyataan_kepala_desa" class="mt-1 text-[11px] text-slate-500"></div>
+                        </div>
+
+                        <div class="p-3.5 bg-amber-50/50 rounded-xl border border-amber-200">
+                            <label class="block font-bold text-slate-800 mb-1.5 leading-snug">
+                                4) Pernyataan tertulis Bupati/Wali Kota yang menyatakan belum mampu memfasilitasi Pembangunan Jalan Desa.
+                            </label>
+                            <input type="file" name="file_pernyataan_bupati_jalan_desa" accept=".pdf,.doc,.docx,.zip,.jpg,.jpeg,.png" class="w-full text-[11px] text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#0f2a71] file:text-[#ffb700] hover:file:bg-navy-800 cursor-pointer">
+                            <div id="info_file_pernyataan_bupati_jalan_desa" class="mt-1 text-[11px] text-slate-500"></div>
                         </div>
                     </div>
                 </div>
@@ -955,14 +1042,76 @@
             }
         }
 
+        const DOKUMEN_FIELDS = [
+            'file_surat_permohonan',
+            'file_proposal_rab',
+            'file_pernyataan_pemeliharaan',
+            'file_pernyataan_ketidakmampuan_kabkota',
+            'file_keputusan_gubernur_fungsi',
+            'file_keputusan_bupati_status',
+            'file_pernyataan_kepala_desa',
+            'file_pernyataan_bupati_jalan_desa',
+        ];
+
+        function syncStatusRuasFromSelectedRuas() {
+            const ruasSelect = document.getElementById('f_ruas');
+            if (!ruasSelect) return;
+            const opt = ruasSelect.options[ruasSelect.selectedIndex];
+            const status = opt ? opt.getAttribute('data-status') : '';
+            if (status === 'Jalan Kab/Kota' || status === 'Jalan Desa') {
+                document.getElementById('f_statusruas').value = status;
+                toggleDokumenByStatusRuas();
+            }
+        }
+
+        function setStatusRuasOption(statusValue) {
+            const select = document.getElementById('f_statusruas');
+            if (select) {
+                select.value = statusValue;
+                toggleDokumenByStatusRuas();
+            }
+        }
+
+        function toggleDokumenByStatusRuas() {
+            const status = document.getElementById('f_statusruas').value;
+            const kabKotaWrap = document.getElementById('dokumenKabKotaWrap');
+            const desaWrap = document.getElementById('dokumenJalanDesaWrap');
+            const badge = document.getElementById('badgeJenisDokumen');
+            const btnKabKota = document.getElementById('btnPilihKabKota');
+            const btnDesa = document.getElementById('btnPilihJalanDesa');
+
+            if (status === 'Jalan Desa') {
+                kabKotaWrap.classList.add('hidden');
+                desaWrap.classList.remove('hidden');
+                badge.innerText = 'Jalan Desa (4 Dokumen)';
+                badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200';
+                btnDesa.className = 'px-3 py-1 rounded-lg bg-[#0f2a71] text-white shadow-2xs transition';
+                btnKabKota.className = 'px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+            } else {
+                kabKotaWrap.classList.remove('hidden');
+                desaWrap.classList.add('hidden');
+                badge.innerText = 'Jalan Kab/Kota (6 Dokumen)';
+                badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-[#0f2a71] border border-blue-200';
+                btnKabKota.className = 'px-3 py-1 rounded-lg bg-[#0f2a71] text-white shadow-2xs transition';
+                btnDesa.className = 'px-3 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition';
+            }
+        }
+
         function openModalTambah() {
             const form = document.getElementById('frmUsulan');
             form.reset();
             form.action = "{{ route('usulan.store') }}";
             document.getElementById('formMethod').value = 'POST';
             document.getElementById('modalFormTitle').innerText = 'Formulir Tambah Usulan Baru';
-            document.getElementById('infoFileDokumen').innerHTML = '';
+
+            DOKUMEN_FIELDS.forEach(col => {
+                const infoEl = document.getElementById('info_' + col);
+                if (infoEl) infoEl.innerHTML = '';
+            });
+
+            document.getElementById('f_statusruas').value = 'Jalan Kab/Kota';
             toggleBridgeField();
+            toggleDokumenByStatusRuas();
             document.getElementById('modalTambah').classList.remove('hidden');
         }
 
@@ -982,20 +1131,24 @@
             document.getElementById('f_ruas').value = item.ruas_jalan_id || '';
             toggleBridgeField();
             document.getElementById('f_jembatan').value = item.jembatan_id || '';
-            document.getElementById('f_statusruas').value = item.status_ruas || 'Kabupaten/Kota';
+            document.getElementById('f_statusruas').value = (item.status_ruas === 'Jalan Desa') ? 'Jalan Desa' : 'Jalan Kab/Kota';
             document.getElementById('f_panjang').value = item.panjang_penanganan || 0;
             document.getElementById('f_satuan').value = item.satuan || 'KM';
             document.getElementById('f_biaya').value = item.alokasi_usulan || 0;
             document.getElementById('f_keterangan').value = item.keterangan || '';
             document.getElementById('f_status_dokumen').value = item.status_dokumen_pendukung || 'SIAP';
 
-            const infoDok = document.getElementById('infoFileDokumen');
-            if (item.file_dokumen_pendukung) {
-                infoDok.innerHTML = `File saat ini: <strong class="text-emerald-700">${item.file_dokumen_pendukung}</strong> (biarkan kosong jika tidak diubah)`;
-            } else {
-                infoDok.innerHTML = `<span class="italic text-slate-400">Belum ada file dokumen yang diupload</span>`;
-            }
+            DOKUMEN_FIELDS.forEach(col => {
+                const infoEl = document.getElementById('info_' + col);
+                if (!infoEl) return;
+                if (item[col]) {
+                    infoEl.innerHTML = `File saat ini: <strong class="text-emerald-700">${item[col]}</strong> (biarkan kosong jika tidak diubah)`;
+                } else {
+                    infoEl.innerHTML = `<span class="italic text-slate-400">Belum ada file yang diupload</span>`;
+                }
+            });
 
+            toggleDokumenByStatusRuas();
             document.getElementById('modalTambah').classList.remove('hidden');
         }
 
@@ -1005,11 +1158,42 @@
 
         function openModalDetail(item, lokasiText, koridorText, ruasText, jembatanText, tematikText) {
             const modalBody = document.getElementById('modalDetailBody');
-            const downloadBtn = item.file_dokumen_pendukung
-                ? `<a href="/usulan/${item.id}/download-dokumen" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0f2a71] text-white font-bold hover:bg-navy-800 transition">
-                    <span>Download Dokumen</span>
-                   </a>`
-                : '';
+
+            const isJalanDesa = item.status_ruas === 'Jalan Desa';
+            const daftarDokumen = isJalanDesa
+                ? [
+                    { field: 'file_surat_permohonan', label: '1) Surat permohonan' },
+                    { field: 'file_proposal_rab', label: '2) Proposal dan rencana anggaran biaya' },
+                    { field: 'file_pernyataan_kepala_desa', label: '3) Pernyataan tertulis Kepala Desa yang menyatakan belum mampu membiayai penyelenggaraan Jalan Desa secara keseluruhan' },
+                    { field: 'file_pernyataan_bupati_jalan_desa', label: '4) Pernyataan tertulis Bupati/Wali Kota yang menyatakan belum mampu memfasilitasi Pembangunan Jalan Desa' },
+                  ]
+                : [
+                    { field: 'file_surat_permohonan', label: '1) Surat permohonan' },
+                    { field: 'file_proposal_rab', label: '2) Proposal dan rencana anggaran biaya' },
+                    { field: 'file_pernyataan_pemeliharaan', label: '3) Pernyataan tertulis menyatakan akan melaksanakan pemeliharaan terhadap ruas-ruas Jalan yang diusulkan setelah diserahkan kembali kepada pengusul' },
+                    { field: 'file_pernyataan_ketidakmampuan_kabkota', label: '4) Pernyataan tertulis yang menyatakan belum mampu membiayai penyelenggaraan Jalan Kabupaten/Kota, dengan melampirkan laporan realisasi anggaran tahun anggaran sebelumnya' },
+                    { field: 'file_keputusan_gubernur_fungsi', label: '5) Keputusan Gubernur tentang fungsi jalan Kabupaten/Kota' },
+                    { field: 'file_keputusan_bupati_status', label: '6) Keputusan Bupati/Wali Kota tentang status jalan Kabupaten/Kota dan peraturan perundangan yang terkait' },
+                  ];
+
+            const dokumenRowsHtml = daftarDokumen.map(doc => {
+                const fileName = item[doc.field];
+                const actionHtml = fileName
+                    ? `<a href="/usulan/${item.id}/download-dokumen/${doc.field}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#0f2a71] text-[#ffb700] hover:bg-navy-800 font-bold text-[11px] transition flex-shrink-0">
+                        <span>Download</span>
+                       </a>`
+                    : `<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-400 italic text-[10px] flex-shrink-0">Belum Diupload</span>`;
+
+                return `
+                    <div class="p-2.5 bg-white rounded-lg border border-slate-200 flex items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <p class="font-semibold text-slate-800 text-[11px] leading-snug">${doc.label}</p>
+                            ${fileName ? `<span class="text-[10px] font-mono text-emerald-700 block mt-0.5 truncate">${fileName}</span>` : ''}
+                        </div>
+                        ${actionHtml}
+                    </div>
+                `;
+            }).join('');
 
             modalBody.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1058,14 +1242,18 @@
                         </div>
                     </div>
 
-                    <div class="md:col-span-2 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1">Dokumen Kelengkapan</span>
-                            <span class="inline-block px-3 py-1 bg-emerald-50 rounded-lg border border-emerald-200 text-emerald-800 font-bold text-xs">
-                                Dokumen Pendukung / Teknis: ${item.status_dokumen_pendukung || 'SIAP'}
+                    <div class="md:col-span-2 p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-[#0f2a71] uppercase tracking-wider">
+                                Dokumen Kelengkapan (${item.status_ruas})
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">
+                                ${daftarDokumen.length} Dokumen Persyaratan
                             </span>
                         </div>
-                        <div>${downloadBtn}</div>
+                        <div class="space-y-2">
+                            ${dokumenRowsHtml}
+                        </div>
                     </div>
                 </div>
             `;

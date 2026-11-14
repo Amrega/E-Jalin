@@ -29,6 +29,24 @@ class UsulanController extends Controller
     }
 
     /**
+     * Daftar kolom file dokumen kelengkapan berdasarkan status ruas
+     */
+    protected function getDokumenColumns(): array
+    {
+        return [
+            'file_surat_permohonan',
+            'file_proposal_rab',
+            'file_pernyataan_pemeliharaan',
+            'file_pernyataan_ketidakmampuan_kabkota',
+            'file_keputusan_gubernur_fungsi',
+            'file_keputusan_bupati_status',
+            'file_pernyataan_kepala_desa',
+            'file_pernyataan_bupati_jalan_desa',
+            'file_dokumen_pendukung',
+        ];
+    }
+
+    /**
      * Tampilkan daftar Usulan beserta statistik dan filter
      */
     public function index(Request $request)
@@ -96,6 +114,11 @@ class UsulanController extends Controller
         // Filter Tematik Kawasan
         if ($request->filled('tematik_kawasan_id')) {
             $query->where('tematik_kawasan_id', $request->tematik_kawasan_id);
+        }
+
+        // Filter Status Ruas (Jalan Kab/Kota / Jalan Desa)
+        if ($request->filled('status_ruas')) {
+            $query->where('status_ruas', $request->status_ruas);
         }
 
         // Filter Status Void (Aktif / Void)
@@ -203,60 +226,81 @@ class UsulanController extends Controller
         }
 
         $validated = $request->validate([
-            'kabupaten_kota_id'        => ['required', 'exists:kabupaten_kota,id'],
-            'tematik_kawasan_id'       => ['nullable', 'exists:tematik_kawasan,id'],
-            'jenis_penanganan_id'      => ['nullable', 'exists:jenis_penanganan,id'],
-            'koridor_id'               => ['nullable', 'exists:koridor,id'],
-            'ruas_jalan_id'            => ['nullable', 'exists:ruas_jalan,id'],
-            'jembatan_id'              => ['nullable', 'exists:jembatan,id'],
-            'nama_pengusul'            => ['required', 'string', 'max:150'],
-            'nama_kegiatan'            => ['required', 'string', 'max:255'],
-            'status_ruas'              => ['required', 'in:Provinsi,Kabupaten/Kota,Non Status'],
-            'panjang_penanganan'       => ['required', 'numeric', 'min:0'],
-            'satuan'                   => ['required', 'in:KM,M'],
-            'alokasi_usulan'           => ['required', 'numeric', 'min:0'],
-            'keterangan'               => ['nullable', 'string'],
-            'status_dokumen_pendukung' => ['required', 'in:SIAP,TIDAK SIAP,TIDAK PERLU'],
-            'file_dokumen_pendukung'   => ['nullable', 'file', 'mimes:pdf,doc,docx,zip', 'max:25600'],
-            'void'                     => ['nullable', 'in:0,1'],
+            'kabupaten_kota_id'                     => ['required', 'exists:kabupaten_kota,id'],
+            'tematik_kawasan_id'                    => ['nullable', 'exists:tematik_kawasan,id'],
+            'jenis_penanganan_id'                   => ['nullable', 'exists:jenis_penanganan,id'],
+            'koridor_id'                            => ['nullable', 'exists:koridor,id'],
+            'ruas_jalan_id'                         => ['nullable', 'exists:ruas_jalan,id'],
+            'jembatan_id'                           => ['nullable', 'exists:jembatan,id'],
+            'nama_pengusul'                         => ['required', 'string', 'max:150'],
+            'nama_kegiatan'                         => ['required', 'string', 'max:255'],
+            'status_ruas'                           => ['required', 'in:Jalan Kab/Kota,Jalan Desa'],
+            'panjang_penanganan'                    => ['required', 'numeric', 'min:0'],
+            'satuan'                                => ['required', 'in:KM,M'],
+            'alokasi_usulan'                        => ['required', 'numeric', 'min:0'],
+            'keterangan'                            => ['nullable', 'string'],
+            'status_dokumen_pendukung'              => ['nullable', 'in:SIAP,TIDAK SIAP,TIDAK PERLU'],
+            'file_dokumen_pendukung'                => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_surat_permohonan'                 => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_proposal_rab'                     => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_pernyataan_pemeliharaan'          => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_pernyataan_ketidakmampuan_kabkota'=> ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_keputusan_gubernur_fungsi'        => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_keputusan_bupati_status'          => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_pernyataan_kepala_desa'           => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_pernyataan_bupati_jalan_desa'     => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'void'                                  => ['nullable', 'in:0,1'],
         ]);
 
-        $fileName = null;
-        if ($request->hasFile('file_dokumen_pendukung')) {
-            $file = $request->file('file_dokumen_pendukung');
-            $uploadPath = $this->getDokumenUploadPath();
+        $uploadPath = $this->getDokumenUploadPath();
+        $uploadedFiles = [];
 
-            $rawName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time() . '_' . Str::slug($rawName) . '.' . ($extension ?: 'pdf');
-            $file->move($uploadPath, $fileName);
+        foreach ($this->getDokumenColumns() as $col) {
+            $uploadedFiles[$col] = null;
+            if ($request->hasFile($col)) {
+                $file = $request->file($col);
+                $rawName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $file->getClientOriginalExtension();
+                $shortPrefix = str_replace('file_', '', $col);
+                $fileName = time() . '_' . $shortPrefix . '_' . Str::slug($rawName) . '.' . ($extension ?: 'pdf');
+                $file->move($uploadPath, $fileName);
+                $uploadedFiles[$col] = $fileName;
+            }
         }
 
         $nextId = (Usulan::max('id') ?? 0) + 1;
         $kodeUsulan = $request->input('kode_usulan') ?: (string) (238890 + $nextId);
 
         Usulan::create([
-            'kode_usulan'              => $kodeUsulan,
-            'kabupaten_kota_id'        => $validated['kabupaten_kota_id'],
-            'upt_dinas_id'             => null,
-            'tematik_kawasan_id'       => $validated['tematik_kawasan_id'] ?? null,
-            'jenis_penanganan_id'      => $validated['jenis_penanganan_id'] ?? null,
-            'koridor_id'               => $validated['koridor_id'] ?? null,
-            'ruas_jalan_id'            => $validated['ruas_jalan_id'] ?? null,
-            'jembatan_id'              => $validated['jembatan_id'] ?? null,
-            'nama_pengusul'            => $validated['nama_pengusul'],
-            'nama_kegiatan'            => $validated['nama_kegiatan'],
-            'status_ruas'              => $validated['status_ruas'],
-            'panjang_penanganan'       => $validated['panjang_penanganan'],
-            'satuan'                   => $validated['satuan'],
-            'alokasi_usulan'           => (int) $validated['alokasi_usulan'],
-            'keterangan'               => $validated['keterangan'] ?? null,
-            'status_dokumen_pendukung' => $validated['status_dokumen_pendukung'],
-            'file_dokumen_pendukung'   => $fileName,
-            'prioritas_pu'             => false,
-            'prioritas_bappeda'        => false,
-            'verifikasi_pu'            => false,
-            'void'                     => $request->has('void') ? (int) $request->void : 0,
+            'kode_usulan'                           => $kodeUsulan,
+            'kabupaten_kota_id'                     => $validated['kabupaten_kota_id'],
+            'upt_dinas_id'                          => null,
+            'tematik_kawasan_id'                    => $validated['tematik_kawasan_id'] ?? null,
+            'jenis_penanganan_id'                   => $validated['jenis_penanganan_id'] ?? null,
+            'koridor_id'                            => $validated['koridor_id'] ?? null,
+            'ruas_jalan_id'                         => $validated['ruas_jalan_id'] ?? null,
+            'jembatan_id'                           => $validated['jembatan_id'] ?? null,
+            'nama_pengusul'                         => $validated['nama_pengusul'],
+            'nama_kegiatan'                         => $validated['nama_kegiatan'],
+            'status_ruas'                           => $validated['status_ruas'],
+            'panjang_penanganan'                    => $validated['panjang_penanganan'],
+            'satuan'                                => $validated['satuan'],
+            'alokasi_usulan'                        => (int) $validated['alokasi_usulan'],
+            'keterangan'                            => $validated['keterangan'] ?? null,
+            'status_dokumen_pendukung'              => $validated['status_dokumen_pendukung'] ?? 'SIAP',
+            'file_dokumen_pendukung'                => $uploadedFiles['file_dokumen_pendukung'] ?? $uploadedFiles['file_surat_permohonan'],
+            'file_surat_permohonan'                 => $uploadedFiles['file_surat_permohonan'],
+            'file_proposal_rab'                     => $uploadedFiles['file_proposal_rab'],
+            'file_pernyataan_pemeliharaan'          => $uploadedFiles['file_pernyataan_pemeliharaan'],
+            'file_pernyataan_ketidakmampuan_kabkota'=> $uploadedFiles['file_pernyataan_ketidakmampuan_kabkota'],
+            'file_keputusan_gubernur_fungsi'        => $uploadedFiles['file_keputusan_gubernur_fungsi'],
+            'file_keputusan_bupati_status'          => $uploadedFiles['file_keputusan_bupati_status'],
+            'file_pernyataan_kepala_desa'           => $uploadedFiles['file_pernyataan_kepala_desa'],
+            'file_pernyataan_bupati_jalan_desa'     => $uploadedFiles['file_pernyataan_bupati_jalan_desa'],
+            'prioritas_pu'                          => false,
+            'prioritas_bappeda'                     => false,
+            'verifikasi_pu'                         => false,
+            'void'                                  => $request->has('void') ? (int) $request->void : 0,
         ]);
 
         return redirect()->route('usulan.index')->with('success', "Usulan #{$kodeUsulan} berhasil ditambahkan.");
@@ -350,57 +394,77 @@ class UsulanController extends Controller
         }
 
         $validated = $request->validate([
-            'kabupaten_kota_id'        => ['required', 'exists:kabupaten_kota,id'],
-            'tematik_kawasan_id'       => ['nullable', 'exists:tematik_kawasan,id'],
-            'jenis_penanganan_id'      => ['nullable', 'exists:jenis_penanganan,id'],
-            'koridor_id'               => ['nullable', 'exists:koridor,id'],
-            'ruas_jalan_id'            => ['nullable', 'exists:ruas_jalan,id'],
-            'jembatan_id'              => ['nullable', 'exists:jembatan,id'],
-            'nama_pengusul'            => ['required', 'string', 'max:150'],
-            'nama_kegiatan'            => ['required', 'string', 'max:255'],
-            'status_ruas'              => ['required', 'in:Provinsi,Kabupaten/Kota,Non Status'],
-            'panjang_penanganan'       => ['required', 'numeric', 'min:0'],
-            'satuan'                   => ['required', 'in:KM,M'],
-            'alokasi_usulan'           => ['required', 'numeric', 'min:0'],
-            'keterangan'               => ['nullable', 'string'],
-            'status_dokumen_pendukung' => ['required', 'in:SIAP,TIDAK SIAP,TIDAK PERLU'],
-            'file_dokumen_pendukung'   => ['nullable', 'file', 'mimes:pdf,doc,docx,zip', 'max:25600'],
-            'void'                     => ['nullable', 'in:0,1'],
+            'kabupaten_kota_id'                     => ['required', 'exists:kabupaten_kota,id'],
+            'tematik_kawasan_id'                    => ['nullable', 'exists:tematik_kawasan,id'],
+            'jenis_penanganan_id'                   => ['nullable', 'exists:jenis_penanganan,id'],
+            'koridor_id'                            => ['nullable', 'exists:koridor,id'],
+            'ruas_jalan_id'                         => ['nullable', 'exists:ruas_jalan,id'],
+            'jembatan_id'                           => ['nullable', 'exists:jembatan,id'],
+            'nama_pengusul'                         => ['required', 'string', 'max:150'],
+            'nama_kegiatan'                         => ['required', 'string', 'max:255'],
+            'status_ruas'                           => ['required', 'in:Jalan Kab/Kota,Jalan Desa'],
+            'panjang_penanganan'                    => ['required', 'numeric', 'min:0'],
+            'satuan'                                => ['required', 'in:KM,M'],
+            'alokasi_usulan'                        => ['required', 'numeric', 'min:0'],
+            'keterangan'                            => ['nullable', 'string'],
+            'status_dokumen_pendukung'              => ['nullable', 'in:SIAP,TIDAK SIAP,TIDAK PERLU'],
+            'file_dokumen_pendukung'                => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_surat_permohonan'                 => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_proposal_rab'                     => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_pernyataan_pemeliharaan'          => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_pernyataan_ketidakmampuan_kabkota'=> ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_keputusan_gubernur_fungsi'        => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_keputusan_bupati_status'          => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_pernyataan_kepala_desa'           => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'file_pernyataan_bupati_jalan_desa'     => ['nullable', 'file', 'mimes:pdf,doc,docx,zip,jpg,jpeg,png', 'max:25600'],
+            'void'                                  => ['nullable', 'in:0,1'],
         ]);
 
-        $fileName = $usulan->file_dokumen_pendukung;
+        $uploadPath = $this->getDokumenUploadPath();
+        $updatedFiles = [];
 
-        if ($request->hasFile('file_dokumen_pendukung')) {
-            $file = $request->file('file_dokumen_pendukung');
-            $uploadPath = $this->getDokumenUploadPath();
+        foreach ($this->getDokumenColumns() as $col) {
+            $currentFile = $usulan->{$col};
+            if ($request->hasFile($col)) {
+                $file = $request->file($col);
+                if ($currentFile && File::exists($uploadPath . '/' . $currentFile)) {
+                    File::delete($uploadPath . '/' . $currentFile);
+                }
 
-            if ($fileName && File::exists($uploadPath . '/' . $fileName)) {
-                File::delete($uploadPath . '/' . $fileName);
+                $rawName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $file->getClientOriginalExtension();
+                $shortPrefix = str_replace('file_', '', $col);
+                $currentFile = time() . '_' . $shortPrefix . '_' . Str::slug($rawName) . '.' . ($extension ?: 'pdf');
+                $file->move($uploadPath, $currentFile);
             }
-
-            $rawName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time() . '_' . Str::slug($rawName) . '.' . ($extension ?: 'pdf');
-            $file->move($uploadPath, $fileName);
+            $updatedFiles[$col] = $currentFile;
         }
 
         $usulan->update([
-            'kabupaten_kota_id'        => $validated['kabupaten_kota_id'],
-            'tematik_kawasan_id'       => $validated['tematik_kawasan_id'] ?? null,
-            'jenis_penanganan_id'      => $validated['jenis_penanganan_id'] ?? null,
-            'koridor_id'               => $validated['koridor_id'] ?? null,
-            'ruas_jalan_id'            => $validated['ruas_jalan_id'] ?? null,
-            'jembatan_id'              => $validated['jembatan_id'] ?? null,
-            'nama_pengusul'            => $validated['nama_pengusul'],
-            'nama_kegiatan'            => $validated['nama_kegiatan'],
-            'status_ruas'              => $validated['status_ruas'],
-            'panjang_penanganan'       => $validated['panjang_penanganan'],
-            'satuan'                   => $validated['satuan'],
-            'alokasi_usulan'           => (int) $validated['alokasi_usulan'],
-            'keterangan'               => $validated['keterangan'] ?? null,
-            'status_dokumen_pendukung' => $validated['status_dokumen_pendukung'],
-            'file_dokumen_pendukung'   => $fileName,
-            'void'                     => $request->has('void') ? (int) $request->void : $usulan->void,
+            'kabupaten_kota_id'                     => $validated['kabupaten_kota_id'],
+            'tematik_kawasan_id'                    => $validated['tematik_kawasan_id'] ?? null,
+            'jenis_penanganan_id'                   => $validated['jenis_penanganan_id'] ?? null,
+            'koridor_id'                            => $validated['koridor_id'] ?? null,
+            'ruas_jalan_id'                         => $validated['ruas_jalan_id'] ?? null,
+            'jembatan_id'                           => $validated['jembatan_id'] ?? null,
+            'nama_pengusul'                         => $validated['nama_pengusul'],
+            'nama_kegiatan'                         => $validated['nama_kegiatan'],
+            'status_ruas'                           => $validated['status_ruas'],
+            'panjang_penanganan'                    => $validated['panjang_penanganan'],
+            'satuan'                                => $validated['satuan'],
+            'alokasi_usulan'                        => (int) $validated['alokasi_usulan'],
+            'keterangan'                            => $validated['keterangan'] ?? null,
+            'status_dokumen_pendukung'              => $validated['status_dokumen_pendukung'] ?? $usulan->status_dokumen_pendukung ?? 'SIAP',
+            'file_dokumen_pendukung'                => $updatedFiles['file_dokumen_pendukung'] ?: $updatedFiles['file_surat_permohonan'],
+            'file_surat_permohonan'                 => $updatedFiles['file_surat_permohonan'],
+            'file_proposal_rab'                     => $updatedFiles['file_proposal_rab'],
+            'file_pernyataan_pemeliharaan'          => $updatedFiles['file_pernyataan_pemeliharaan'],
+            'file_pernyataan_ketidakmampuan_kabkota'=> $updatedFiles['file_pernyataan_ketidakmampuan_kabkota'],
+            'file_keputusan_gubernur_fungsi'        => $updatedFiles['file_keputusan_gubernur_fungsi'],
+            'file_keputusan_bupati_status'          => $updatedFiles['file_keputusan_bupati_status'],
+            'file_pernyataan_kepala_desa'           => $updatedFiles['file_pernyataan_kepala_desa'],
+            'file_pernyataan_bupati_jalan_desa'     => $updatedFiles['file_pernyataan_bupati_jalan_desa'],
+            'void'                                  => $request->has('void') ? (int) $request->void : $usulan->void,
         ]);
 
         return redirect()->route('usulan.index')->with('success', "Usulan #{$usulan->kode_usulan} berhasil diperbarui.");
@@ -417,10 +481,12 @@ class UsulanController extends Controller
             return redirect()->route('usulan.index')->with('error', 'Anda tidak memiliki hak akses untuk menghapus data usulan ini.');
         }
 
-        if ($usulan->file_dokumen_pendukung) {
-            $filePath = public_path('uploads/dokumen/usulan/' . $usulan->file_dokumen_pendukung);
-            if (File::exists($filePath)) {
-                File::delete($filePath);
+        foreach ($this->getDokumenColumns() as $col) {
+            if ($usulan->{$col}) {
+                $filePath = public_path('uploads/dokumen/usulan/' . $usulan->{$col});
+                if (File::exists($filePath)) {
+                    File::delete($filePath);
+                }
             }
         }
 
@@ -449,9 +515,9 @@ class UsulanController extends Controller
     }
 
     /**
-     * Download file Dokumen Pendukung / Teknis
+     * Download file Dokumen Kelengkapan berdasarkan jenis dokumen
      */
-    public function downloadDokumen(Request $request, Usulan $usulan)
+    public function downloadDokumen(Request $request, Usulan $usulan, ?string $jenis = null)
     {
         $user = $request->user();
 
@@ -463,16 +529,25 @@ class UsulanController extends Controller
             return redirect()->back()->with('error', 'Anda hanya dapat mengunduh dokumen tugas milik UPT Anda.');
         }
 
-        if (!$usulan->file_dokumen_pendukung) {
-            return redirect()->back()->with('error', 'File dokumen pendukung tidak tersedia untuk usulan ini.');
+        $allowedColumns = $this->getDokumenColumns();
+        $targetColumn = ($jenis && in_array($jenis, $allowedColumns, true))
+            ? $jenis
+            : 'file_dokumen_pendukung';
+
+        $fileName = $usulan->{$targetColumn}
+            ?? $usulan->file_surat_permohonan
+            ?? $usulan->file_dokumen_pendukung;
+
+        if (!$fileName) {
+            return redirect()->back()->with('error', 'File dokumen tersebut belum diunggah untuk usulan ini.');
         }
 
-        $filePath = public_path('uploads/dokumen/usulan/' . $usulan->file_dokumen_pendukung);
+        $filePath = public_path('uploads/dokumen/usulan/' . $fileName);
 
         if (!File::exists($filePath)) {
             return redirect()->back()->with('error', 'File dokumen fisik tidak ditemukan di server.');
         }
 
-        return response()->download($filePath, $usulan->file_dokumen_pendukung);
+        return response()->download($filePath, $fileName);
     }
 }

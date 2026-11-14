@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('usulan', UsulanController::class)->parameters(['usulan' => 'usulan']);
         Route::post('usulan/{usulan}/update-status', [UsulanController::class, 'updateStatus'])->name('usulan.update-status');
         Route::post('usulan/{usulan}/toggle-void', [UsulanController::class, 'toggleVoid'])->name('usulan.toggle-void');
-        Route::get('usulan/{usulan}/download-dokumen', [UsulanController::class, 'downloadDokumen'])->name('usulan.download-dokumen');
+        Route::get('usulan/{usulan}/download-dokumen/{jenis?}', [UsulanController::class, 'downloadDokumen'])->name('usulan.download-dokumen');
         Route::redirect('usulan-inpres', '/usulan');
 
         // CRUD Jembatan

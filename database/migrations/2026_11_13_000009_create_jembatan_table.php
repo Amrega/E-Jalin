@@ -18,7 +18,7 @@ return new class extends Migration
                 $table->string('nama_jembatan', 255);
                 $table->string('nomor_jembatan', 100)->nullable();
                 $table->double('panjang_jembatan')->nullable();
-                $table->enum('status_jembatan', ['Kabupaten/Kota', 'Non Status'])->default('Kabupaten/Kota');
+                $table->enum('status_jembatan', ['Jalan Kab/Kota', 'Jalan Desa'])->default('Jalan Kab/Kota');
                 $table->string('file_kml_jembatan', 255)->nullable();
                 $table->boolean('void')->default(false);
                 $table->timestamp('created_at')->nullable()->useCurrent();

@@ -19,7 +19,7 @@ return new class extends Migration
                 $table->string('nama_ruas', 255);
                 $table->string('nomor_ruas', 100)->nullable();
                 $table->double('panjang_ruas')->nullable();
-                $table->enum('status_jalan', ['Kabupaten/Kota', 'Non Status'])->default('Kabupaten/Kota');
+                $table->enum('status_jalan', ['Jalan Kab/Kota', 'Jalan Desa'])->default('Jalan Kab/Kota');
                 $table->string('file_kml_ruas', 255)->nullable();
                 $table->boolean('void')->default(false);
                 $table->timestamp('created_at')->nullable()->useCurrent();
