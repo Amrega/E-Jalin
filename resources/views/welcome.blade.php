@@ -90,7 +90,7 @@
                     </p>
 
                     <!-- Feature Highlights -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2 max-w-2xl mx-auto lg:mx-0">
+                    <!-- <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2 max-w-2xl mx-auto lg:mx-0">
                         <div class="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-left hover:bg-white/15 transition">
                             <div class="w-9 h-9 rounded-xl bg-[#ffb700]/20 border border-[#ffb700]/40 flex items-center justify-center text-[#ffb700] mb-2.5">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -120,7 +120,7 @@
                             <h3 class="text-sm font-bold text-white">38 Kab/Kota &amp; 11 UPT</h3>
                             <p class="text-xs text-slate-300 mt-0.5 leading-snug">Cakupan penuh infrastruktur jalan &amp; jembatan daerah.</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Right Side: Login Panel -->
