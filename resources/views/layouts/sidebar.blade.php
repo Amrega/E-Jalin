@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        
+        @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isKabupatenKota()))
             <!-- 3. Induk Menu: Referensi (Khusus Administrator) -->
             <div>
                 <div class="flex items-center gap-2.5 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
@@ -78,7 +78,7 @@
                     </a>
                 </div>
             </div>
-            
+        @endif
         @if(auth()->check() && auth()->user()->isAdmin())
             <!-- 4. Induk Menu: Master (Khusus Administrator) -->
             <div>

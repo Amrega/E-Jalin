@@ -49,7 +49,9 @@ Route::middleware('auth')->group(function () {
         Route::post('usulan/{usulan}/toggle-void', [UsulanController::class, 'toggleVoid'])->name('usulan.toggle-void');
         Route::get('usulan/{usulan}/download-dokumen/{jenis?}', [UsulanController::class, 'downloadDokumen'])->name('usulan.download-dokumen');
         Route::redirect('usulan-inpres', '/usulan');
+    });
 
+    Route::middleware('role:administrator,user')->group(function () {
         // CRUD Jembatan
         Route::resource('jembatan', JembatanController::class)->parameters(['jembatan' => 'jembatan']);
         Route::post('jembatan/{jembatan}/toggle-void', [JembatanController::class, 'toggleVoid'])->name('jembatan.toggle-void');
@@ -70,8 +72,6 @@ Route::middleware('auth')->group(function () {
     // AKSES KHUSUS ADMINISTRATOR: Referensi, Master, & Manajemen Akses
     // =========================================================================
     Route::middleware('role:administrator')->group(function () {
-
-        
 
         // --- MASTER ---
         // CRUD Kabupaten / Kota
