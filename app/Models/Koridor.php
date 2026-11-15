@@ -12,7 +12,7 @@ class Koridor extends Model
     protected $table = 'koridor';
 
     protected $fillable = [
-        'kabupaten_kota_id',
+        'provinsi_id',
         'nama_koridor',
         'nomor_koridor',
         'panjang_koridor',
@@ -27,9 +27,9 @@ class Koridor extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function kabupatenKota()
+    public function provinsi()
     {
-        return $this->belongsTo(KabupatenKota::class, 'kabupaten_kota_id');
+        return $this->belongsTo(Provinsi::class, 'provinsi_id');
     }
 
     public function ruasJalan()

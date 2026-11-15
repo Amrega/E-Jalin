@@ -36,7 +36,7 @@ class KabupatenKota extends Model
 
     public function koridor()
     {
-        return $this->hasMany(Koridor::class, 'kabupaten_kota_id');
+        return $this->hasManyThrough(Koridor::class, RuasJalan::class, 'kabupaten_kota_id', 'id', 'id', 'koridor_id');
     }
 
     public function ruasJalan()

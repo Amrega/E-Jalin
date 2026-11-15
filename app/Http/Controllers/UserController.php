@@ -54,12 +54,6 @@ class UserController extends Controller
         $perPage = in_array($perPage, [10, 25, 50, 100]) ? $perPage : 10;
         $userList = $query->paginate($perPage)->withQueryString();
 
-        // Data Statistik
-        $totalUsers = User::count();
-        $totalAktif = User::where('void', 0)->count();
-        $totalVoid  = User::where('void', 1)->count();
-        $totalRoles = Role::where('void', 0)->count();
-
         // Dropdown Role & Kabupaten/Kota
         $roleList = Role::where('void', 0)
             ->orderBy('nama_role', 'asc')
@@ -78,10 +72,6 @@ class UserController extends Controller
             'roleList',
             'kabupatenKotaList',
             'uptDinasList',
-            'totalUsers',
-            'totalAktif',
-            'totalVoid',
-            'totalRoles'
         ));
     }
 

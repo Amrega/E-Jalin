@@ -81,27 +81,19 @@ class RuasJalanController extends Controller
         $perPage = in_array($perPage, [10, 25, 50, 100]) ? $perPage : 10;
         $ruasJalanList = $query->paginate($perPage)->withQueryString();
 
-        // Data Statistik
-        $totalRuas    = RuasJalan::count();
-        $totalPanjang = RuasJalan::where('void', 0)->sum('panjang_ruas') ?? 0;
-        $totalKabKota = RuasJalan::distinct('kabupaten_kota_id')->count('kabupaten_kota_id');
-        $totalAktif   = RuasJalan::where('void', 0)->count();
-
         // Dropdown Daftar Kabupaten / Kota di Jawa Timur
         $kabupatenKotaList = KabupatenKota::where('void', 0)
             ->orderBy('nama_kabupaten_kota', 'asc')
             ->get();
 
-        // Dropdown Koridor untuk filter bar (disaring jika kab/kota tertentu dipilih)
-        $koridorFilterQuery = Koridor::where('void', 0);
-        if ($request->filled('kabupaten_kota_id')) {
-            $koridorFilterQuery->where('kabupaten_kota_id', $request->kabupaten_kota_id);
-        }
-        $koridorList = $koridorFilterQuery->orderBy('nama_koridor', 'asc')->get();
+        // Dropdown Koridor untuk filter bar
+        $koridorList = Koridor::where('void', 0)
+            ->orderBy('nama_koridor', 'asc')
+            ->get();
 
         // Seluruh Koridor aktif untuk kebutuhan dinamis di Modal Tambah & Edit
         $allKoridorList = Koridor::where('void', 0)
-            ->select('id', 'kabupaten_kota_id', 'nama_koridor', 'nomor_koridor')
+            ->select('id', 'provinsi_id', 'nama_koridor', 'nomor_koridor')
             ->orderBy('nama_koridor', 'asc')
             ->get();
 
@@ -110,10 +102,6 @@ class RuasJalanController extends Controller
             'kabupatenKotaList',
             'koridorList',
             'allKoridorList',
-            'totalRuas',
-            'totalPanjang',
-            'totalKabKota',
-            'totalAktif'
         ));
     }
 

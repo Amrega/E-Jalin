@@ -14,7 +14,7 @@ return new class extends Migration
         if (!Schema::hasTable('koridor')) {
             Schema::create('koridor', function (Blueprint $table) {
                 $table->integer('id', true);
-                $table->integer('kabupaten_kota_id');
+                $table->integer('provinsi_id');
                 $table->string('nama_koridor', 255);
                 $table->string('nomor_koridor', 100)->nullable();
                 $table->double('panjang_koridor')->nullable();
@@ -23,9 +23,9 @@ return new class extends Migration
                 $table->timestamp('created_at')->nullable()->useCurrent();
                 $table->timestamp('updated_at')->nullable()->useCurrent()->useCurrentOnUpdate();
 
-                $table->foreign('kabupaten_kota_id', 'fk_koridor_kabupaten_kota')
+                $table->foreign('provinsi_id', 'fk_koridor_provinsi')
                     ->references('id')
-                    ->on('kabupaten_kota')
+                    ->on('provinsi')
                     ->cascadeOnUpdate();
             });
         }

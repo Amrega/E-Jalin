@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KabupatenKota;
+use App\Models\Provinsi;
 use App\Models\Koridor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -27,7 +27,7 @@ class KoridorController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Koridor::with('kabupatenKota');
+        $query = Koridor::with('provinsi');
 
         // Filter Pencarian
         if ($request->filled('search')) {
@@ -35,15 +35,15 @@ class KoridorController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('nama_koridor', 'like', "%{$search}%")
                   ->orWhere('nomor_koridor', 'like', "%{$search}%")
-                  ->orWhereHas('kabupatenKota', function ($kq) use ($search) {
-                      $kq->where('nama_kabupaten_kota', 'like', "%{$search}%");
+                  ->orWhereHas('provinsi', function ($pq) use ($search) {
+                      $pq->where('nama_provinsi', 'like', "%{$search}%");
                   });
             });
         }
 
-        // Filter Kabupaten / Kota
-        if ($request->filled('kabupaten_kota_id')) {
-            $query->where('kabupaten_kota_id', $request->kabupaten_kota_id);
+        // Filter Provinsi
+        if ($request->filled('provinsi_id')) {
+            $query->where('provinsi_id', $request->provinsi_id);
         }
 
         // Filter Status Void
@@ -63,24 +63,17 @@ class KoridorController extends Controller
         $perPage = in_array($perPage, [10, 25, 50, 100]) ? $perPage : 10;
         $koridors = $query->paginate($perPage)->withQueryString();
 
-        // Data Statistik
-        $totalKoridor = Koridor::count();
-        $totalPanjang = Koridor::where('void', 0)->sum('panjang_koridor') ?? 0;
-        $totalKabKota = Koridor::distinct('kabupaten_kota_id')->count('kabupaten_kota_id');
-        $totalAktif   = Koridor::where('void', 0)->count();
-
-        // Dropdown Daftar Kabupaten / Kota di Jawa Timur
-        $kabupatenKotaList = KabupatenKota::where('void', 0)
-            ->orderBy('nama_kabupaten_kota', 'asc')
+        // Dropdown Daftar Provinsi (Default Jawa Timur & Lainnya)
+        $provinsiList = Provinsi::where('void', 0)
+            ->orderBy('nama_provinsi', 'asc')
             ->get();
+        if ($provinsiList->isEmpty()) {
+            $provinsiList = Provinsi::orderBy('nama_provinsi', 'asc')->get();
+        }
 
         return view('koridor.index', compact(
             'koridors',
-            'kabupatenKotaList',
-            'totalKoridor',
-            'totalPanjang',
-            'totalKabKota',
-            'totalAktif'
+            'provinsiList',
         ));
     }
 
@@ -90,18 +83,18 @@ class KoridorController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kabupaten_kota_id' => ['required', 'exists:kabupaten_kota,id'],
+            'provinsi_id'      => ['required', 'exists:provinsi,id'],
             'nama_koridor'      => ['required', 'string', 'max:255'],
             'nomor_koridor'     => ['nullable', 'string', 'max:100'],
             'panjang_koridor'   => ['nullable', 'numeric', 'min:0'],
             'file_kml_koridor'  => ['nullable', 'file', 'max:25600'], // max 25MB
             'void'              => ['nullable', 'in:0,1'],
         ], [
-            'kabupaten_kota_id.required' => 'Kabupaten / Kota wajib dipilih.',
-            'kabupaten_kota_id.exists'   => 'Kabupaten / Kota tidak valid.',
-            'nama_koridor.required'      => 'Nama koridor wajib diisi.',
-            'panjang_koridor.numeric'    => 'Panjang koridor harus berupa angka.',
-            'file_kml_koridor.max'       => 'Ukuran file KML maksimal 25MB.',
+            'provinsi_id.required'  => 'Provinsi wajib dipilih.',
+            'provinsi_id.exists'    => 'Provinsi tidak valid.',
+            'nama_koridor.required' => 'Nama koridor wajib diisi.',
+            'panjang_koridor.numeric' => 'Panjang koridor harus berupa angka.',
+            'file_kml_koridor.max'  => 'Ukuran file KML maksimal 25MB.',
         ]);
 
         $fileName = null;
@@ -116,7 +109,7 @@ class KoridorController extends Controller
         }
 
         Koridor::create([
-            'kabupaten_kota_id' => $validated['kabupaten_kota_id'],
+            'provinsi_id'      => $validated['provinsi_id'],
             'nama_koridor'      => $validated['nama_koridor'],
             'nomor_koridor'     => $validated['nomor_koridor'] ?? null,
             'panjang_koridor'   => $validated['panjang_koridor'] ?? null,
@@ -133,17 +126,17 @@ class KoridorController extends Controller
     public function update(Request $request, Koridor $koridor)
     {
         $validated = $request->validate([
-            'kabupaten_kota_id' => ['required', 'exists:kabupaten_kota,id'],
+            'provinsi_id'      => ['required', 'exists:provinsi,id'],
             'nama_koridor'      => ['required', 'string', 'max:255'],
             'nomor_koridor'     => ['nullable', 'string', 'max:100'],
             'panjang_koridor'   => ['nullable', 'numeric', 'min:0'],
             'file_kml_koridor'  => ['nullable', 'file', 'max:25600'],
             'void'              => ['nullable', 'in:0,1'],
         ], [
-            'kabupaten_kota_id.required' => 'Kabupaten / Kota wajib dipilih.',
-            'kabupaten_kota_id.exists'   => 'Kabupaten / Kota tidak valid.',
-            'nama_koridor.required'      => 'Nama koridor wajib diisi.',
-            'panjang_koridor.numeric'    => 'Panjang koridor harus berupa angka.',
+            'provinsi_id.required'  => 'Provinsi wajib dipilih.',
+            'provinsi_id.exists'    => 'Provinsi tidak valid.',
+            'nama_koridor.required' => 'Nama koridor wajib diisi.',
+            'panjang_koridor.numeric' => 'Panjang koridor harus berupa angka.',
         ]);
 
         $fileName = $koridor->file_kml_koridor;
@@ -165,7 +158,7 @@ class KoridorController extends Controller
         }
 
         $koridor->update([
-            'kabupaten_kota_id' => $validated['kabupaten_kota_id'],
+            'provinsi_id'      => $validated['provinsi_id'],
             'nama_koridor'      => $validated['nama_koridor'],
             'nomor_koridor'     => $validated['nomor_koridor'] ?? null,
             'panjang_koridor'   => $validated['panjang_koridor'] ?? null,

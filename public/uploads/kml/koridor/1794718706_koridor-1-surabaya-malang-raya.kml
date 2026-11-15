@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Koridor 1: Koridor Metropolitan Surabaya - Malang Raya</name>
+    <description>Peta jaringan jalan Koridor 1 berdasarkan Peta Pengembangan Wilayah Strategis Jawa Timur (Surabaya - Sidoarjo - Pasuruan - Malang - Batu)</description>
+
+    <!-- Gaya Garis Utama Koridor 1 (Biru sesuai warna panah di peta) -->
+    <Style id="koridor1Style">
+      <LineStyle>
+        <color>ffff6600</color> <!-- Biru terang (AABBGGRR) -->
+        <width>6</width>
+      </LineStyle>
+    </Style>
+
+    <!-- Gaya Titik Simpul Kota/Kawasan -->
+    <Style id="simpulKoridor1Style">
+      <IconStyle>
+        <color>ffffaa00</color>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/blu-stars.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+
+    <!-- Ruas Jalan Koridor 1 -->
+    <Placemark>
+      <name>Koridor 1: Metropolitan Surabaya - Malang Raya</name>
+      <description>
+        <![CDATA[
+          <b>Nama Koridor:</b> Koridor 1 - Koridor Metropolitan Surabaya - Malang Raya<br/>
+          <b>Lintasan Wilayah:</b> Kota Surabaya - Kab. Sidoarjo - Kab. Pasuruan - Kab. Malang - Kota Malang - Kota Batu<br/>
+          <b>Status Jalan:</b> Jalan Nasional Arteri Primer (Poros Tengah Utara-Selatan)<br/>
+          <b>Panjang Estimasi:</b> ± 112 km<br/>
+          <b>Keterangan Peta:</b> Menghubungkan pusat pertumbuhan metropolitan Gerbangkertosusila (Surabaya-Sidoarjo) dengan kawasan wisata & agropolitan Malang Raya.
+        ]]>
+      </description>
+      <ExtendedData>
+        <Data name="nomor_koridor"><value>1</value></Data>
+        <Data name="nama_koridor"><value>Koridor Metropolitan Surabaya - Malang Raya</value></Data>
+        <Data name="lintasan_kota"><value>Surabaya - Sidoarjo - Pasuruan - Malang - Batu</value></Data>
+        <Data name="panjang_km"><value>112.0</value></Data>
+        <Data name="status_jalan"><value>Jalan Nasional / Arteri Primer</value></Data>
+      </ExtendedData>
+      <styleUrl>#koridor1Style</styleUrl>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>
+          112.7376,-7.2458,0
+          112.7379,-7.2585,0
+          112.7412,-7.2665,0
+          112.7405,-7.2785,0
+          112.7392,-7.2895,0
+          112.7348,-7.3025,0
+          112.7315,-7.3185,0
+          112.7288,-7.332,0
+          112.7215,-7.3435,0
+          112.7183,-7.3456,0
+          112.7212,-7.362,0
+          112.7235,-7.3815,0
+          112.7228,-7.405,0
+          112.7195,-7.428,0
+          112.7178,-7.4455,0
+          112.7155,-7.462,0
+          112.7112,-7.488,0
+          112.7055,-7.515,0
+          112.6995,-7.542,0
+          112.6968,-7.5585,0
+          112.7015,-7.589,0
+          112.7042,-7.625,0
+          112.7058,-7.6512,0
+          112.7145,-7.685,0
+          112.732,-7.728,0
+          112.7385,-7.765,0
+          112.698,-7.8325,0
+          112.6815,-7.868,0
+          112.6685,-7.8965,0
+          112.6562,-7.9245,0
+          112.6435,-7.942,0
+          112.6368,-7.9625,0
+          112.6312,-7.9775,0
+          112.6215,-7.9685,0
+          112.6125,-7.951,0
+          112.6065,-7.9385,0
+          112.596,-7.9265,0
+          112.5825,-7.912,0
+          112.568,-7.9015,0
+          112.5495,-7.892,0
+          112.5365,-7.881,0
+          112.5255,-7.8712,0
+        </coordinates>
+      </LineString>
+    </Placemark>
+
+    <!-- Titik-Titik Simpul Utama Koridor 1 -->
+    <Placemark>
+      <name>Simpul 01: Pusat Kota Surabaya (Tugu Pahlawan)</name>
+      <description>Titik awal utara Koridor 1 di pusat Kota Metropolitan Surabaya.</description>
+      <styleUrl>#simpulKoridor1Style</styleUrl>
+      <Point>
+        <coordinates>112.7376,-7.2458,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>Simpul 02: Bundaran Waru (Perbatasan Surabaya - Sidoarjo)</name>
+      <description>Simpul gerbang utama penghubung Surabaya dan Sidoarjo.</description>
+      <styleUrl>#simpulKoridor1Style</styleUrl>
+      <Point>
+        <coordinates>112.7183,-7.3456,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>Simpul 03: Kota Sidoarjo</name>
+      <description>Simpul pusat pemerintahan dan industri Kabupaten Sidoarjo.</description>
+      <styleUrl>#simpulKoridor1Style</styleUrl>
+      <Point>
+        <coordinates>112.7178,-7.4455,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>Simpul 04: Simpang Gempol - Pandaan (Kab. Pasuruan)</name>
+      <description>Simpul kawasan industri Pasuruan bagian barat dan akses menuju Malang.</description>
+      <styleUrl>#simpulKoridor1Style</styleUrl>
+      <Point>
+        <coordinates>112.7058,-7.6512,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>Simpul 05: Kota Malang (Alun-Alun Merdeka)</name>
+      <description>Simpul utama pusat pendidikan dan jasa di Malang Raya.</description>
+      <styleUrl>#simpulKoridor1Style</styleUrl>
+      <Point>
+        <coordinates>112.6312,-7.9775,0</coordinates>
+      </Point>
+    </Placemark>
+
+    <Placemark>
+      <name>Simpul 06: Kota Wisata Batu</name>
+      <description>Titik akhir selatan Koridor 1 di kawasan wisata agropolitan Kota Batu.</description>
+      <styleUrl>#simpulKoridor1Style</styleUrl>
+      <Point>
+        <coordinates>112.5255,-7.8712,0</coordinates>
+      </Point>
+    </Placemark>
+
+  </Document>
+</kml>

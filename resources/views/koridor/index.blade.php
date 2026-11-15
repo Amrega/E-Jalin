@@ -89,13 +89,13 @@
                     <span class="hidden sm:inline">data</span>
                 </div>
 
-                <!-- Filter Kab/Kota -->
+                <!-- Filter Provinsi -->
                 <div class="flex items-center">
-                    <select name="kabupaten_kota_id" onchange="this.form.submit()" class="border border-slate-300 rounded-lg px-3 py-1.5 bg-white font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#0f2a71] max-w-xs">
-                        <option value="">-- Semua Kab/Kota di Jatim --</option>
-                        @foreach($kabupatenKotaList as $kk)
-                            <option value="{{ $kk->id }}" {{ request('kabupaten_kota_id') == $kk->id ? 'selected' : '' }}>
-                                {{ $kk->nama_kabupaten_kota }}
+                    <select name="provinsi_id" onchange="this.form.submit()" class="border border-slate-300 rounded-lg px-3 py-1.5 bg-white font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#0f2a71] max-w-xs">
+                        <option value="">-- Semua Provinsi --</option>
+                        @foreach($provinsiList as $prov)
+                            <option value="{{ $prov->id }}" {{ request('provinsi_id') == $prov->id ? 'selected' : '' }}>
+                                {{ $prov->nama_provinsi }}
                             </option>
                         @endforeach
                     </select>
@@ -110,7 +110,7 @@
                     </select>
                 </div>
 
-                @if(request()->anyFilled(['search', 'kabupaten_kota_id', 'status']))
+                @if(request()->anyFilled(['search', 'provinsi_id', 'status']))
                     <a href="{{ route('koridor.index') }}" class="px-2.5 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition flex items-center gap-1">
                         <span>Reset</span>
                         ✕
@@ -146,7 +146,7 @@
                         <th class="py-3.5 px-4 w-12 text-center">NO</th>
                         <th class="py-3.5 px-4">NOMOR KORIDOR</th>
                         <th class="py-3.5 px-4">NAMA KORIDOR</th>
-                        <th class="py-3.5 px-4">KABUPATEN / KOTA</th>
+                        <th class="py-3.5 px-4">PROVINSI</th>
                         <th class="py-3.5 px-4 text-right">PANJANG (KM)</th>
                         <th class="py-3.5 px-4 text-center">FILE KML</th>
                         <th class="py-3.5 px-4 text-center">STATUS</th>
@@ -177,7 +177,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
-                                    <span>{{ $item->kabupatenKota->nama_kabupaten_kota ?? '-' }}</span>
+                                    <span>{{ $item->provinsi->nama_provinsi ?? '-' }}</span>
                                 </div>
                             </td>
                             <td class="py-3 px-4 text-right font-mono font-bold text-[#0f2a71]">
@@ -219,7 +219,7 @@
                                 <div class="inline-flex items-center gap-1.5">
                                     <button 
                                         type="button"
-                                        onclick="openModalDetail({{ json_encode($item) }}, '{{ $item->kabupatenKota->nama_kabupaten_kota ?? '' }}')" 
+                                        onclick="openModalDetail({{ json_encode($item) }}, '{{ $item->provinsi->nama_provinsi ?? '' }}')" 
                                         title="Lihat Detail" 
                                         class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 hover:bg-[#0f2a71] hover:text-[#ffb700] flex items-center justify-center transition shadow-2xs"
                                     >
@@ -292,7 +292,9 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
+                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">
+                        EJ
+                    </div>
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Tambah Referensi Koridor</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Form Penambahan Data Koridor Jawa Timur</p>
@@ -308,12 +310,12 @@
                 <div class="p-6 overflow-y-auto space-y-4 text-xs text-slate-700 flex-grow">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1.5">
-                            Kabupaten / Kota <span class="text-red-500">*</span>
+                            Provinsi <span class="text-red-500">*</span>
                         </label>
-                        <select name="kabupaten_kota_id" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
-                            <option value="">-- Pilih Kabupaten / Kota --</option>
-                            @foreach($kabupatenKotaList as $kk)
-                                <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
+                        <select name="provinsi_id" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                            <option value="">-- Pilih Provinsi --</option>
+                            @foreach($provinsiList as $prov)
+                                <option value="{{ $prov->id }}">{{ $prov->nama_provinsi }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -367,7 +369,9 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
+                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">
+                        EJ
+                    </div>
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Ubah Data Koridor</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Perbarui Informasi Referensi Koridor</p>
@@ -382,11 +386,11 @@
 
                 <div class="p-6 overflow-y-auto space-y-4 text-xs text-slate-700 flex-grow">
                     <div>
-                        <label class="block font-bold text-slate-700 mb-1.5">Kabupaten / Kota <span class="text-red-500">*</span></label>
-                        <select id="edit_kabupaten_kota_id" name="kabupaten_kota_id" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
-                            <option value="">-- Pilih Kabupaten / Kota --</option>
-                            @foreach($kabupatenKotaList as $kk)
-                                <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
+                        <label class="block font-bold text-slate-700 mb-1.5">Provinsi <span class="text-red-500">*</span></label>
+                        <select id="edit_provinsi_id" name="provinsi_id" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                            <option value="">-- Pilih Provinsi --</option>
+                            @foreach($provinsiList as $prov)
+                                <option value="{{ $prov->id }}">{{ $prov->nama_provinsi }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -438,7 +442,7 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
+                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">EJ</div>
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Detail Referensi Koridor</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Informasi Lengkap Koridor Angkutan</p>
@@ -498,7 +502,7 @@
         const form = document.getElementById('formEdit');
         form.action = `/koridor/${data.id}`;
 
-        document.getElementById('edit_kabupaten_kota_id').value = data.kabupaten_kota_id;
+        document.getElementById('edit_provinsi_id').value = data.provinsi_id;
         document.getElementById('edit_nomor_koridor').value = data.nomor_koridor || '';
         document.getElementById('edit_nama_koridor').value = data.nama_koridor || '';
         document.getElementById('edit_panjang_koridor').value = data.panjang_koridor !== null ? data.panjang_koridor : '';
@@ -518,7 +522,7 @@
     }
 
     // Modal Detail
-    function openModalDetail(data, namaKabKota) {
+    function openModalDetail(data, namaProvinsi) {
         const body = document.getElementById('modalDetailBody');
         const kmlDownloadLink = data.file_kml_koridor 
             ? `<a href="/koridor/${data.id}/download-kml" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition">
@@ -543,8 +547,8 @@
 
                 <div class="grid grid-cols-2 gap-3">
                     <div class="p-3 bg-white border border-slate-200 rounded-xl">
-                        <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Kabupaten / Kota</span>
-                        <span class="font-bold text-slate-800">${namaKabKota || '-'}</span>
+                        <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Provinsi</span>
+                        <span class="font-bold text-slate-800">${namaProvinsi || '-'}</span>
                     </div>
                     <div class="p-3 bg-white border border-slate-200 rounded-xl">
                         <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Panjang Koridor</span>

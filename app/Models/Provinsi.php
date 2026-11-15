@@ -26,4 +26,9 @@ class Provinsi extends Model
     {
         return $this->hasMany(KabupatenKota::class, 'provinsi_id');
     }
+
+    public function koridor()
+    {
+        return $this->hasMany(Koridor::class, 'provinsi_id');
+    }
 }

@@ -38,18 +38,9 @@ class RoleController extends Controller
         $perPage = in_array($perPage, [10, 25, 50, 100]) ? $perPage : 10;
         $roleList = $query->paginate($perPage)->withQueryString();
 
-        // Data Statistik
-        $totalRole  = Role::count();
-        $totalAktif = Role::where('void', 0)->count();
-        $totalVoid  = Role::where('void', 1)->count();
-        $totalUsers = User::count();
 
         return view('role.index', compact(
             'roleList',
-            'totalRole',
-            'totalAktif',
-            'totalVoid',
-            'totalUsers'
         ));
     }
 

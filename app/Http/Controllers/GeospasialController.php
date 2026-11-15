@@ -21,7 +21,7 @@ class GeospasialController extends Controller
             ->get(['id', 'nama_kabupaten_kota']);
 
         // 2. Ambil Data Koridor (Layer Merah)
-        $rawKoridor = Koridor::with(['kabupatenKota', 'ruasJalan' => function($q) {
+        $rawKoridor = Koridor::with(['provinsi', 'ruasJalan' => function($q) {
                 $q->where('void', 0)->select('id', 'koridor_id', 'nama_ruas', 'nomor_ruas');
             }])
             ->withCount('ruasJalan')
@@ -42,8 +42,9 @@ class GeospasialController extends Controller
                 'nomor'               => $item->nomor_koridor ?? '-',
                 'panjang'             => $item->panjang_koridor ? number_format($item->panjang_koridor, 2, ',', '.') . ' Km' : '-',
                 'panjang_raw'         => (float) $item->panjang_koridor,
-                'kabupaten_kota_id'   => $item->kabupaten_kota_id,
-                'kabupaten_kota_nama' => $item->kabupatenKota?->nama_kabupaten_kota ?? 'Jawa Timur',
+                'provinsi_id'         => $item->provinsi_id,
+                'provinsi_nama'       => $item->provinsi?->nama_provinsi ?? 'Jawa Timur',
+                'kabupaten_kota_nama' => $item->provinsi?->nama_provinsi ?? 'Jawa Timur',
                 'ruas_count'          => $item->ruas_jalan_count ?? 0,
                 'ruas_list'           => $item->ruasJalan->pluck('nama_ruas')->values()->all(),
                 'file_kml'            => $item->file_kml_koridor,

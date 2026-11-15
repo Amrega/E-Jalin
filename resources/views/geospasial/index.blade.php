@@ -599,8 +599,8 @@
                     (item.nomor && item.nomor.toLowerCase().includes(search)) ||
                     (item.kabupaten_kota_nama && item.kabupaten_kota_nama.toLowerCase().includes(search));
 
-                // Kab/Kota match
-                const matchKab = !kabId || String(item.kabupaten_kota_id) === String(kabId);
+                // Kab/Kota match (Koridor bersifat lintas wilayah)
+                const matchKab = !kabId || (item.layer_type === 'koridor' ? true : String(item.kabupaten_kota_id) === String(kabId));
 
                 // Only KML match
                 const matchKml = !onlyKml || item.has_kml;
@@ -722,10 +722,17 @@
                         ${detailQuickBlock}
 
                         <div class="grid grid-cols-2 gap-1.5 text-[11px] text-slate-600 mb-2 font-medium">
-                            <div>
-                                <span class="text-slate-400 text-[10px] block">Wilayah:</span>
-                                <span class="truncate block font-semibold text-slate-800">${item.kabupaten_kota_nama}</span>
-                            </div>
+                            ${item.layer_type === 'koridor' ? `
+                                <div>
+                                    <span class="text-slate-400 text-[10px] block">Total Ruas:</span>
+                                    <span class="truncate block font-bold text-red-700">${item.ruas_count} Ruas Terhubung</span>
+                                </div>
+                            ` : `
+                                <div>
+                                    <span class="text-slate-400 text-[10px] block">Wilayah:</span>
+                                    <span class="truncate block font-semibold text-slate-800">${item.kabupaten_kota_nama}</span>
+                                </div>
+                            `}
                             <div>
                                 <span class="text-slate-400 text-[10px] block">Panjang / Bentang:</span>
                                 <span class="font-bold text-slate-900">${item.panjang}</span>
@@ -874,14 +881,14 @@
                         <h4 class="text-xs font-black text-slate-900 leading-snug break-words">${item.nama}</h4>
                         <div class="mt-1.5 pt-1.5 border-t border-red-200/60 flex items-center justify-between text-[10px] text-slate-600 font-medium">
                             <span>Ruas Terhubung: <strong class="text-red-700 font-bold">${item.ruas_count} Ruas</strong></span>
-                            <span>Wilayah: <strong class="text-slate-800">${item.kabupaten_kota_nama}</strong></span>
+                            <span>Total Panjang: <strong class="text-slate-800 font-bold">${item.panjang}</strong></span>
                         </div>
                     </div>
                 `;
                 extraInfo = `
                     <div class="flex justify-between py-1 border-b border-slate-100">
-                        <span class="text-slate-400">Ruas Terhubung:</span>
-                        <span class="font-bold text-slate-800">${item.ruas_count} Ruas</span>
+                        <span class="text-slate-400">Total Ruas Terkait:</span>
+                        <span class="font-bold text-red-700 font-mono">${item.ruas_count} Ruas</span>
                     </div>
                 `;
             } else if (item.layer_type === 'jembatan') {
@@ -931,10 +938,12 @@
                                 <span class="text-slate-400">Nomor Registrasi:</span>
                                 <span class="font-mono font-bold text-slate-800">${item.nomor}</span>
                             </div>
-                            <div class="flex justify-between py-1 border-b border-slate-100">
-                                <span class="text-slate-400">Wilayah Kab/Kota:</span>
-                                <span class="font-bold text-slate-800">${item.kabupaten_kota_nama}</span>
-                            </div>
+                            ${item.layer_type !== 'koridor' ? `
+                                <div class="flex justify-between py-1 border-b border-slate-100">
+                                    <span class="text-slate-400">Wilayah Kab/Kota:</span>
+                                    <span class="font-bold text-slate-800">${item.kabupaten_kota_nama}</span>
+                                </div>
+                            ` : ''}
                             <div class="flex justify-between py-1 border-b border-slate-100">
                                 <span class="text-slate-400">Panjang / Bentang:</span>
                                 <span class="font-bold text-slate-900">${item.panjang}</span>
@@ -969,7 +978,9 @@
 
             const typeTitle = item.layer_type === 'koridor' ? 'KORIDOR JALAN' : (item.layer_type === 'ruas' ? 'RUAS JALAN' : 'JEMBATAN');
             document.getElementById('modalDetailTitle').innerText = `Detail ${typeTitle}`;
-            document.getElementById('modalDetailSubtitle').innerText = `Wilayah: ${item.kabupaten_kota_nama} | Nomor: ${item.nomor}`;
+            document.getElementById('modalDetailSubtitle').innerText = item.layer_type === 'koridor'
+                ? `Nomor Registrasi: ${item.nomor} | Koridor Arteri Strategis`
+                : `Wilayah: ${item.kabupaten_kota_nama} | Nomor: ${item.nomor}`;
 
             let specificGrid = '';
             if (item.layer_type === 'ruas') {
@@ -1000,13 +1011,9 @@
                         <span class="text-[10px] uppercase font-black text-red-800 block">Nama Lengkap Koridor Arteri</span>
                         <span class="font-black text-slate-900 text-sm leading-snug block mt-0.5">${item.nama}</span>
                     </div>
-                    <div>
-                        <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Ruas Terhubung</span>
-                        <span class="font-bold text-red-700 text-xs">${item.ruas_count} Ruas</span>
-                    </div>
-                    <div>
-                        <span class="text-[10px] uppercase font-bold text-slate-400 block">Wilayah Administratif</span>
-                        <span class="font-semibold text-slate-800 text-xs">${item.kabupaten_kota_nama}</span>
+                    <div class="col-span-2 p-2.5 bg-red-50/60 rounded-xl border border-red-200/80 flex items-center justify-between">
+                        <span class="text-[10px] uppercase font-black text-red-800">Total Ruas Terhubung:</span>
+                        <span class="font-bold text-red-700 text-xs">${item.ruas_count} Ruas Jalan Terkait</span>
                     </div>
                     ${item.ruas_list && item.ruas_list.length > 0 ? `
                         <div class="col-span-2 text-[11px] bg-white p-2.5 rounded-lg border border-slate-200 max-h-28 overflow-y-auto">
@@ -1048,11 +1055,13 @@
                             <span class="text-[10px] uppercase font-bold text-slate-400 block">Panjang / Dimensi</span>
                             <span class="font-bold text-[#0f2a71] text-xs">${item.panjang}</span>
                         </div>
-                        <div>
-                            <span class="text-[10px] uppercase font-bold text-slate-400 block">Kabupaten / Kota</span>
-                            <span class="font-semibold text-slate-800 text-xs">${item.kabupaten_kota_nama}</span>
-                        </div>
-                        <div>
+                        ${item.layer_type !== 'koridor' ? `
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-slate-400 block">Kabupaten / Kota</span>
+                                <span class="font-semibold text-slate-800 text-xs">${item.kabupaten_kota_nama}</span>
+                            </div>
+                        ` : ''}
+                        <div class="${item.layer_type === 'koridor' ? 'col-span-2' : ''}">
                             <span class="text-[10px] uppercase font-bold text-slate-400 block">File KML</span>
                             <span class="font-mono text-xs text-slate-700 truncate block">${item.file_kml || 'Belum diunggah'}</span>
                         </div>

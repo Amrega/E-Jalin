@@ -339,7 +339,9 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
+                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">
+                        EJ
+                    </div>
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Tambah Referensi Ruas Jalan</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Form Penambahan Data Ruas Jalan Jawa Timur</p>
@@ -357,7 +359,7 @@
                         <label class="block font-bold text-slate-700 mb-1.5">
                             Kabupaten / Kota <span class="text-red-500">*</span>
                         </label>
-                        <select id="tambah_kabupaten_kota_id" name="kabupaten_kota_id" required onchange="updateKoridorOptions('tambah')" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                        <select id="tambah_kabupaten_kota_id" name="kabupaten_kota_id" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
                             <option value="">-- Pilih Kabupaten / Kota --</option>
                             @foreach($kabupatenKotaList as $kk)
                                 <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
@@ -368,9 +370,14 @@
                     <div>
                         <label class="block font-bold text-slate-700 mb-1.5">Koridor (Opsional)</label>
                         <select id="tambah_koridor_id" name="koridor_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
-                            <option value="">-- Pilih Kabupaten / Kota Terlebih Dahulu --</option>
+                            <option value="">-- Non-Koridor (Tidak Terkait Koridor) --</option>
+                            @foreach($allKoridorList as $k)
+                                <option value="{{ $k->id }}">
+                                    {{ $k->nomor_koridor ? '[' . $k->nomor_koridor . '] ' : '' }}{{ $k->nama_koridor }}
+                                </option>
+                            @endforeach
                         </select>
-                        <span class="text-[10px] text-slate-400 mt-0.5 block">Hanya menampilkan koridor yang melintasi wilayah kabupaten/kota terpilih. Pilih "Non-Koridor" jika tidak terkait koridor.</span>
+                        <span class="text-[10px] text-slate-400 mt-0.5 block">Pilih koridor arteri yang menaungi ruas jalan ini, atau biarkan "Non-Koridor".</span>
                     </div>
 
                     <div>
@@ -430,7 +437,9 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
+                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">
+                        EJ
+                    </div>
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Ubah Data Ruas Jalan</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Perbarui Informasi Referensi Ruas Jalan</p>
@@ -446,7 +455,7 @@
                 <div class="p-6 overflow-y-auto space-y-4 text-xs text-slate-700 flex-grow">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1.5">Kabupaten / Kota <span class="text-red-500">*</span></label>
-                        <select id="edit_kabupaten_kota_id" name="kabupaten_kota_id" required onchange="updateKoridorOptions('edit')" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
+                        <select id="edit_kabupaten_kota_id" name="kabupaten_kota_id" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
                             <option value="">-- Pilih Kabupaten / Kota --</option>
                             @foreach($kabupatenKotaList as $kk)
                                 <option value="{{ $kk->id }}">{{ $kk->nama_kabupaten_kota }}</option>
@@ -457,9 +466,14 @@
                     <div>
                         <label class="block font-bold text-slate-700 mb-1.5">Koridor (Opsional)</label>
                         <select id="edit_koridor_id" name="koridor_id" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]">
-                            <option value="">-- Non-Koridor --</option>
+                            <option value="">-- Non-Koridor (Tidak Terkait Koridor) --</option>
+                            @foreach($allKoridorList as $k)
+                                <option value="{{ $k->id }}">
+                                    {{ $k->nomor_koridor ? '[' . $k->nomor_koridor . '] ' : '' }}{{ $k->nama_koridor }}
+                                </option>
+                            @endforeach
                         </select>
-                        <span class="text-[10px] text-slate-400 mt-0.5 block">Hanya menampilkan koridor yang melintasi wilayah kabupaten/kota terpilih.</span>
+                        <span class="text-[10px] text-slate-400 mt-0.5 block">Pilih koridor arteri yang menaungi ruas jalan ini, atau biarkan "Non-Koridor".</span>
                     </div>
 
                     <div>
@@ -518,7 +532,7 @@
             
             <div class="px-6 py-4 bg-[#0f2a71] text-white flex items-center justify-between border-b-2 border-[#ffb700]">
                 <div class="flex items-center gap-2.5">
-                    <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
+                    <div class="w-8 h-8 rounded-lg bg-[#ffb700] text-[#0f2a71] flex items-center justify-center font-black text-sm">EJ</div>
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Detail Referensi Ruas Jalan</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Informasi Lengkap Ruas Jalan Jawa Timur</p>
@@ -569,54 +583,14 @@
     const allKoridors = @json($allKoridorList ?? []);
 
     /**
-     * Memperbarui opsi pilihan Koridor berdasarkan Kabupaten / Kota yang dipilih
+     * Memilih opsi Koridor pada form
      * @param {string} context - 'tambah' atau 'edit'
-     * @param {number|null} selectedKoridorId - ID koridor yang sedang aktif (misal saat edit)
+     * @param {number|null} selectedKoridorId - ID koridor yang dipilih
      */
     function updateKoridorOptions(context, selectedKoridorId = null) {
-        const kabKotaSelect = document.getElementById(context + '_kabupaten_kota_id');
         const koridorSelect = document.getElementById(context + '_koridor_id');
-        if (!kabKotaSelect || !koridorSelect) return;
-
-        const kabKotaId = kabKotaSelect.value;
-        koridorSelect.innerHTML = '';
-
-        if (!kabKotaId) {
-            const opt = document.createElement('option');
-            opt.value = '';
-            opt.textContent = '-- Pilih Kabupaten / Kota Terlebih Dahulu --';
-            koridorSelect.appendChild(opt);
-            return;
-        }
-
-        // Filter koridor berdasarkan kab/kota yang dipilih
-        const filtered = allKoridors.filter(k => String(k.kabupaten_kota_id) === String(kabKotaId));
-
-        // Opsi Non-Koridor
-        const nonKoridorOpt = document.createElement('option');
-        nonKoridorOpt.value = '';
-        if (filtered.length === 0) {
-            nonKoridorOpt.textContent = '-- Non-Koridor (Tidak ada koridor di wilayah ini) --';
-        } else {
-            nonKoridorOpt.textContent = '-- Non-Koridor --';
-        }
-        koridorSelect.appendChild(nonKoridorOpt);
-
-        // Tambahkan koridor yang tersedia di wilayah tersebut
-        filtered.forEach(k => {
-            const opt = document.createElement('option');
-            opt.value = k.id;
-            const nomor = k.nomor_koridor ? `[${k.nomor_koridor}] ` : '';
-            opt.textContent = `${nomor}${k.nama_koridor}`;
-            if (selectedKoridorId && String(k.id) === String(selectedKoridorId)) {
-                opt.selected = true;
-            }
-            koridorSelect.appendChild(opt);
-        });
-
-        // Jika tidak ada koridor yang cocok atau memang null, pilih opsi Non-Koridor
-        if (!selectedKoridorId || !filtered.some(k => String(k.id) === String(selectedKoridorId))) {
-            nonKoridorOpt.selected = true;
+        if (koridorSelect && selectedKoridorId !== null) {
+            koridorSelect.value = selectedKoridorId || '';
         }
     }
 
@@ -626,7 +600,10 @@
         if (kabKotaSelect) {
             kabKotaSelect.value = '';
         }
-        updateKoridorOptions('tambah');
+        const koridorSelect = document.getElementById('tambah_koridor_id');
+        if (koridorSelect) {
+            koridorSelect.value = '';
+        }
         document.getElementById('modalTambah').classList.remove('hidden');
     }
     function closeModalTambah() {
@@ -639,14 +616,18 @@
         form.action = `/ruas/${data.id}`;
 
         const editKabKota = document.getElementById('edit_kabupaten_kota_id');
-        editKabKota.value = data.kabupaten_kota_id;
+        if (editKabKota) {
+            editKabKota.value = data.kabupaten_kota_id;
+        }
 
-        // Muat koridor dinamis sesuai kab/kota dan pilih data.koridor_id
-        updateKoridorOptions('edit', data.koridor_id);
+        const editKoridor = document.getElementById('edit_koridor_id');
+        if (editKoridor) {
+            editKoridor.value = data.koridor_id || '';
+        }
 
         document.getElementById('edit_nomor_ruas').value = data.nomor_ruas || '';
         document.getElementById('edit_nama_ruas').value = data.nama_ruas || '';
-        document.getElementById('edit_status_jalan').value = data.status_jalan || 'Jalan Kab/Kota';
+        document.getElementById('edit_status_jalan').value = data.status_jalan || 'Kabupaten/Kota';
         document.getElementById('edit_panjang_ruas').value = data.panjang_ruas !== null ? data.panjang_ruas : '';
         document.getElementById('edit_void').checked = data.void == 1;
 

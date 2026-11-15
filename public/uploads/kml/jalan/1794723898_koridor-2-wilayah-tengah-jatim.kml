@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Koridor 2: Wilayah Tengah / Antar Pegunungan (Smart Village &amp; Valley)</name>
+    <description>Peta Koridor 2 Jawa Timur sesuai perencanaan strategis: Koridor Kota Besar, Menengah, dan Kecil di Wilayah Tengah/Antar Pegunungan (Ngawi - Madiun - Nganjuk - Jombang - Mojokerto - Kediri - Tulungagung - Blitar - Malang - Probolinggo - Lumajang - Jember - Bondowoso - Situbondo).</description>
+
+    <!-- Gaya Garis Utama Koridor 2A (Ungu/Biru Tengah) -->
+    <Style id="koridor2MainStyle">
+      <LineStyle>
+        <color>ffd45a6a</color> <!-- Ungu-biru sesuai panah Koridor 2 di peta -->
+        <width>6</width>
+      </LineStyle>
+    </Style>
+
+    <!-- Gaya Garis Cabang Koridor 2B (Lembah Brantas: Kertosono - Kediri - Tulungagung - Blitar - Malang) -->
+    <Style id="koridor2BranchStyle">
+      <LineStyle>
+        <color>ffe88494</color> <!-- Ungu muda -->
+        <width>5</width>
+      </LineStyle>
+    </Style>
+
+    <!-- Gaya Titik Simpul Kota -->
+    <Style id="simpulKoridor2Style">
+      <IconStyle>
+        <color>ffffaa55</color>
+        <scale>1.15</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+
+    <Folder>
+      <name>Jalur Jalan Koridor 2</name>
+
+      <!-- Jalur 2A: Poros Utama Tengah (Ngawi - Madiun - Nganjuk - Jombang - Mojokerto - Pasuruan - Probolinggo - Lumajang - Jember - Bondowoso - Situbondo) -->
+      <Placemark>
+        <name>Koridor 2A: Poros Utama Tengah (Ngawi - Mojokerto - Jember - Situbondo)</name>
+        <description>
+          <![CDATA[
+            <b>Nama Koridor:</b> Koridor 2 - Wilayah Tengah / Antar Pegunungan (Smart Village &amp; Valley)<br/>
+            <b>Kode Segmen:</b> KDR-JTM-02A<br/>
+            <b>Lintasan Kota:</b> Ngawi - Madiun - Nganjuk - Jombang - Mojokerto - Pasuruan - Probolinggo - Lumajang - Jember - Bondowoso - Situbondo<br/>
+            <b>Fungsi:</b> Penghubung kota besar, menengah, dan kecil wilayah tengah Jawa Timur<br/>
+            <b>Panjang Estimasi:</b> ± 435 km
+          ]]>
+        </description>
+        <ExtendedData>
+          <Data name="kode_koridor"><value>KDR-JTM-02A</value></Data>
+          <Data name="nama_koridor"><value>Koridor 2 Wilayah Tengah (Poros Utama)</value></Data>
+          <Data name="segmen"><value>Ngawi - Madiun - Nganjuk - Jombang - Mojokerto - Probolinggo - Lumajang - Jember - Bondowoso - Situbondo</value></Data>
+          <Data name="panjang_km"><value>435.0</value></Data>
+          <Data name="status_jalan"><value>Jalan Nasional Arteri &amp; Kolektor Primer</value></Data>
+        </ExtendedData>
+        <styleUrl>#koridor2MainStyle</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+          111.4462,-7.4045,0
+          111.4525,-7.4280,0
+          111.4710,-7.4650,0
+          111.4920,-7.5080,0
+          111.5150,-7.5450,0
+          111.5320,-7.5850,0
+          111.5239,-7.6298,0
+          111.5480,-7.6120,0
+          111.6540,-7.5485,0
+          111.7250,-7.5680,0
+          111.7950,-7.5890,0
+          111.9012,-7.6031,0
+          111.9850,-7.5960,0
+          112.0550,-7.5910,0
+          112.1025,-7.5905,0
+          112.1650,-7.5680,0
+          112.2331,-7.5458,0
+          112.2950,-7.5280,0
+          112.3580,-7.5060,0
+          112.4338,-7.4726,0
+          112.4850,-7.4920,0
+          112.5480,-7.5250,0
+          112.6150,-7.5520,0
+          112.6955,-7.5820,0
+          112.7820,-7.5985,0
+          112.9065,-7.6453,0
+          113.0250,-7.6850,0
+          113.1280,-7.7210,0
+          113.2158,-7.7543,0
+          113.2450,-7.8150,0
+          113.2380,-7.8950,0
+          113.2250,-7.9850,0
+          113.2215,-8.0650,0
+          113.2248,-8.1335,0
+          113.3150,-8.1480,0
+          113.4250,-8.1650,0
+          113.5350,-8.1720,0
+          113.6250,-8.1710,0
+          113.7022,-8.1724,0
+          113.7450,-8.1150,0
+          113.7780,-8.0450,0
+          113.8020,-7.9750,0
+          113.8214,-7.9135,0
+          113.8650,-7.8520,0
+          113.9180,-7.7850,0
+          113.9650,-7.7320,0
+          114.0095,-7.7062,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+
+      <!-- Jalur 2B: Cabang Lembah Brantas (Kertosono - Kediri - Tulungagung - Blitar - Kepanjen - Malang) -->
+      <Placemark>
+        <name>Koridor 2B: Cabang Lembah Brantas (Kertosono - Kediri - Tulungagung - Blitar - Malang)</name>
+        <description>
+          <![CDATA[
+            <b>Nama Koridor:</b> Koridor 2 - Cabang Lembah Brantas &amp; Antar Pegunungan<br/>
+            <b>Kode Segmen:</b> KDR-JTM-02B<br/>
+            <b>Lintasan Kota:</b> Kertosono (Nganjuk) - Kediri - Tulungagung - Blitar - Kepanjen - Kota Malang<br/>
+            <b>Fungsi:</b> Penghubung kota menengah di kawasan Selingkar Wilis dan Lembah Brantas<br/>
+            <b>Panjang Estimasi:</b> ± 168 km
+          ]]>
+        </description>
+        <ExtendedData>
+          <Data name="kode_koridor"><value>KDR-JTM-02B</value></Data>
+          <Data name="nama_koridor"><value>Koridor 2 Wilayah Tengah (Cabang Lembah Brantas)</value></Data>
+          <Data name="segmen"><value>Kertosono - Kediri - Tulungagung - Blitar - Kepanjen - Malang</value></Data>
+          <Data name="panjang_km"><value>168.0</value></Data>
+          <Data name="status_jalan"><value>Jalan Nasional Kolektor Primer</value></Data>
+        </ExtendedData>
+        <styleUrl>#koridor2BranchStyle</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+          112.1025,-7.5905,0
+          112.0650,-7.6650,0
+          112.0350,-7.7450,0
+          112.0118,-7.8166,0
+          111.9850,-7.8950,0
+          111.9450,-7.9850,0
+          111.9025,-8.0657,0
+          111.9850,-8.0820,0
+          112.0750,-8.0920,0
+          112.1678,-8.0983,0
+          112.2650,-8.1150,0
+          112.3650,-8.1320,0
+          112.4650,-8.1380,0
+          112.5725,-8.1305,0
+          112.6050,-8.0550,0
+          112.6304,-7.9826,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+
+    <Folder>
+      <name>Titik Simpul Kota Koridor 2</name>
+      <Placemark>
+        <name>Simpul 01: Ngawi (Kartonyono)</name>
+        <description>Titik awal barat Koridor 2 Wilayah Tengah.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>111.4462,-7.4045,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 02: Kota Madiun</name>
+        <description>Simpul pusat wilayah Mataraman barat.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>111.5239,-7.6298,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 03: Kota Nganjuk</name>
+        <description>Simpul jalur arteri tengah Nganjuk.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>111.9012,-7.6031,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 04: Simpang Mengkreng (Kertosono)</name>
+        <description>Simpul pertemuan cabang Kediri-Blitar dan Jombang-Mojokerto.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>112.1025,-7.5905,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 05: Kota Jombang</name>
+        <description>Simpul kota menengah di koridor tengah.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>112.2331,-7.5458,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 06: Kota Mojokerto</name>
+        <description>Simpul penghubung tengah menuju Gerbangkertosusila.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>112.4338,-7.4726,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 07: Kota Kediri</name>
+        <description>Simpul utama cabang lembah Brantas (Kediri - Tulungagung - Blitar).</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>112.0118,-7.8166,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 08: Kota Tulungagung</name>
+        <description>Simpul kawasan antar pegunungan selatan-tengah.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>111.9025,-8.0657,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 09: Kota Blitar</name>
+        <description>Simpul penghubung koridor tengah-selatan menuju Malang.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>112.1678,-8.0983,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 10: Kota Malang</name>
+        <description>Simpul pertemuan Koridor 2 dengan Koridor 1 Metropolitan.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>112.6304,-7.9826,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 11: Kota Probolinggo</name>
+        <description>Simpul jalur tengah timur menuju Lumajang dan Jember.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>113.2158,-7.7543,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 12: Kota Lumajang</name>
+        <description>Simpul lembah Semeru - Lumajang.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>113.2248,-8.1335,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 13: Kota Jember</name>
+        <description>Simpul pusat wilayah Tapal Kuda tengah.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>113.7022,-8.1724,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 14: Kota Bondowoso</name>
+        <description>Simpul kawasan lembah Ijen - Bondowoso.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>113.8214,-7.9135,0</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simpul 15: Kota Situbondo</name>
+        <description>Titik ujung timur Koridor 2 di Situbondo.</description>
+        <styleUrl>#simpulKoridor2Style</styleUrl>
+        <Point>
+          <coordinates>114.0095,-7.7062,0</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

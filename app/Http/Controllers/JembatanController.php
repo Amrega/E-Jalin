@@ -80,12 +80,6 @@ class JembatanController extends Controller
         $perPage = in_array($perPage, [10, 25, 50, 100]) ? $perPage : 10;
         $jembatanList = $query->paginate($perPage)->withQueryString();
 
-        // Data Statistik
-        $totalJembatan = Jembatan::count();
-        $totalPanjang  = Jembatan::where('void', 0)->sum('panjang_jembatan') ?? 0;
-        $totalRuas     = Jembatan::distinct('ruas_jalan_id')->count('ruas_jalan_id');
-        $totalAktif    = Jembatan::where('void', 0)->count();
-
         // Dropdown Daftar Kabupaten / Kota di Jawa Timur
         $kabupatenKotaList = KabupatenKota::where('void', 0)
             ->orderBy('nama_kabupaten_kota', 'asc')
@@ -109,10 +103,6 @@ class JembatanController extends Controller
             'kabupatenKotaList',
             'ruasJalanList',
             'allRuasJalanList',
-            'totalJembatan',
-            'totalPanjang',
-            'totalRuas',
-            'totalAktif'
         ));
     }
 
