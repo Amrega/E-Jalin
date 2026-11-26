@@ -50,6 +50,7 @@ class UsulanAspalCrudTest extends TestCase
             'keterangan_urgensi',
             'pengusul_id',
             'qty_drum',
+            'tahun',
             'updated_at',
             'upload_surat_permohonan',
         ], $columns);
@@ -123,6 +124,7 @@ class UsulanAspalCrudTest extends TestCase
             ->assertSessionHas('success');
 
         $item = UsulanAspal::with(['pengusul', 'jenisPengusul'])->firstOrFail();
+        $this->assertSame((int) now()->year, $item->tahun);
         $this->assertSame('Kabupaten Malang', $item->kabupaten_kota);
         $this->assertSame(50, $item->qty_drum);
         $this->assertSame('Dinas PU Kab. Malang', $item->pengusul->nama_pengusul);

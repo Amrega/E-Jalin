@@ -12,6 +12,7 @@ class UsulanAspal extends Model
     protected $table = 'usulan_aspal';
 
     protected $fillable = [
+        'tahun',
         'kabupaten_kota',
         'qty_drum',
         'keterangan_urgensi',
@@ -21,6 +22,7 @@ class UsulanAspal extends Model
     ];
 
     protected $casts = [
+        'tahun'      => 'integer',
         'qty_drum'   => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

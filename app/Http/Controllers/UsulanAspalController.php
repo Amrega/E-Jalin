@@ -203,6 +203,7 @@ class UsulanAspalController extends Controller
         }
 
         UsulanAspal::create([
+            'tahun'                   => (int) now()->year,
             'kabupaten_kota'          => trim($validated['kabupaten_kota']),
             'qty_drum'                => (int) $validated['qty_drum'],
             'keterangan_urgensi'      => trim($validated['keterangan_urgensi']),
@@ -283,6 +284,7 @@ class UsulanAspalController extends Controller
         }
 
         $usulanAspal->update([
+            'tahun'                   => $usulanAspal->tahun ?: (int) now()->year,
             'kabupaten_kota'          => trim($validated['kabupaten_kota']),
             'qty_drum'                => (int) $validated['qty_drum'],
             'keterangan_urgensi'      => trim($validated['keterangan_urgensi']),
