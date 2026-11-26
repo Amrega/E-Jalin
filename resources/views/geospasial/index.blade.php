@@ -53,7 +53,7 @@
     <nav class="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 mb-4 gap-2">
         <span class="text-[#0f2a71] hover:underline cursor-pointer">GEOSPASIAL GIS</span>
         <span class="text-slate-400">&gt;</span>
-        <span class="text-[#b87500] font-extrabold">PETA SPASIAL KML INTERAKTIF</span>
+        <span class="text-[#b87500] font-extrabold">PETA</span>
     </nav>
 
     <!-- Map & Sidepanel Container (Full Height Layout) -->

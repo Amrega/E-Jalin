@@ -67,7 +67,7 @@ class UserController extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
-        return view('user.index', compact(
+        return view('users.index', compact(
             'userList',
             'roleList',
             'kabupatenKotaList',
@@ -112,7 +112,7 @@ class UserController extends Controller
             'void'              => $request->has('void') ? (int) $request->void : 0,
         ]);
 
-        return redirect()->route('user.index')->with('success', 'Akun pengguna berhasil ditambahkan.');
+        return redirect()->route('users.index')->with('success', 'Data user berhasil ditambahkan.');
     }
 
     /**
@@ -156,27 +156,33 @@ class UserController extends Controller
 
         $user->update($updateData);
 
-        return redirect()->route('user.index')->with('success', 'Data akun pengguna berhasil diperbarui.');
+        return redirect()->route('users.index')->with('success', 'Data user berhasil diperbarui.');
     }
 
     /**
-     * Hapus akun pengguna
+     * Hapus data user
      */
     public function destroy(User $user)
     {
         // Proteksi 1: Tidak boleh menghapus akun yang sedang dipakai login
         if (Auth::id() === $user->id) {
-            return redirect()->route('user.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif digunakan.');
+            return redirect()->route('users.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif digunakan.');
         }
 
         // Proteksi 2: Tidak boleh menghapus akun administrator utama (id = 1 atau username 'admin')
         if ($user->id === 1 || $user->username === 'admin') {
-            return redirect()->route('user.index')->with('error', 'Akun Administrator Utama tidak boleh dihapus dari sistem.');
+            return redirect()->route('users.index')->with('error', 'Akun Administrator Utama tidak boleh dihapus dari sistem.');
+        }
+
+        // Proteksi 3: Tidak boleh menghapus akun yang masih terhubung dengan master Pengusul
+        $pengusulCount = $user->pengusul()->count();
+        if ($pengusulCount > 0) {
+            return redirect()->route('users.index')->with('error', "User \"{$user->name}\" tidak dapat dihapus karena masih melekat pada {$pengusulCount} data Pengusul.");
         }
 
         $user->delete();
 
-        return redirect()->route('user.index')->with('success', 'Akun pengguna berhasil dihapus.');
+        return redirect()->route('users.index')->with('success', 'Data user berhasil dihapus.');
     }
 
     /**

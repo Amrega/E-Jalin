@@ -5,9 +5,9 @@
 @section('content')
     <!-- Breadcrumbs -->
     <nav class="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 mb-6 gap-2">
-        <span class="text-[#0f2a71] hover:underline cursor-pointer">REFERENSI MASTER</span>
+        <span class="text-[#0f2a71] hover:underline cursor-pointer">MASTER</span>
         <span class="text-slate-400">&gt;</span>
-        <span class="text-[#b87500] font-extrabold">DAFTAR UPT PJJ</span>
+        <span class="text-[#b87500] font-extrabold">UPT PJJ</span>
     </nav>
 
     <!-- Notification Messages -->
@@ -275,7 +275,7 @@
                     <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
                         <h3 class="text-base font-bold text-white leading-tight">Tambah UPT PJJ</h3>
-                        <p class="text-[10px] text-slate-300 font-medium">Registrasi Unit Pengelolaan Jalan & Jembatan</p>
+                        <p class="text-[10px] text-slate-300 font-medium">Penambahan Data UPT PJJ</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeModalTambah()" class="p-1.5 text-slate-300 hover:text-white rounded-lg hover:bg-white/10 transition cursor-pointer">

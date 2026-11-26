@@ -4,8 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GeospasialController;
 use App\Http\Controllers\JembatanController;
 use App\Http\Controllers\JenisPenangananController;
+use App\Http\Controllers\JenisPengusulController;
 use App\Http\Controllers\KabupatenKotaController;
 use App\Http\Controllers\KoridorController;
+use App\Http\Controllers\PengusulController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RuasJalanController;
 use App\Http\Controllers\TematikKawasanController;
@@ -91,10 +93,17 @@ Route::middleware('auth')->group(function () {
         Route::resource('tematik-kawasan', TematikKawasanController::class)->parameters(['tematik-kawasan' => 'tematik_kawasan']);
         Route::post('tematik-kawasan/{tematik_kawasan}/toggle-void', [TematikKawasanController::class, 'toggleVoid'])->name('tematik-kawasan.toggle-void');
 
+        // CRUD Jenis Pengusul
+        Route::resource('jenis-pengusul', JenisPengusulController::class)->parameters(['jenis-pengusul' => 'jenis_pengusul']);
+
+        // CRUD Pengusul
+        Route::resource('pengusul', PengusulController::class)->parameters(['pengusul' => 'pengusul']);
+
         // --- MANAJEMEN AKSES ---
-        // CRUD Pengguna (Users)
-        Route::resource('user', UserController::class);
-        Route::post('user/{user}/toggle-void', [UserController::class, 'toggleVoid'])->name('user.toggle-void');
+        // CRUD Users
+        Route::resource('users', UserController::class)->parameters(['users' => 'user']);
+        Route::post('users/{user}/toggle-void', [UserController::class, 'toggleVoid'])->name('users.toggle-void');
+        Route::redirect('user', '/users');
 
         // CRUD Role
         Route::resource('role', RoleController::class);

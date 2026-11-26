@@ -54,6 +54,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Relasi ke master Pengusul yang melekat pada akun pengguna ini
+     */
+    public function pengusul()
+    {
+        return $this->hasMany(Pengusul::class, 'user_id');
+    }
+
+    /**
      * Cek nama role user saat ini (lowercase)
      */
     public function roleName(): string

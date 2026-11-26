@@ -104,6 +104,12 @@
                     <a href="{{ route('tematik-kawasan.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('tematik-kawasan*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
                         Tematik Kawasan
                     </a>
+                    <a href="{{ route('jenis-pengusul.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('jenis-pengusul*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Jenis Pengusul
+                    </a>
+                    <a href="{{ route('pengusul.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('pengusul*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Pengusul
+                    </a>
                 </div>
             </div>
 
@@ -119,8 +125,8 @@
                 </div>
 
                 <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
-                    <a href="{{ route('user.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('user*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
-                        Pengguna
+                    <a href="{{ route('users.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('users*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                        Users
                     </a>
                     <a href="{{ route('role.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('role*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
                         Role

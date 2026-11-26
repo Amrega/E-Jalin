@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Data Pengguna Sistem - E-Jalin Dinas PU Bina Marga Provinsi Jawa Timur')
+@section('title', 'Data Users - E-Jalin Dinas PU Bina Marga Provinsi Jawa Timur')
 
 @section('content')
     <!-- Breadcrumbs -->
     <nav class="flex items-center text-xs font-bold uppercase tracking-wider text-slate-500 mb-6 gap-2">
-        <span class="text-[#0f2a71] hover:underline cursor-pointer">REFERENSI MASTER</span>
+        <span class="text-[#0f2a71] hover:underline cursor-pointer">MANAJEMEN AKSES</span>
         <span class="text-slate-400">&gt;</span>
-        <span class="text-[#b87500] font-extrabold">DATA PENGGUNA</span>
+        <span class="text-[#b87500] font-extrabold">USERS</span>
     </nav>
 
     <!-- Notification Messages -->
@@ -54,16 +54,16 @@
     <!-- Top Action Header & Buttons -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div class="flex items-center gap-3">
-            <button onclick="openModalTambah()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5 active:translate-y-0">
+            <button onclick="openModalTambah()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
                 </svg>
-                <span>Tambah Pengguna</span>
+                <span>Tambah User</span>
             </button>
         </div>
 
         <div class="flex items-center gap-2.5">
-            <a href="{{ route('user.index') }}" title="Refresh Halaman" class="p-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-600 shadow-xs transition">
+            <a href="{{ route('users.index') }}" title="Refresh Halaman" class="p-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-600 shadow-xs transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                 </svg>
@@ -75,7 +75,7 @@
     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
         
         <!-- Filter Controls Form -->
-        <form method="GET" action="{{ route('user.index') }}" class="p-4 sm:p-5 border-b border-slate-200 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 text-xs bg-slate-50/50">
+        <form method="GET" action="{{ route('users.index') }}" class="p-4 sm:p-5 border-b border-slate-200 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 text-xs bg-slate-50/50">
             
             <div class="flex flex-wrap items-center gap-2.5">
                 <!-- Per Page -->
@@ -111,7 +111,7 @@
                 </div>
 
                 @if(request()->anyFilled(['search', 'role_id', 'status']))
-                    <a href="{{ route('user.index') }}" class="px-2.5 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition flex items-center gap-1">
+                    <a href="{{ route('users.index') }}" class="px-2.5 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition flex items-center gap-1">
                         <span>Reset</span>
                         ✕
                     </a>
@@ -144,7 +144,7 @@
                 <thead class="bg-slate-50/90 text-slate-600 font-bold uppercase tracking-wider border-b border-slate-200 select-none">
                     <tr>
                         <th class="py-3.5 px-4 w-12 text-center">NO</th>
-                        <th class="py-3.5 px-4">PENGGUNA</th>
+                        <th class="py-3.5 px-4">USER</th>
                         <th class="py-3.5 px-4">USERNAME</th>
                         <th class="py-3.5 px-4">ROLE HAK AKSES</th>
                         <th class="py-3.5 px-4 text-center">STATUS</th>
@@ -214,7 +214,7 @@
                                         <span>Aktif</span>
                                     </span>
                                 @else
-                                    <form method="POST" action="{{ route('user.toggle-void', $item->id) }}" class="inline-block">
+                                    <form method="POST" action="{{ route('users.toggle-void', $item->id) }}" class="inline-block">
                                         @csrf
                                         @if(!$item->void)
                                             <button type="submit" title="Klik untuk non-aktifkan (Void)" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[11px] hover:bg-emerald-200 transition">
@@ -249,7 +249,7 @@
                                     <button 
                                         type="button"
                                         onclick="openModalEdit({{ json_encode($item) }})" 
-                                        title="Ubah Pengguna" 
+                                        title="Ubah User" 
                                         class="w-7 h-7 rounded-lg bg-[#0f2a71] text-white hover:bg-navy-700 flex items-center justify-center transition shadow-2xs"
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +259,7 @@
                                     <button 
                                         type="button"
                                         onclick="openModalHapus({{ $item->id }}, '{{ addslashes($item->name) }}', {{ Auth::id() === $item->id ? 'true' : 'false' }}, {{ $item->id === 1 ? 'true' : 'false' }})" 
-                                        title="Hapus Pengguna" 
+                                        title="Hapus User" 
                                         class="w-7 h-7 rounded-lg bg-red-100 text-red-600 hover:bg-red-600 hover:text-white flex items-center justify-center transition shadow-2xs"
                                     >
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -278,8 +278,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                         </svg>
                                     </div>
-                                    <span class="font-bold text-slate-600">Belum ada data akun pengguna</span>
-                                    <span class="text-xs text-slate-400">Silakan klik tombol <strong>+ Tambah Pengguna</strong> di atas untuk menambahkan akun baru.</span>
+                                    <span class="font-bold text-slate-600">Belum ada data user</span>
+                                    <span class="text-xs text-slate-400">Silakan klik tombol <strong>+ Tambah User</strong> di atas untuk menambahkan user baru.</span>
                                 </div>
                             </td>
                         </tr>
@@ -303,7 +303,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- MODAL: TAMBAH PENGGUNA                                        -->
+    <!-- MODAL: TAMBAH USER                                            -->
     <!-- ============================================================== -->
     <div id="modalTambah" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs hidden transition-opacity">
         <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
@@ -312,8 +312,8 @@
                 <div class="flex items-center gap-2.5">
                     <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
-                        <h3 class="text-base font-bold text-white leading-tight">Tambah Akun Pengguna</h3>
-                        <p class="text-[10px] text-slate-300 font-medium">Registrasi Akun Baru E-Jalin Jawa Timur</p>
+                        <h3 class="text-base font-bold text-white leading-tight">Tambah User</h3>
+                        <p class="text-[10px] text-slate-300 font-medium">Penambahan Data User</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeModalTambah()" class="p-1.5 text-slate-300 hover:text-white rounded-lg hover:bg-white/10 transition">
@@ -321,7 +321,7 @@
                 </button>
             </div>
 
-            <form action="{{ route('user.store') }}" method="POST" class="flex flex-col flex-grow overflow-hidden">
+            <form action="{{ route('users.store') }}" method="POST" class="flex flex-col flex-grow overflow-hidden">
                 @csrf
                 <div class="p-6 overflow-y-auto space-y-4 text-xs text-slate-700 flex-grow">
                     <div>
@@ -427,7 +427,7 @@
 
                 <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2.5">
                     <button type="button" onclick="closeModalTambah()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-bold hover:bg-slate-100 transition">Batal</button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-xs">Simpan Pengguna</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-xs">Simpan User</button>
                 </div>
             </form>
 
@@ -435,7 +435,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- MODAL: EDIT PENGGUNA                                          -->
+    <!-- MODAL: EDIT USER                                              -->
     <!-- ============================================================== -->
     <div id="modalEdit" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs hidden transition-opacity">
         <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
@@ -444,7 +444,7 @@
                 <div class="flex items-center gap-2.5">
                     <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
-                        <h3 class="text-base font-bold text-white leading-tight">Ubah Data Pengguna</h3>
+                        <h3 class="text-base font-bold text-white leading-tight">Ubah Data User</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Perbarui Informasi Akun dan Hak Akses</p>
                     </div>
                 </div>
@@ -566,7 +566,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- MODAL: DETAIL PENGGUNA                                        -->
+    <!-- MODAL: DETAIL USER                                            -->
     <!-- ============================================================== -->
     <div id="modalDetail" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs hidden transition-opacity">
         <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md flex flex-col overflow-hidden">
@@ -575,7 +575,7 @@
                 <div class="flex items-center gap-2.5">
                     <img src="{{ asset('assets/logo_ejalin.png') }}" alt="Logo E-Jalin" class="w-8 h-8 rounded-full object-cover shadow-xs ring-1 ring-[#ffb700]">
                     <div>
-                        <h3 class="text-base font-bold text-white leading-tight">Detail Akun Pengguna</h3>
+                        <h3 class="text-base font-bold text-white leading-tight">Detail User</h3>
                         <p class="text-[10px] text-slate-300 font-medium">Informasi Profil dan Hak Akses</p>
                     </div>
                 </div>
@@ -601,16 +601,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                     </svg>
                 </div>
-                <h3 class="text-base font-bold text-slate-800 mb-1">Hapus Akun Pengguna?</h3>
+                <h3 class="text-base font-bold text-slate-800 mb-1">Hapus User?</h3>
                 <p class="text-xs text-slate-500 mb-4" id="hapusTextPrompt">
-                    Apakah Anda yakin ingin menghapus akun pengguna ini? Tindakan ini tidak dapat dibatalkan.
+                    Apakah Anda yakin ingin menghapus user ini? Tindakan ini tidak dapat dibatalkan.
                 </p>
                 <form id="formHapus" method="POST">
                     @csrf
                     @method('DELETE')
                     <div class="flex items-center justify-center gap-2.5">
                         <button type="button" onclick="closeModalHapus()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-100 transition">Batal</button>
-                        <button type="submit" id="btnKonfirmasiHapus" class="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition shadow-xs">Ya, Hapus Akun</button>
+                        <button type="submit" id="btnKonfirmasiHapus" class="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition shadow-xs">Ya, Hapus User</button>
                     </div>
                 </form>
             </div>
@@ -631,7 +631,7 @@
     // Modal Edit
     function openModalEdit(data) {
         const form = document.getElementById('formEdit');
-        form.action = `/user/${data.id}`;
+        form.action = `/users/${data.id}`;
 
         document.getElementById('edit_name').value = data.name || '';
         document.getElementById('edit_username').value = data.username || '';
@@ -659,7 +659,7 @@
             <div class="space-y-3">
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
                     <div>
-                        <span class="text-[10px] uppercase font-bold text-slate-400 block">ID Pengguna</span>
+                        <span class="text-[10px] uppercase font-bold text-slate-400 block">ID User</span>
                         <span class="text-sm font-mono font-black text-[#0f2a71]">#${data.id}</span>
                     </div>
                     <div>${statusBadge}</div>
@@ -702,7 +702,7 @@
     // Modal Hapus
     function openModalHapus(id, name, isCurrent, isAdmin) {
         const form = document.getElementById('formHapus');
-        form.action = `/user/${id}`;
+        form.action = `/users/${id}`;
         
         const btn = document.getElementById('btnKonfirmasiHapus');
         const prompt = document.getElementById('hapusTextPrompt');
@@ -716,7 +716,7 @@
             btn.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
         } else {
-            prompt.innerHTML = `Apakah Anda yakin ingin menghapus akun pengguna <strong>"${name}"</strong>? Tindakan ini tidak dapat dibatalkan.`;
+            prompt.innerHTML = `Apakah Anda yakin ingin menghapus user <strong>"${name}"</strong>? Tindakan ini tidak dapat dibatalkan.`;
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
