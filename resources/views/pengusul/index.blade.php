@@ -285,7 +285,7 @@
                             value="{{ old('nama_pengusul') }}"
                             maxlength="255"
                             required
-                            placeholder="Contoh: Bupati Malang / DPRD Provinsi Jawa Timur"
+                            placeholder="Contoh: Bupati Malang"
                             class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]"
                         >
                     </div>
@@ -364,7 +364,7 @@
                             name="nama_pengusul"
                             maxlength="255"
                             required
-                            placeholder="Contoh: Bupati Malang / DPRD Provinsi Jawa Timur"
+                            placeholder="Contoh: Bupati Malang"
                             class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0f2a71]"
                         >
                     </div>
