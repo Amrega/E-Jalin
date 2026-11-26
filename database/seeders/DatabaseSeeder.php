@@ -119,38 +119,38 @@ class DatabaseSeeder extends Seeder
         DB::table('kabupaten_kota')->upsert([
             ['id' => 1, 'provinsi_id' => 1, 'upt_id' => 11, 'nama_kabupaten_kota' => 'Kabupaten Bangkalan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 2, 'provinsi_id' => 1, 'upt_id' => 10, 'nama_kabupaten_kota' => 'Kabupaten Banyuwangi', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
-            ['id' => 3, 'provinsi_id' => 1, 'upt_id' => 6, 'nama_kabupaten_kota' => 'Kabupaten Blitar', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 4, 'provinsi_id' => 1, 'upt_id' => 3, 'nama_kabupaten_kota' => 'Kabupaten Bojonegoro', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
+            ['id' => 3, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Blitar', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:19:12'],
+            ['id' => 4, 'provinsi_id' => 1, 'upt_id' => 7, 'nama_kabupaten_kota' => 'Kabupaten Bojonegoro', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:10:41'],
             ['id' => 5, 'provinsi_id' => 1, 'upt_id' => 9, 'nama_kabupaten_kota' => 'Kabupaten Bondowoso', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 6, 'provinsi_id' => 1, 'upt_id' => 1, 'nama_kabupaten_kota' => 'Kabupaten Gresik', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
             ['id' => 7, 'provinsi_id' => 1, 'upt_id' => 9, 'nama_kabupaten_kota' => 'Kabupaten Jember', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 8, 'provinsi_id' => 1, 'upt_id' => 2, 'nama_kabupaten_kota' => 'Kabupaten Jombang', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 9, 'provinsi_id' => 1, 'upt_id' => 6, 'nama_kabupaten_kota' => 'Kabupaten Kediri', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
+            ['id' => 9, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Kediri', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:19:28'],
             ['id' => 10, 'provinsi_id' => 1, 'upt_id' => 1, 'nama_kabupaten_kota' => 'Kabupaten Lamongan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
             ['id' => 11, 'provinsi_id' => 1, 'upt_id' => 8, 'nama_kabupaten_kota' => 'Kabupaten Lumajang', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
-            ['id' => 12, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Madiun', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 13, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Magetan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 14, 'provinsi_id' => 1, 'upt_id' => 7, 'nama_kabupaten_kota' => 'Kabupaten Malang', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
+            ['id' => 12, 'provinsi_id' => 1, 'upt_id' => 5, 'nama_kabupaten_kota' => 'Kabupaten Madiun', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:23:35'],
+            ['id' => 13, 'provinsi_id' => 1, 'upt_id' => 5, 'nama_kabupaten_kota' => 'Kabupaten Magetan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:21:59'],
+            ['id' => 14, 'provinsi_id' => 1, 'upt_id' => 3, 'nama_kabupaten_kota' => 'Kabupaten Malang', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:12:10'],
             ['id' => 15, 'provinsi_id' => 1, 'upt_id' => 2, 'nama_kabupaten_kota' => 'Kabupaten Mojokerto', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 16, 'provinsi_id' => 1, 'upt_id' => 6, 'nama_kabupaten_kota' => 'Kabupaten Nganjuk', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 17, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Ngawi', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 18, 'provinsi_id' => 1, 'upt_id' => 5, 'nama_kabupaten_kota' => 'Kabupaten Pacitan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
+            ['id' => 16, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Nganjuk', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:19:45'],
+            ['id' => 17, 'provinsi_id' => 1, 'upt_id' => 5, 'nama_kabupaten_kota' => 'Kabupaten Ngawi', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:22:24'],
+            ['id' => 18, 'provinsi_id' => 1, 'upt_id' => 6, 'nama_kabupaten_kota' => 'Kabupaten Pacitan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:21:07'],
             ['id' => 19, 'provinsi_id' => 1, 'upt_id' => 11, 'nama_kabupaten_kota' => 'Kabupaten Pamekasan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 20, 'provinsi_id' => 1, 'upt_id' => 8, 'nama_kabupaten_kota' => 'Kabupaten Pasuruan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
-            ['id' => 21, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Ponorogo', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
+            ['id' => 21, 'provinsi_id' => 1, 'upt_id' => 5, 'nama_kabupaten_kota' => 'Kabupaten Ponorogo', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:22:45'],
             ['id' => 22, 'provinsi_id' => 1, 'upt_id' => 8, 'nama_kabupaten_kota' => 'Kabupaten Probolinggo', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 23, 'provinsi_id' => 1, 'upt_id' => 11, 'nama_kabupaten_kota' => 'Kabupaten Sampang', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 24, 'provinsi_id' => 1, 'upt_id' => 1, 'nama_kabupaten_kota' => 'Kabupaten Sidoarjo', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
             ['id' => 25, 'provinsi_id' => 1, 'upt_id' => 10, 'nama_kabupaten_kota' => 'Kabupaten Situbondo', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 26, 'provinsi_id' => 1, 'upt_id' => 11, 'nama_kabupaten_kota' => 'Kabupaten Sumenep', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
-            ['id' => 27, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Trenggalek', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 28, 'provinsi_id' => 1, 'upt_id' => 3, 'nama_kabupaten_kota' => 'Kabupaten Tuban', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 29, 'provinsi_id' => 1, 'upt_id' => 6, 'nama_kabupaten_kota' => 'Kabupaten Tulungagung', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 30, 'provinsi_id' => 1, 'upt_id' => 7, 'nama_kabupaten_kota' => 'Kota Batu', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
-            ['id' => 31, 'provinsi_id' => 1, 'upt_id' => 6, 'nama_kabupaten_kota' => 'Kota Blitar', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 32, 'provinsi_id' => 1, 'upt_id' => 6, 'nama_kabupaten_kota' => 'Kota Kediri', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 33, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kota Madiun', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
-            ['id' => 34, 'provinsi_id' => 1, 'upt_id' => 7, 'nama_kabupaten_kota' => 'Kota Malang', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
+            ['id' => 27, 'provinsi_id' => 1, 'upt_id' => 5, 'nama_kabupaten_kota' => 'Kabupaten Trenggalek', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:23:00'],
+            ['id' => 28, 'provinsi_id' => 1, 'upt_id' => 7, 'nama_kabupaten_kota' => 'Kabupaten Tuban', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:11:20'],
+            ['id' => 29, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kabupaten Tulungagung', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:19:59'],
+            ['id' => 30, 'provinsi_id' => 1, 'upt_id' => 3, 'nama_kabupaten_kota' => 'Kota Batu', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:11:55'],
+            ['id' => 31, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kota Blitar', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:20:13'],
+            ['id' => 32, 'provinsi_id' => 1, 'upt_id' => 4, 'nama_kabupaten_kota' => 'Kota Kediri', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:20:26'],
+            ['id' => 33, 'provinsi_id' => 1, 'upt_id' => 5, 'nama_kabupaten_kota' => 'Kota Madiun', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:21:42'],
+            ['id' => 34, 'provinsi_id' => 1, 'upt_id' => 3, 'nama_kabupaten_kota' => 'Kota Malang', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-26 08:11:41'],
             ['id' => 35, 'provinsi_id' => 1, 'upt_id' => 2, 'nama_kabupaten_kota' => 'Kota Mojokerto', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:41'],
             ['id' => 36, 'provinsi_id' => 1, 'upt_id' => 8, 'nama_kabupaten_kota' => 'Kota Pasuruan', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
             ['id' => 37, 'provinsi_id' => 1, 'upt_id' => 8, 'nama_kabupaten_kota' => 'Kota Probolinggo', 'void' => 0, 'created_at' => '2026-11-12 13:20:02', 'updated_at' => '2026-11-12 15:33:42'],
@@ -214,6 +214,15 @@ class DatabaseSeeder extends Seeder
             ['id' => 12, 'nama_tematik' => 'Konektivitas - Terhubung Ke Status Lebih Tinggi (Jalan Provinsi)', 'void' => 0, 'created_at' => '2026-11-12 14:49:13', 'updated_at' => '2026-11-12 14:49:13'],
             ['id' => 13, 'nama_tematik' => 'Konektivitas - Terhubung Ke Simpul Transportasi', 'void' => 0, 'created_at' => '2026-11-12 14:49:13', 'updated_at' => '2026-11-12 14:49:13'],
         ], ['id'], ['nama_tematik', 'void', 'updated_at']);
+
+        // 7b. Jenis Pengusul
+        DB::table('jenis_pengusul')->upsert([
+            ['id' => 1, 'nama_jenis_pengusul' => 'Instansi', 'created_at' => '2026-11-26 04:31:50', 'updated_at' => '2026-11-26 04:31:50'],
+            ['id' => 2, 'nama_jenis_pengusul' => 'Lembaga', 'created_at' => '2026-11-26 04:32:01', 'updated_at' => '2026-11-26 04:32:01'],
+        ], ['id'], ['nama_jenis_pengusul', 'updated_at']);
+
+        // 7c. Pengusul (Bupati / Walikota untuk seluruh 38 Pemda Kab/Kota)
+        $this->call(PengusulPemdaSeeder::class);
 
         // 8. Koridor
         DB::table('koridor')->upsert([

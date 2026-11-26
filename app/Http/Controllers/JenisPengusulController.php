@@ -84,6 +84,12 @@ class JenisPengusulController extends Controller
                 ->with('error', "Jenis pengusul \"{$jenisPengusul->nama_jenis_pengusul}\" tidak dapat dihapus karena masih digunakan oleh {$pengusulCount} data Pengusul.");
         }
 
+        $usulanAspalCount = $jenisPengusul->usulanAspal()->count();
+        if ($usulanAspalCount > 0) {
+            return redirect()->route('jenis-pengusul.index')
+                ->with('error', "Jenis pengusul \"{$jenisPengusul->nama_jenis_pengusul}\" tidak dapat dihapus karena masih digunakan pada {$usulanAspalCount} data Usulan Aspal.");
+        }
+
         $nama = $jenisPengusul->nama_jenis_pengusul;
         $jenisPengusul->delete();
 

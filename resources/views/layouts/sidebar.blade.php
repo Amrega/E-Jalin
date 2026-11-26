@@ -48,8 +48,11 @@
             </div>
 
             <div class="space-y-1 text-xs font-medium pl-3 border-l-2 border-[#0f2a71] ml-5 mt-2">
-                <a href="{{ route('usulan.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('usulan*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                <a href="{{ route('usulan.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('usulan.*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
                     Usulan
+                </a>
+                <a href="{{ route('usulan-aspal.index') }}" class="block py-2 px-3 rounded-lg transition {{ request()->routeIs('usulan-aspal.*') ? 'bg-[#0f2a71] text-[#ffb700] font-bold border-l-4 border-[#ffb700] shadow-sm' : 'text-slate-300 hover:text-[#ffb700] hover:bg-white/5' }}">
+                    Usulan Aspal
                 </a>
             </div>
         </div>

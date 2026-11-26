@@ -13,6 +13,7 @@ use App\Http\Controllers\RuasJalanController;
 use App\Http\Controllers\TematikKawasanController;
 use App\Http\Controllers\UptDinasController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsulanAspalController;
 use App\Http\Controllers\UsulanController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +52,10 @@ Route::middleware('auth')->group(function () {
         Route::post('usulan/{usulan}/toggle-void', [UsulanController::class, 'toggleVoid'])->name('usulan.toggle-void');
         Route::get('usulan/{usulan}/download-dokumen/{jenis?}', [UsulanController::class, 'downloadDokumen'])->name('usulan.download-dokumen');
         Route::redirect('usulan-inpres', '/usulan');
+
+        // Halaman & Aksi Usulan Aspal
+        Route::resource('usulan-aspal', UsulanAspalController::class)->parameters(['usulan-aspal' => 'usulan_aspal']);
+        Route::get('usulan-aspal/{usulan_aspal}/download-surat', [UsulanAspalController::class, 'downloadSurat'])->name('usulan-aspal.download-surat');
     });
 
     Route::middleware('role:administrator,user')->group(function () {

@@ -125,6 +125,12 @@ class PengusulController extends Controller
      */
     public function destroy(Pengusul $pengusul)
     {
+        $usulanAspalCount = $pengusul->usulanAspal()->count();
+        if ($usulanAspalCount > 0) {
+            return redirect()->route('pengusul.index')
+                ->with('error', "Pengusul \"{$pengusul->nama_pengusul}\" tidak dapat dihapus karena masih digunakan pada {$usulanAspalCount} data Usulan Aspal.");
+        }
+
         $nama = $pengusul->nama_pengusul;
         $pengusul->delete();
 

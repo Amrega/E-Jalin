@@ -37,4 +37,12 @@ class Pengusul extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    /**
+     * Relasi ke Usulan Aspal
+     */
+    public function usulanAspal()
+    {
+        return $this->hasMany(UsulanAspal::class, 'pengusul_id');
+    }
 }

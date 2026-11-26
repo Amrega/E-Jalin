@@ -165,15 +165,7 @@
                             </td>
                             <td class="py-3 px-4">
                                 @if($item->user)
-                                    <div class="flex flex-col">
-                                        <span class="font-bold text-slate-800">{{ $item->user->name }}</span>
-                                        <span class="text-[11px] text-slate-400 font-mono">
-                                            {{ '@' . $item->user->username }}
-                                            @if($item->user->role)
-                                                &bull; {{ $item->user->role->nama_role }}
-                                            @endif
-                                        </span>
-                                    </div>
+                                    <span class="font-semibold text-slate-800">{{ $item->user->name }}</span>
                                 @else
                                     <span class="text-slate-400 italic text-[11px]">-</span>
                                 @endif
@@ -315,7 +307,7 @@
                             <option value="">-- Pilih User --</option>
                             @foreach($userList as $user)
                                 <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                    {{ $user->name }} ({{ '@' . $user->username }}{{ $user->role ? ' - ' . $user->role->nama_role : '' }})
+                                    {{ $user->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -391,7 +383,7 @@
                             <option value="">-- Pilih User --</option>
                             @foreach($userList as $user)
                                 <option value="{{ $user->id }}">
-                                    {{ $user->name }} ({{ '@' . $user->username }}{{ $user->role ? ' - ' . $user->role->nama_role : '' }})
+                                    {{ $user->name }}
                                 </option>
                             @endforeach
                         </select>
@@ -493,7 +485,7 @@
             const tempOption = document.createElement('option');
             tempOption.value = targetUserId;
             tempOption.dataset.temp = '1';
-            tempOption.textContent = `${data.user.name} (@${data.user.username} - Non-Aktif)`;
+            tempOption.textContent = `${data.user.name} (Non-Aktif)`;
             userSelect.appendChild(tempOption);
         }
         userSelect.value = targetUserId;

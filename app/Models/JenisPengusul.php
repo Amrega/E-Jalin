@@ -27,4 +27,12 @@ class JenisPengusul extends Model
     {
         return $this->hasMany(Pengusul::class, 'jenis_pengusul_id');
     }
+
+    /**
+     * Relasi ke Usulan Aspal
+     */
+    public function usulanAspal()
+    {
+        return $this->hasMany(UsulanAspal::class, 'jenis_pengusul_id');
+    }
 }
